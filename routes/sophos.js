@@ -1,10 +1,6 @@
 const router = require("express").Router();
 const axios = require("axios");
 
-const SophosClientKey = "3e87a2ab-0766-48db-a167-8e5344d06a4c"
-const SophosSecretKey = "37bc07c18d70b70cb47cfc446888486bb2f4b85bba4d09a48525b7530fe33d2e3d002a325fce650fe17e8397009c957d9d0f"
-const SophosApiURL = "https://api.central.sophos.com"
-
 let SophosAccessToken;
 let SophosOrgID;
 
@@ -12,11 +8,11 @@ InitSophosAPI();
 
 async function InitSophosAPI() {
     await axios.post("https://id.sophos.com/api/v2/oauth2/token", 
-        `grant_type=client_credentials&client_id=${SophosClientKey}&client_secret=${SophosSecretKey}&scope=token`)
+        `grant_type=client_credentials&client_id=${process.env.SOPHOS_CLIENT_KEY}&client_secret=${process.env.SOPHOS_SECRET_KEY}&scope=token`)
         .then(res => { SophosAccessToken = res.data.access_token })
         .catch(err => console.log(err))
 
-    await axios.get(`${SophosApiURL}/whoami/v1`,
+    await axios.get(`${process.env.SOPHOS_API_URL}/whoami/v1`,
         { headers: { Authorization: `Bearer ${SophosAccessToken}` }})
         .then(res => { SophosOrgID = res.data.id })
         .catch(err => console.log(err))
@@ -28,7 +24,7 @@ router.route("/devicecount/:sitename").get(async (req, res) => {
     for (let i = 1; i < 10; i++) {
         if (tenant) { break; }
 
-        await axios.get(`${SophosApiURL}/organization/v1/tenants?page=${i}`, 
+        await axios.get(`${process.env.SOPHOS_API_URL}/organization/v1/tenants?page=${i}`, 
             { headers: { Authorization: `Bearer ${SophosAccessToken}`, "X-Organization-ID": SophosOrgID }})
             .then(res => {
                 for (let j = 0; j < res.data.items.length; j++) {
@@ -54,7 +50,7 @@ router.route("/devices/:sitename").get(async (req, res) => {
     for (let i = 1; i < 10; i++) {
         if (tenant) { break; }
 
-        await axios.get(`${SophosApiURL}/organization/v1/tenants?page=${i}`, 
+        await axios.get(`${process.env.SOPHOS_API_URL}/organization/v1/tenants?page=${i}`, 
             { headers: { Authorization: `Bearer ${SophosAccessToken}`, "X-Organization-ID": SophosOrgID }})
             .then(res => {
                 for (let j = 0; j < res.data.items.length; j++) {
