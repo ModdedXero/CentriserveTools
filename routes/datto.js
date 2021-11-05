@@ -18,8 +18,8 @@ function InitDattoAPI() {
 }
 
 router.route("/devicecount/:sitename").get(async (req, res) => {
-    let tenants = {};
-    let tenant = {};
+    let tenants;
+    let tenant;
 
     await axios.get(`${DattoApiURL}/api/v2/account/sites`, { headers: { Authorization: `Bearer ${DattoAccessToken}` }})
         .then(res => { tenants = res.data.sites })
@@ -36,6 +36,34 @@ router.route("/devicecount/:sitename").get(async (req, res) => {
         { headers: { Authorization: `Bearer ${DattoAccessToken}` }})
         .then(doc => { res.status(200).json({ response: doc.data.devicesStatus.numberOfDevices }) })
         .catch(err => console.log(err))
+});
+
+router.route("/devices/:sitename").get(async (req, res) => {
+    let tenants;
+    let tenant;
+    let deviceNames = [];
+
+    await axios.get(`${DattoApiURL}/api/v2/account/sites`, { headers: { Authorization: `Bearer ${DattoAccessToken}` }})
+        .then(doc => { tenants = doc.data.sites })
+        .catch(err => console.log(err))
+
+    for (let i = 0; i < tenants.length; i++) {
+        if (tenants[i].name.toLowerCase().includes(req.params.sitename.toLowerCase())) {
+            tenant = tenants[i];
+            break;
+        }
+    }
+
+    await axios.get(`${DattoApiURL}/api/v2/site/${tenant.uid}/devices`,
+        { headers: { Authorization: `Bearer ${DattoAccessToken}` }})
+        .then(doc => { tenant.devices = doc.data.devices })
+        .catch(err => console.log(err))
+
+    for (let i = 0; i < tenant.devices.length; i++) {
+        deviceNames.push(tenant.devices[i].hostname);
+    }
+
+    res.status(200).json({ response: deviceNames });
 });
 
 module.exports = router;

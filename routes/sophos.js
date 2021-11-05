@@ -47,4 +47,34 @@ router.route("/devicecount/:sitename").get(async (req, res) => {
     res.status(200).json({ response: tenant.devices.length });
 });
 
+router.route("/devices/:sitename").get(async (req, res) => {
+    let tenant;
+    let computerNames = [];
+
+    for (let i = 1; i < 10; i++) {
+        if (tenant) { break; }
+
+        await axios.get(`${SophosApiURL}/organization/v1/tenants?page=${i}`, 
+            { headers: { Authorization: `Bearer ${SophosAccessToken}`, "X-Organization-ID": SophosOrgID }})
+            .then(res => {
+                for (let j = 0; j < res.data.items.length; j++) {
+                    if (res.data.items[j].name.toLowerCase().includes(req.params.sitename.toLowerCase().replace("%20", " "))) {
+                        tenant = res.data.items[j];
+                        break;
+                    }
+                }
+            })
+    }
+
+    await axios.get(`${tenant.apiHost}/endpoint/v1/endpoints`, 
+        { headers: { Authorization: `Bearer ${SophosAccessToken}`, "X-Tenant-ID": tenant.id }})
+        .then(res => { tenant.devices = res.data.items })
+
+    for (let i = 0; i < tenant.devices.length; i++) {
+        computerNames.push(tenant.devices[i].hostname);
+    }
+
+    res.status(200).json({ response: computerNames })
+});
+
 module.exports = router;
