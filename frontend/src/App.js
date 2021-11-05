@@ -4,16 +4,23 @@ import axios from "axios";
 function App() {
   const [sophosCount, setSophosCount] = useState(0);
   const [dattoCount, setDattoCount] = useState(0);
+  const [siteName, setSiteName] = useState("");
 
   async function UpdateComputerCount() {
-    axios.get(`/api/sophos/devicecount/kuna kids dental`)
+    setSophosCount(0);
+    setDattoCount(0);
+
+    axios.get(`/api/sophos/devicecount/${siteName}`)
     .then(res => setSophosCount(res.data.response))
 
-    axios.get(`/api/dattp/devicecount/kuna kids dental`)
+    axios.get(`/api/datto/devicecount/${siteName}`)
+      .then(res => setDattoCount(res.data.response))
   };
 
   return (
     <div>
+      <input type="text" value={siteName} onChange={(e) => setSiteName(e.target.value)} />
+      <br />
       Sophos Computer Count {sophosCount}
       <br />
       Datto Computer Count {dattoCount}

@@ -14,7 +14,7 @@ async function InitSophosAPI() {
     await axios.post("https://id.sophos.com/api/v2/oauth2/token", 
         `grant_type=client_credentials&client_id=${SophosClientKey}&client_secret=${SophosSecretKey}&scope=token`)
         .then(res => { SophosAccessToken = res.data.access_token })
-        .catch(err => console.log(No))
+        .catch(err => console.log(err))
 
     await axios.get(`${SophosApiURL}/whoami/v1`,
         { headers: { Authorization: `Bearer ${SophosAccessToken}` }})
