@@ -56,10 +56,32 @@ router.route("/devices/:sitename").get(async (req, res) => {
         .catch(err => console.log(err))
 
     for (let i = 0; i < tenant.devices.length; i++) {
-        deviceNames.push(tenant.devices[i].hostname);
+        deviceNames.push(tenant.devices[i].hostname.toUpperCase());
     }
 
-    res.status(200).json({ response: deviceNames });
+    res.status(200).json({ response: deviceNames.sort((a, b) => a.localeCompare(b)) });
+});
+
+router.route("/sites").get(async (req, res) => {
+    let tenants;
+    let siteNames = [];
+
+    await axios.get(`${process.env.DATTO_API_URL}/api/v2/account/sites`, { headers: { Authorization: `Bearer ${DattoAccessToken}` }})
+        .then(doc => { tenants = doc.data.sites })
+        .catch(err => console.log(err))
+
+    if (!tenants) {
+        res.status(302);
+        return;
+    }
+
+    for (let i = 0; i < tenants.length; i++) {
+        if (tenants[i].name) {
+            siteNames.push(tenants[i].name);
+        }
+    }
+
+    res.status(200).json({ response: siteNames });
 });
 
 module.exports = router;

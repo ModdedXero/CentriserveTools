@@ -67,10 +67,33 @@ router.route("/devices/:sitename").get(async (req, res) => {
         .then(res => { tenant.devices = res.data.items })
 
     for (let i = 0; i < tenant.devices.length; i++) {
-        computerNames.push(tenant.devices[i].hostname);
+        computerNames.push(tenant.devices[i].hostname.toUpperCase());
     }
 
-    res.status(200).json({ response: computerNames })
+    res.status(200).json({ response: computerNames.sort((a, b) => a.localeCompare(b)) })
+});
+
+router.route("/sites").get(async (req, res) => {
+    let tenants = [];
+    let sites = [];
+
+    for (let i = 1; i < 10; i++) {
+        await axios.get(`${process.env.SOPHOS_API_URL}/organization/v1/tenants?page=${i}`, 
+            { headers: { Authorization: `Bearer ${SophosAccessToken}`, "X-Organization-ID": SophosOrgID }})
+            .then(res => { tenants.push(res.data.items) })
+    }
+
+    for (let i = 0; i < tenants.length; i++) {
+        if (tenants[i]) {
+            for (let j = 0; j < tenants[i].length; j++) {
+                if (tenants[i][j].name && !tenants[i][j].name.includes("ZZZ")) {
+                    sites.push(tenants[i][j].name);
+                }
+            }
+        }
+    }
+
+    res.status(200).json({ response: sites.sort((a, b) => a.localeCompare(b)) });
 });
 
 module.exports = router;
