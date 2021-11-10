@@ -11,11 +11,13 @@ const port = process.env.PORT || 5000;
 
 const sophosRouter = require("./routes/sophos");
 const dattoRouter = require("./routes/datto");
+const agentsRouter = require("./routes/agents");
 
 app.use(express.static(path.join(__dirname, "frontend", "build")));
 
 app.use("/api/sophos", sophosRouter);
 app.use("/api/datto", dattoRouter);
+app.use("/api/agents", agentsRouter);
 
 if (process.env.NODE_ENV === "production") {
 

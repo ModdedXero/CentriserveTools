@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import fileDownload from "js-file-download";
 
 import Notify from "./components/utility/notify";
 
@@ -33,13 +34,13 @@ function App() {
 
     await axios.get(`/api/sophos/devices/${e.target.value}`)
       .then(res => { 
-        setSophosComputerNames(res.data.response.sort((a, b) => a.localeCompare(b)));
+        setSophosComputerNames(res.data.response);
         setSophosCount(res.data.response.length)
       })
 
     await axios.get(`/api/datto/devices/${e.target.value}`)
       .then(res => {
-        setDattoComputerNames(res.data.response.sort((a, b) => a.localeCompare(b)));
+        setDattoComputerNames(res.data.response);
         setDattoCount(res.data.response.length);
       })
   };
@@ -116,6 +117,18 @@ function App() {
     )
   }
 
+  async function GenerateReport() {
+    await axios.get(`/api/agents/report/${siteName}`, { responseType: "arraybuffer" })
+      .then(res => {
+        let blob = new Blob(
+            [res.data], 
+            { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }
+          );
+        
+        fileDownload(blob, `${siteName} Agent Report.xlsx`);
+      })
+  }
+
   return (
     <div className="app-wrapper">
       <div className="app-header">
@@ -128,6 +141,7 @@ function App() {
           })}
         </select>
         {GenerateComputerNames()}
+        <input type="button" onClick={GenerateReport} value="Download Report" />
       </div>
     </div>
   );

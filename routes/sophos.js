@@ -86,7 +86,7 @@ router.route("/sites").get(async (req, res) => {
     for (let i = 0; i < tenants.length; i++) {
         if (tenants[i]) {
             for (let j = 0; j < tenants[i].length; j++) {
-                if (tenants[i][j].name && !tenants[i][j].name.includes("ZZZ")) {
+                if (tenants[i][j].name && !tenants[i][j].name.includes("ZZZ") && !tenants[i][j].name.includes("XX")) {
                     sites.push(tenants[i][j].name);
                 }
             }

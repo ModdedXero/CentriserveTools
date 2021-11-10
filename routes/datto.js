@@ -50,6 +50,8 @@ router.route("/devices/:sitename").get(async (req, res) => {
         }
     }
 
+    if (!tenant.uid) res.status(302).json({ response: `Tenant ${req.params.sitename} not found!` });
+
     await axios.get(`${process.env.DATTO_API_URL}/api/v2/site/${tenant.uid}/devices`,
         { headers: { Authorization: `Bearer ${DattoAccessToken}` }})
         .then(doc => { tenant.devices = doc.data.devices })
