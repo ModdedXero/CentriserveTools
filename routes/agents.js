@@ -2,7 +2,7 @@ const router = require("express").Router();
 const axios = require("axios");
 const ExcelJS = require("exceljs");
 
-const localUrl = "http://127.0.0.1:5000";
+const localUrl = `http://127.0.0.1:${process.env.PORT || 5000}`;
 
 router.route("/devices").get(async (req, res) => {
 
