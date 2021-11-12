@@ -49,7 +49,72 @@ router.route("/report/:sitename").get(async (req, res) => {
     workbook.xlsx.write(res);
 });
 
+router.route("/reportall").get(async (req, res) => {
+  const workbook = new ExcelJS.Workbook();
+  let sites = [];
+
+  await axios.get(`${localUrl}/api/sophos/sites`)
+    .then(doc => { sites = doc.data.response })
+
+  sitesUniq = [...new Set(sites)];
+  let promise = Promise.resolve();
+
+  sitesUniq.forEach(async (siteName) => {
+    promise = promise.then(async () => {
+      console.log(`${sitesUniq.indexOf(siteName)}/${sitesUniq.length}`);
+
+      const sheet = workbook.addWorksheet(siteName.substring(0, 30));
+      sheet.columns = [
+          { header: "Sophos", key: "sophos", width: 30 }, 
+          { header: "Datto", key: "datto", width: 30}
+      ];
+
+      let dattoDevices = [];
+      let sophosDevices = [];
+
+      await GetSiteDevices(siteName)
+        .then(res => { dattoDevices = res.datto; sophosDevices = res.sophos });
+
+      let deviceCompList = GenerateComputerList(dattoDevices, sophosDevices);
+  
+      deviceCompList.forEach((val) => {
+          sheet.addRow({ sophos: val.sophos, datto: val.datto });
+      })
+    
+      for (let i = 0; i < deviceCompList.length; i++) {
+          if (deviceCompList[i].isEqual) {
+              sheet.getCell(`A${i + 2}`).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "BAE7B5"} };
+              sheet.getCell(`B${i + 2}`).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "BAE7B5"} };
+          } else {
+              sheet.getCell(`A${i + 2}`).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "DDB0B1"} };
+              sheet.getCell(`B${i + 2}`).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "DDB0B1"} };
+          }
+      }
+
+      return new Promise((resolve) => setTimeout(resolve, 0));
+    })
+  })
+
+  promise.then(() => {
+    workbook.xlsx.write(res);
+  })
+});
+
 /* General Functions */
+
+async function GetSiteDevices(siteName) {
+  let dattoDevices = [];
+  let sophosDevices = [];
+
+  await axios.get(`${localUrl}/api/datto/devices/${siteName}`)
+    .then(doc => { doc.data.response ? dattoDevices = doc.data.response : dattoDevices = [] })
+    .catch(err => "err")
+  await axios.get(`${localUrl}/api/sophos/devices/${siteName}`)
+    .then(doc => { doc.data.response ? sophosDevices = doc.data.response : sophosDevices = [] })
+    .catch(err => "err")
+
+  return { datto: dattoDevices, sophos: sophosDevices };
+}
 
 function strcmp(a, b) {
     if (a === b) return 0;

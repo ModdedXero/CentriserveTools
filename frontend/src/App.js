@@ -5,6 +5,7 @@ import fileDownload from "js-file-download";
 import Notify from "./components/utility/notify";
 
 import "./app.css";
+import Button from "./components/utility/button";
 
 function App() {
   const [sophosCount, setSophosCount] = useState(0);
@@ -13,6 +14,7 @@ function App() {
   const [dattoComputerNames, setDattoComputerNames] = useState([]);
   const [allSiteNames, setAllSiteNames] = useState([]);
 
+  const [loadingReport, setLoadingReport] = useState(false);
   const [loadingSites, setLoadingSites] = useState(true);
   const [siteName, setSiteName] = useState("");
 
@@ -118,6 +120,8 @@ function App() {
   }
 
   async function GenerateReport() {
+    setLoadingReport(true);
+    
     await axios.get(`/api/agents/report/${siteName}`, { responseType: "arraybuffer" })
       .then(res => {
         let blob = new Blob(
@@ -126,6 +130,22 @@ function App() {
           );
         
         fileDownload(blob, `${siteName} Agent Report.xlsx`);
+        setLoadingReport(false);
+      })
+  }
+
+  async function GenerateReportAll() {
+    setLoadingReport(true);
+
+    await axios.get(`/api/agents/reportall`, { responseType: "arraybuffer" })
+      .then(res => {
+        let blob = new Blob(
+            [res.data], 
+            { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }
+          );
+        
+        fileDownload(blob, `${siteName} Agent Report.xlsx`);
+        setLoadingReport(false);
       })
   }
 
@@ -141,7 +161,9 @@ function App() {
           })}
         </select>
         {GenerateComputerNames()}
-        <input type="button" onClick={GenerateReport} value="Download Report" />
+        <Button onClick={GenerateReport} clickState={loadingReport}>Download Report</Button>
+        <Button onClick={GenerateReportAll} clickState={loadingReport}>Download Report All</Button>
+        {loadingReport && <Notify>Report Generating...</Notify>}
       </div>
     </div>
   );

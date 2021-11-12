@@ -62,7 +62,7 @@ body {
 
 .notify-background {
     position: fixed;
-    right: 0;
+    left: 0;
     top: 0;
     margin: 20px;
     padding: 10px 20px;
