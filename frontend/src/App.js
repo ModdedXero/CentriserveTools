@@ -144,7 +144,7 @@ function App() {
             { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }
           );
         
-        fileDownload(blob, `${siteName} Agent Report.xlsx`);
+        fileDownload(blob, `All Sites Agent Report.xlsx`);
         setLoadingReport(false);
       })
   }
