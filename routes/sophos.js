@@ -1,11 +1,14 @@
+// Initialize required packages (express: Server router, axios: http API)
 const router = require("express").Router();
 const axios = require("axios");
 
+// Initialize needed sophos access tokens
 let SophosAccessToken;
 let SophosOrgID;
 
 InitSophosAPI();
 
+// Use Client and Secret keys in config to obtain API Access Token
 async function InitSophosAPI() {
     await axios.post("https://id.sophos.com/api/v2/oauth2/token", 
         `grant_type=client_credentials&client_id=${process.env.SOPHOS_CLIENT_KEY}&client_secret=${process.env.SOPHOS_SECRET_KEY}&scope=token`)
@@ -18,6 +21,9 @@ async function InitSophosAPI() {
         .catch(err => console.log(err))
 }
 
+/* HTTP Request Routes */
+
+// Access Sophos API for array of devices based off a Site Name and returns device count
 router.route("/devicecount/:sitename").get(async (req, res) => {
     let tenant;
 
@@ -43,6 +49,7 @@ router.route("/devicecount/:sitename").get(async (req, res) => {
     res.status(200).json({ response: tenant.devices.length });
 });
 
+// Access Sophos API for array of devices based off a Site Name and returns array
 router.route("/devices/:sitename").get(async (req, res) => {
     let tenant;
     let computerNames = [];
@@ -73,6 +80,7 @@ router.route("/devices/:sitename").get(async (req, res) => {
     res.status(200).json({ response: computerNames.sort((a, b) => a.localeCompare(b)) })
 });
 
+// Access Sophos API for array of sites and returns array
 router.route("/sites").get(async (req, res) => {
     let tenants = [];
     let sites = [];

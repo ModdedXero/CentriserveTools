@@ -1,10 +1,13 @@
+// Initialize required packages (express: Server router, axios: http API)
 const router = require("express").Router();
 const axios = require("axios");
 
+// Initialize needed datto access tokens
 let DattoAccessToken;
 
 InitDattoAPI();
 
+// Use Client and Secret keys in config to obtain API Access Token
 function InitDattoAPI() {
     axios.post(`${process.env.DATTO_API_URL}/auth/oauth/token`,
         `grant_type=password&username=${process.env.DATTO_CLIENT_KEY}&password=${process.env.DATTO_SECRET_KEY}`,
@@ -13,6 +16,9 @@ function InitDattoAPI() {
         .catch(err => console.log(err))
 }
 
+/* HTTP Request Routes */
+
+// Access Datto API for array of devices based off a Site Name and returns device count
 router.route("/devicecount/:sitename").get(async (req, res) => {
     let tenants;
     let tenant;
@@ -34,6 +40,7 @@ router.route("/devicecount/:sitename").get(async (req, res) => {
         .catch(err => console.log(err))
 });
 
+// Access Datto API for array of devices based off a Site Name and returns array
 router.route("/devices/:sitename").get(async (req, res) => {
     let tenants;
     let tenant;
@@ -67,6 +74,7 @@ router.route("/devices/:sitename").get(async (req, res) => {
     res.status(200).json({ response: deviceNames.sort((a, b) => a.localeCompare(b)) });
 });
 
+// Access Datto API for array of sites and returns array
 router.route("/sites").get(async (req, res) => {
     let tenants;
     let siteNames = [];

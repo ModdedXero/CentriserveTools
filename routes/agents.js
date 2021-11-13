@@ -1,17 +1,36 @@
+// This route is to replace frontend from calling Sophos and Datto seperately
+
+// Initialize required packages (express: Server router, axios: http API, ExcelJS: Excel buffer generator)
 const router = require("express").Router();
 const axios = require("axios");
 const ExcelJS = require("exceljs");
 
+// Local server URL for inverted API calls
 const localUrl = `http://127.0.0.1:${process.env.PORT || 5000}`;
 
-router.route("/devices").get(async (req, res) => {
+/* HTTP Request Routes */
 
+// Gets Sophos and Datto devices and creates comparison and returns JSON object
+router.route("/devices/:sitename").get(async (req, res) => {
+  let dattoDevices = [];
+  let sophosDevices = [];
+
+  await GetSiteDevices(req.params.sitename)
+    .then(res => { dattoDevices = res.datto; sophosDevices = res.sophos });
+
+  res.status(200).json({ response: {
+    dattoCount: dattoDevices.length,
+    sophosCount: sophosDevices.length,
+    comparison: GenerateComputerList(dattoDevices, sophosDevices)
+  }});
 });
 
+// Gets all customer sites and returns array
 router.route("/sites").get(async (req, res) => {
 
 });
 
+// Generates an excel report of a specific sites devices
 router.route("/report/:sitename").get(async (req, res) => {
     const workbook = new ExcelJS.Workbook();
     
@@ -49,6 +68,7 @@ router.route("/report/:sitename").get(async (req, res) => {
     workbook.xlsx.write(res);
 });
 
+// Generates an excel report of all sites devices
 router.route("/reportall").get(async (req, res) => {
   const workbook = new ExcelJS.Workbook();
   let sites = [];
@@ -102,6 +122,7 @@ router.route("/reportall").get(async (req, res) => {
 
 /* General Functions */
 
+// Returns all devices for a site
 async function GetSiteDevices(siteName) {
   let dattoDevices = [];
   let sophosDevices = [];
@@ -116,12 +137,14 @@ async function GetSiteDevices(siteName) {
   return { datto: dattoDevices, sophos: sophosDevices };
 }
 
+// Method for comparing string alphabetical order
 function strcmp(a, b) {
     if (a === b) return 0;
     if (a > b) return 1;
     return -1;
 }
 
+// Filters Datto and Sophos device arrays into comparison
 function GenerateComputerList(dattoDevices, sophosDevices) {
     const length = sophosDevices.length > dattoDevices.length ? sophosDevices.length : dattoDevices.length;
     let deviceList = [];
