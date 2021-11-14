@@ -104,18 +104,16 @@ export default function DeviceChart() {
     }
 
     return (
-        <div className="app-wrapper">
-            <div className="app-body">
-                <select className="site-name-select" value={siteName} onChange={UpdateComputerCount}>
-                {allSiteNames.map((siteName) => {
-                    return <option value={siteName}>{siteName}</option>
-                })}
-                </select>
-                {GenerateComputerNames()}
-                <Button onClick={GenerateReport} clickState={loadingReport}>Download Report</Button>
-                <Button onClick={GenerateReportAll} clickState={loadingReport}>Download Report All</Button>
-                {loadingReport && <Notify>Report Generating...</Notify>}
-            </div>
+        <div className="app-body">
+            <select className="site-name-select" value={siteName} onChange={UpdateComputerCount}>
+            {allSiteNames.map((siteName) => {
+                return <option value={siteName}>{siteName}</option>
+            })}
+            </select>
+            {GenerateComputerNames()}
+            <Button onClick={GenerateReport} clickState={loadingReport}>Download Report</Button>
+            <Button onClick={GenerateReportAll} clickState={loadingReport}>Download Report All</Button>
+            {loadingReport && <Notify>Report Generating...</Notify>}
         </div>
     );
 }

@@ -73,3 +73,22 @@ body {
     color: #178033;
     overflow: auto;
 }
+
+/* Navbar */
+
+.navbar-app {
+
+}
+
+.navbar-link {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+}
+
+.navbar-logo {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    float: right;
+}
