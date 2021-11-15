@@ -3,6 +3,11 @@ body {
     color: #ffff;
 }
 
+.site-wrapper {
+    display: flex;
+    flex-flow: column;
+}
+
 /* App */
 
 .app-wrapper {
@@ -10,6 +15,7 @@ body {
     flex-direction: column;
     min-height: 100vh;
     background-color: #2e2e2e;
+    margin-top: 40px;
 }
 
 .app-header {
@@ -20,41 +26,41 @@ body {
     padding: 50px;
 }
 
-/* Device Comparison */
-
 .site-name-select {
     font-size: 20px;
 }
 
-.device-comp {
+/* Table */
+
+.table-wrapper {
     display: flex;
     padding: 20px 0;
 }
 
-.device-comp-table {
+.table-wrapper table {
     padding: 0 20px 0 0;
     border-collapse: collapse;
 }
 
-.device-comp-table th {
+.table-wrapper th {
     padding: 12px 10px;
     text-align: left;
     background-color: #3b8f8f;
 }
 
-.device-comp-table td, .device-comp-table th {
+.table-wrapper td, .table-wrapper th {
     border: 1px solid #ddd;
     padding: 8px;
 }
 
-.device-comp-table-row-equal {
+.row-green {
     background-color: #04AA6D;
 }
-.device-comp-table-row-unequal {
+.row-red {
     background-color: #a64146;
 }
 
-.device-comp-table tr:hover {
+.table-wrapper tbody tr:hover {
     background-color: #212121;
 }
 
@@ -77,18 +83,36 @@ body {
 /* Navbar */
 
 .navbar-app {
+    display: flex;
+    background-color: #262626;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    box-shadow: 0 4px 8px 0 rgba(150, 150, 150, 0.2), 0 6px 20px 0 rgba(88, 88, 88, 0.19);
+}
 
+.navbar-app ul {
+    float: right;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-app li {
+    display: inline-block;
+    margin-left: 70px;
 }
 
 .navbar-link {
     display: block;
-    padding: 10px;
     text-decoration: none;
+    color: white;
 }
 
 .navbar-logo {
     display: block;
     padding: 10px;
     text-decoration: none;
-    float: right;
 }

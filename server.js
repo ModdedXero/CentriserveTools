@@ -19,6 +19,9 @@ const sophosRouter = require("./routes/sophos");
 const dattoRouter = require("./routes/datto");
 const agentsRouter = require("./routes/agents");
 
+// Create Handlers
+const reports = require("./reports/report_scheduler");
+
 // Set path for public folder for UI
 app.use(express.static(path.join(__dirname, "frontend", "build")));
 
@@ -45,3 +48,7 @@ if (process.env.NODE_ENV === "production") {
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+
+
+// Initialize Handlers
+reports.Initialize();

@@ -5,12 +5,19 @@ import DynamicLink from "../utility/dynamic_link";
 export default function Navbar({ children }) {
 
     return (
-        <nav className="navbar-app">
-            <DynamicLink className="navbar-link" to="/">Home</DynamicLink>
-            <h2 className="navbar-logo">Centriserve</h2>
+        <div className="site-wrapper">
+            <nav className="navbar-app">
+                <DynamicLink className="navbar-logo" to="/">
+                    <img src="/logo_with_name.png" />
+                </DynamicLink>
+                <ul>
+                    <li><DynamicLink className="navbar-link" to="/">Device Charts</DynamicLink></li>
+                    <li><DynamicLink className="navbar-link" to="/reports">Reports</DynamicLink></li>
+                </ul>
+            </nav>
             <div className="app-wrapper">
                 {children}
             </div>
-        </nav>
+        </div>
     )
 }

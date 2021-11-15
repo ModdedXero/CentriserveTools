@@ -40,34 +40,34 @@ export default function DeviceChart() {
 
     function GenerateComputerNames() {
         return (
-            <div className="device-comp">
+            <div className="table-wrapper">
                 {loadingSites && <Notify>Site list loading...</Notify>}
-                <table className="device-comp-table">
-                <thead>
-                    <tr>
-                    <th>Sophos Computers: {sophosCount}</th>
-                    <th>Datto Computers: {dattoCount}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {computers.map((comp) => {
-                    if (comp.isEqual) {
-                        return (
-                        <tr className="device-comp-table-row-equal">
-                            <td>{comp.sophos}</td>
-                            <td>{comp.datto}</td>
+                <table>
+                    <thead>
+                        <tr>
+                        <th>Sophos Computers: {sophosCount}</th>
+                        <th>Datto Computers: {dattoCount}</th>
                         </tr>
-                        )
-                    } else {
-                        return (
-                        <tr className="device-comp-table-row-unequal">
-                            <td>{comp.sophos ? comp.sophos : ""}</td>
-                            <td>{comp.datto ? comp.datto : ""}</td>
-                        </tr>
-                        )
-                    }
-                    })}
-                </tbody>
+                    </thead>
+                    <tbody>
+                        {computers.map((comp) => {
+                        if (comp.isEqual) {
+                            return (
+                            <tr className="row-green">
+                                <td>{comp.sophos}</td>
+                                <td>{comp.datto}</td>
+                            </tr>
+                            )
+                        } else {
+                            return (
+                            <tr className="row-red">
+                                <td>{comp.sophos ? comp.sophos : ""}</td>
+                                <td>{comp.datto ? comp.datto : ""}</td>
+                            </tr>
+                            )
+                        }
+                        })}
+                    </tbody>
                 </table>
             </div>
         )
@@ -76,7 +76,7 @@ export default function DeviceChart() {
     async function GenerateReport() {
         setLoadingReport(true);
         
-        await axios.get(`/api/agents/report/${siteName}`, { responseType: "arraybuffer" })
+        await axios.get(`/api/agents/report/site/${siteName}`, { responseType: "arraybuffer" })
             .then(res => {
                 let blob = new Blob(
                     [res.data], 
@@ -88,31 +88,16 @@ export default function DeviceChart() {
           })
     }
 
-    async function GenerateReportAll() {
-        setLoadingReport(true);
-    
-        await axios.get(`/api/agents/reportall`, { responseType: "arraybuffer" })
-            .then(res => {
-                let blob = new Blob(
-                    [res.data], 
-                    { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }
-                );
-                
-                fileDownload(blob, `All Sites Agent Report.xlsx`);
-                setLoadingReport(false);
-            })
-    }
-
     return (
         <div className="app-body">
             <select className="site-name-select" value={siteName} onChange={UpdateComputerCount}>
-            {allSiteNames.map((siteName) => {
-                return <option value={siteName}>{siteName}</option>
-            })}
+                <option>Select Site...</option>
+                {allSiteNames.map((siteName) => {
+                    return <option value={siteName}>{siteName}</option>
+                })}
             </select>
             {GenerateComputerNames()}
             <Button onClick={GenerateReport} clickState={loadingReport}>Download Report</Button>
-            <Button onClick={GenerateReportAll} clickState={loadingReport}>Download Report All</Button>
             {loadingReport && <Notify>Report Generating...</Notify>}
         </div>
     );
