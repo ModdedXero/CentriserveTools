@@ -1,7 +1,17 @@
 const axios = require("axios");
 const ExcelJS = require("exceljs");
 
+const DownloadFile = require("../firebase").DownloadFile;
+
 const localUrl = `http://127.0.0.1:${process.env.PORT || 5000}`;
+
+/* Helper Functions */
+
+async function DownloadReport(res, repName) {
+  await DownloadFile(`Reports/${repName}.xlsx`, `${__dirname}/${repName}.xlsx`)
+          .catch(err => console.log(err));
+  res.sendFile(`${__dirname}/${repName}.xlsx`);
+}
 
 /* Report Generators */
 
@@ -144,3 +154,4 @@ function GenerateComputerList(dattoDevices, sophosDevices) {
 
 exports.GenSiteAgentComparison = GenSiteAgentComparison;
 exports.GenAllSitesAgentComparison = GenAllSitesAgentComparison;
+exports.DownloadReport = DownloadReport;

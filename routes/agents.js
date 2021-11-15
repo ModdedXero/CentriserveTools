@@ -4,7 +4,6 @@
 const router = require("express").Router();
 const axios = require("axios");
 
-const DownloadFile = require("../firebase").DownloadFile;
 const ReportGenerator = require("../reports/report_generator");
 
 // Local server URL for inverted API calls
@@ -34,8 +33,7 @@ router.route("/sites").get(async (req, res) => {
 
 // Generates an excel report of all sites devices
 router.route("/report/site/all").get(async (req, res) => {
-  await DownloadFile("Reports/All Sites Agent Comparison.xlsx", __dirname + "/All Sites Agent Comparison.xlsx");
-  res.sendFile(__dirname + "/All Sites Agent Comparison.xlsx");
+  ReportGenerator.DownloadReport(res, "All Sites Agent Comparison");
 });
 
 // Generates an excel report of a specific sites devices
