@@ -4,8 +4,6 @@
 const router = require("express").Router();
 const axios = require("axios");
 
-const fs = require("fs");
-const Blob = require("node:buffer").Blob;
 const DownloadFile = require("../firebase").DownloadFile;
 const ReportGenerator = require("../reports/report_generator");
 
@@ -36,8 +34,8 @@ router.route("/sites").get(async (req, res) => {
 
 // Generates an excel report of all sites devices
 router.route("/report/site/all").get(async (req, res) => {
-  await DownloadFile("/Test.xlsx", __dirname + "/Test.xlsx");
-  res.sendFile(__dirname + "/Test.xlsx");
+  await DownloadFile("Reports/All Sites Agent Comparison.xlsx", __dirname + "/All Sites Agent Comparison.xlsx");
+  res.sendFile(__dirname + "/All Sites Agent Comparison.xlsx");
 });
 
 // Generates an excel report of a specific sites devices
