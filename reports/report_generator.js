@@ -8,9 +8,9 @@ const localUrl = `http://127.0.0.1:${process.env.PORT || 5000}`;
 /* Helper Functions */
 
 async function DownloadReport(res, repName) {
-  await DownloadFile(`Reports/${repName}.xlsx`, `${__dirname}/${repName}.xlsx`)
+  await DownloadFile(`Reports/${repName}.xlsx`, `${__dirname}/reports/${repName}.xlsx`)
           .catch(err => console.log(err));
-  res.sendFile(`${__dirname}/${repName}.xlsx`);
+  res.sendFile(`${__dirname}/reports/${repName}.xlsx`);
 }
 
 /* Report Generators */
