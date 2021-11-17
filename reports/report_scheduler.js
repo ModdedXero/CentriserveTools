@@ -19,8 +19,8 @@ async function GenerateReport(repGen, title) {
             const blob = new Blob([data], {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8" });
             await blob.arrayBuffer()
                 .then(async array => {
-                    fs.writeFile("./test.xlsx", Buffer.from(array), () => {})
-                    UploadFile("./test.xlsx", "Reports/" + title + ".xlsx");
+                    fs.writeFile(`./${title}.xlsx`, Buffer.from(array), () => {})
+                    UploadFile(`./${title}.xlsx`, "Reports/" + title + ".xlsx");
                 })
             })
             .catch(err => console.log(err))
