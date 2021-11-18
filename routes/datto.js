@@ -1,6 +1,5 @@
 // Initialize required packages (express: Server router, axios: http API)
 const router = require("express").Router();
-const axios = require("axios");
 
 const DattoData = require("./data_helpers/datto_data");
 

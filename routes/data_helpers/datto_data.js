@@ -18,7 +18,7 @@ function InitDattoAPI() {
 async function GetDevices(siteName) {
     let tenants;
     let tenant;
-    let deviceNames = [];
+    let deviceInfo = [];
 
     await axios.get(`${process.env.DATTO_API_URL}/api/v2/account/sites`, { headers: { Authorization: `Bearer ${DattoAccessToken}` }})
         .then(doc => { tenants = doc.data.sites })
@@ -41,10 +41,11 @@ async function GetDevices(siteName) {
         .catch(err => console.log(err))
 
     for (let i = 0; i < tenant.devices.length; i++) {
-        deviceNames.push(tenant.devices[i].hostname.toUpperCase());
+        tenant.devices[i].hostname = tenant.devices[i].hostname.toUpperCase();
+        deviceInfo.push(tenant.devices[i]);
     }
 
-    return deviceNames.sort((a, b) => a.localeCompare(b));
+    return deviceInfo.sort((a, b) => a.hostname.localeCompare(b.hostname));
 }
 
 // Access Datto API for array of sites and returns array

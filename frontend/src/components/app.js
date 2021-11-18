@@ -3,15 +3,15 @@ import { Switch } from "react-router";
 
 import DynamicRoute from "./utility/dynamic_route";
 
-import DeviceChart from "./public/device_chart";
-import Reports from "./public/reports/reports";
+import DevicePage from "./public/device_page/device_page";
+import Reports from "./public/reports_page/reports_page";
 
 import "../styles/app.css"
 
 export default function App() {
     return (
         <Switch>
-            <DynamicRoute exact path="/" component={DeviceChart} />
+            <DynamicRoute exact path="/" component={DevicePage} />
             <DynamicRoute path="/reports" component={Reports} />
         </Switch>
     )

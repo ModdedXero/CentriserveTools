@@ -2,14 +2,10 @@
 
 // Initialize required packages (express: Server router, axios: http API, ExcelJS: Excel buffer generator)
 const router = require("express").Router();
-const axios = require("axios");
 
 const DattoData = require("./data_helpers/datto_data");
 const SophosData = require("./data_helpers/sophos_data");
 const ReportGenerator = require("../reports/report_generator");
-
-// Local server URL for inverted API calls
-const localUrl = `http://127.0.0.1:${process.env.PORT || 5000}`;
 
 /* HTTP Request Routes */
 
@@ -58,7 +54,7 @@ function GenerateComputerList(dattoDevices, sophosDevices) {
 
     for (let i = 0; i < length; i++) {
       if (sophosDevices[i] && dattoDevices[i]) {
-        switch (strcmp(sophosDevices[i], dattoDevices[i])) {
+        switch (strcmp(sophosDevices[i].hostname, dattoDevices[i].hostname)) {
           case 0: 
             deviceList.push({ isEqual: true, datto: dattoDevices[i], sophos: sophosDevices[i] });
             break;

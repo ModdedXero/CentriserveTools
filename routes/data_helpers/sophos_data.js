@@ -23,7 +23,7 @@ async function InitSophosAPI() {
 // Access Sophos API for array of devices based off a Site Name and returns array
 async function GetDevices(siteName) {
     let tenant;
-    let computerNames = [];
+    let deviceInfo = [];
 
     for (let i = 1; i < 10; i++) {
         if (tenant) { break; }
@@ -46,10 +46,11 @@ async function GetDevices(siteName) {
         .catch(err => { return undefined })
 
     for (let i = 0; i < tenant.devices.length; i++) {
-        computerNames.push(tenant.devices[i].hostname.toUpperCase());
+        tenant.devices[i].hostname = tenant.devices[i].hostname.toUpperCase();
+        deviceInfo.push(tenant.devices[i]);
     }
 
-    return computerNames.sort((a, b) => a.localeCompare(b));
+    return deviceInfo.sort((a, b) => a.hostname.localeCompare(b.hostname));
 }
 
 // Access Sophos API for array of sites and returns array

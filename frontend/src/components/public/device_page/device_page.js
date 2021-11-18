@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import fileDownload from "js-file-download";
 
-import Notify from "../utility/notify";
-import Button from "../utility/button";
+import Notify from "../../utility/notify";
+import Button from "../../utility/button";
+import DeviceInfoDatto from "./device_info_datto";
+import DeviceInfoSophos from "./device_info_sophos";
 
-export default function DeviceChart() {
+export default function DevicePage() {
     const [sophosCount, setSophosCount] = useState(0);
     const [dattoCount, setDattoCount] = useState(0);
     const [computers, setComputers] = useState([]);
@@ -54,15 +56,15 @@ export default function DeviceChart() {
                         if (comp.isEqual) {
                             return (
                             <tr className="row-green">
-                                <td>{comp.sophos}</td>
-                                <td>{comp.datto}</td>
+                                <td>{comp.sophos.hostname}</td>
+                                <td>{comp.datto.hostname}</td>
                             </tr>
                             )
                         } else {
                             return (
                             <tr className="row-red">
-                                <td>{comp.sophos ? comp.sophos : ""}</td>
-                                <td>{comp.datto ? comp.datto : ""}</td>
+                                <td>{comp.sophos ? comp.sophos.hostname : ""}</td>
+                                <td>{comp.datto ? comp.datto.hostname : ""}</td>
                             </tr>
                             )
                         }
@@ -90,15 +92,19 @@ export default function DeviceChart() {
 
     return (
         <div className="app-body">
-            <select className="site-name-select" value={siteName} onChange={UpdateComputerCount}>
-                <option>Select Site...</option>
-                {allSiteNames.map((siteName) => {
-                    return <option value={siteName}>{siteName}</option>
-                })}
-            </select>
-            {GenerateComputerNames()}
-            <Button onClick={GenerateReport} clickState={loadingReport}>Download Report</Button>
-            {loadingReport && <Notify>Report Generating...</Notify>}
+            <div className="device-page">
+                <select className="site-name-select" value={siteName} onChange={UpdateComputerCount}>
+                    <option>Select Site...</option>
+                    {allSiteNames.map((siteName) => {
+                        return <option value={siteName}>{siteName}</option>
+                    })}
+                </select>
+                {GenerateComputerNames()}
+                <Button onClick={GenerateReport} clickState={loadingReport}>Download Report</Button>
+                {loadingReport && <Notify>Report Generating...</Notify>}
+                <DeviceInfoDatto />
+                <DeviceInfoSophos />
+            </div>
         </div>
     );
 }
