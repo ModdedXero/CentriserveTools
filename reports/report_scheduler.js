@@ -2,13 +2,14 @@ const Blob = require("node:buffer").Blob;
 const fs = require("fs");
 
 const UploadFile = require("../firebase").UploadFile;
-const scheduler = require("../utility/scheduler");
 const ReportGenerator = require("../reports/report_generator");
 
-function Initialize() {
-    Reports.forEach((rep) => {
-        scheduler.Schedule(() => { GenerateReport(rep.generator(), rep.title )}, rep.interval);
-    })
+async function Initialize() {
+    setInterval(async () => {
+        Reports.forEach(async (rep) => {
+            GenerateReport(rep.generator, rep.title);
+        })
+    }, 60 * 60 * 1000);
 }
 
 async function GenerateReport(repGen, title) {
@@ -30,7 +31,6 @@ const Reports = [
     {
         title: "All Sites Agent Comparison",
         generator: () => {return ReportGenerator.GenAllSitesAgentComparison},
-        interval: 60
     }
 ]
 

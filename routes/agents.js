@@ -4,6 +4,8 @@
 const router = require("express").Router();
 const axios = require("axios");
 
+const DattoData = require("./data_helpers/datto_data");
+const SophosData = require("./data_helpers/sophos_data");
 const ReportGenerator = require("../reports/report_generator");
 
 // Local server URL for inverted API calls
@@ -13,11 +15,8 @@ const localUrl = `http://127.0.0.1:${process.env.PORT || 5000}`;
 
 // Gets Sophos and Datto devices and creates comparison and returns JSON object
 router.route("/devices/:sitename").get(async (req, res) => {
-  let dattoDevices = [];
-  let sophosDevices = [];
-
-  await GetSiteDevices(req.params.sitename)
-    .then(res => { dattoDevices = res.datto; sophosDevices = res.sophos });
+  const dattoDevices = await DattoData.GetDevices(req.params.sitename);
+  const sophosDevices = await SophosData.GetDevices(req.params.sitename);
 
   res.status(200).json({ response: {
     dattoCount: dattoDevices.length,
@@ -28,7 +27,8 @@ router.route("/devices/:sitename").get(async (req, res) => {
 
 // Gets all customer sites and returns array
 router.route("/sites").get(async (req, res) => {
-  
+  const siteNames = await SophosData.GetSites();
+  res.status(200).json({ response: siteNames });
 });
 
 // Generates an excel report of all sites devices
@@ -43,21 +43,6 @@ router.route("/report/site/:sitename").get(async (req, res) => {
 });
 
 /* General Functions */
-
-// Returns all devices for a site
-async function GetSiteDevices(siteName) {
-  let dattoDevices = [];
-  let sophosDevices = [];
-
-  await axios.get(`${localUrl}/api/datto/devices/${siteName}`)
-    .then(doc => { doc.data.response ? dattoDevices = doc.data.response : dattoDevices = [] })
-    .catch(err => "err")
-  await axios.get(`${localUrl}/api/sophos/devices/${siteName}`)
-    .then(doc => { doc.data.response ? sophosDevices = doc.data.response : sophosDevices = [] })
-    .catch(err => "err")
-
-  return { datto: dattoDevices, sophos: sophosDevices };
-}
 
 // Method for comparing string alphabetical order
 function strcmp(a, b) {

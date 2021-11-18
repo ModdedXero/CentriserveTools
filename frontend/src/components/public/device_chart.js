@@ -16,7 +16,7 @@ export default function DeviceChart() {
     const [siteName, setSiteName] = useState("");
 
     useEffect(() => {
-        axios.get("/api/sophos/sites")
+        axios.get("/api/agents/sites")
             .then(res => {
                 setAllSiteNames(res.data.response);
                 setLoadingSites(false);
