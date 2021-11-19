@@ -31,8 +31,16 @@ export default function DevicePage() {
         setSophosCount(0);
         setDattoCount(0);
         setComputers([]);
+
+        let site;
+
+        allSiteNames.forEach(siteInfo => {
+            if (siteInfo.name === e.target.value) {
+                site = siteInfo;
+            }
+        })
     
-        await axios.post(`/api/agents/devices`, { sitename: e.target.value })
+        await axios.post(`/api/agents/devices`, { sitename: site })
             .then(res => {
                 setComputers(res.data.response.comparison);
                 setDattoCount(res.data.response.dattoCount);
@@ -96,7 +104,7 @@ export default function DevicePage() {
                 <select className="site-name-select" value={siteName} onChange={UpdateComputerCount}>
                     <option>Select Site...</option>
                     {allSiteNames.map((siteName) => {
-                        return <option value={siteName}>{siteName}</option>
+                        return <option value={siteName.name}>{siteName.name}</option>
                     })}
                 </select>
                 {GenerateComputerNames()}

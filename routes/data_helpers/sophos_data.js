@@ -21,26 +21,14 @@ async function InitSophosAPI() {
 }
 
 // Access Sophos API for array of devices based off a Site Name and returns array
-async function GetDevices(siteName) {
+async function GetDevices(id) {
     let tenant;
     let deviceInfo = [];
 
-    for (let i = 1; i < 10; i++) {
-        if (tenant) { break; }
-
-        await axios.get(`${process.env.SOPHOS_API_URL}/partner/v1/tenants?page=${i}`, 
-            { headers: { Authorization: `Bearer ${SophosAccessToken}`, "X-Partner-ID": SophosPartnerID }})
-            .then(doc => {
-                if (doc.data.items) {
-                    for (let j = 0; j < doc.data.items.length; j++) {
-                        if (doc.data.items[j].name.toLowerCase().includes(siteName.toLowerCase())) {
-                            tenant = doc.data.items[j];
-                            break;
-                        }
-                    }
-                }
-            })
-    }
+    await axios.get(`${process.env.SOPHOS_API_URL}/partner/v1/tenants/${id}`, 
+        { headers: { Authorization: `Bearer ${SophosAccessToken}`, "X-Partner-ID": SophosPartnerID }})
+        .then(doc => { tenant = doc.data })
+        .catch(err => console.log(err))
 
     await axios.get(`${tenant.apiHost}/endpoint/v1/endpoints`, 
         { headers: { Authorization: `Bearer ${SophosAccessToken}`, "X-Tenant-ID": tenant.id }})
@@ -60,24 +48,38 @@ async function GetSites() {
     let tenants = [];
     let sites = [];
 
-    for (let i = 1; i < 10; i++) {
-        await axios.get(`${process.env.SOPHOS_API_URL}/partner/v1/tenants?page=${i}`, 
-            { headers: { Authorization: `Bearer ${SophosAccessToken}`, "X-Partner-ID": SophosPartnerID }})
-            .then(doc => { tenants.push(doc.data.items) })
-            .catch(err => console.log(err))
-    }
+    await axios.get(`${process.env.SOPHOS_API_URL}/partner/v1/tenants?page=1&pageSize=100&pageTotal=true`, 
+        { headers: { Authorization: `Bearer ${SophosAccessToken}`, "X-Partner-ID": SophosPartnerID }})
+        .then(async doc => {
+            for (let i = 1; i < doc.data.pages.total; i++) {
+                await axios.get(`${process.env.SOPHOS_API_URL}/partner/v1/tenants?page=${i}&pageSize=100&pageTotal=true`, 
+                { headers: { Authorization: `Bearer ${SophosAccessToken}`, "X-Partner-ID": SophosPartnerID }})
+                    .then(doc => { tenants.push(doc.data.items) })
+                    .catch(err => console.log(err));
+            }
+        })
+        .catch(err => console.log(err))
 
     for (let i = 0; i < tenants.length; i++) {
         if (tenants[i]) {
             for (let j = 0; j < tenants[i].length; j++) {
                 if (tenants[i][j].name && !tenants[i][j].name.includes("ZZZ") && !tenants[i][j].name.includes("XX")) {
-                    sites.push(tenants[i][j].name);
+                    sites.push(tenants[i][j]);
                 }
             }
         }
     }
+    
+    sites.sort((a, b) => a.name.localeCompare(b.name));
+    sitesUniq = sites.filter((item, pos, self) => {
+        if (self[pos + 1]) {
+            return self[pos].name != self[pos + 1].name;
+        } else {
+            return true;
+        }
+    })
 
-    return sites.sort((a, b) => a.localeCompare(b));
+    return sitesUniq;
 }
 
 exports.GetDevices = GetDevices
