@@ -33,8 +33,8 @@ router.route("/report/site/all").get(async (req, res) => {
 });
 
 // Generates an excel report of a specific sites devices
-router.route("/report/site/:sitename").get(async (req, res) => {
-  const wb = await ReportGenerator.GenSiteAgentComparison(req.params.sitename);
+router.route("/report/site").post(async (req, res) => {
+  const wb = await ReportGenerator.GenSiteAgentComparison(req.body.sitename);
   wb.xlsx.write(res);
 });
 

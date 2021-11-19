@@ -16,6 +16,7 @@ export default function DevicePage() {
     const [loadingReport, setLoadingReport] = useState(false);
     const [loadingSites, setLoadingSites] = useState(true);
     const [siteName, setSiteName] = useState("");
+    const [filterName, setFilterName] = useState("all");
 
     useEffect(() => {
         axios.get("/api/agents/sites")
@@ -49,44 +50,76 @@ export default function DevicePage() {
     };
 
     function GenerateComputerNames() {
-        return (
-            <div className="table-wrapper">
-                {loadingSites && <Notify>Site list loading...</Notify>}
-                <table>
-                    <thead>
-                        <tr>
-                        <th>Sophos Computers: {sophosCount}</th>
-                        <th>Datto Computers: {dattoCount}</th>
-                        </tr>
-                    </thead>
+        switch(filterName) {
+            case "all":
+                return (
                     <tbody>
                         {computers.map((comp) => {
-                        if (comp.isEqual) {
-                            return (
-                            <tr className="row-green">
-                                <td>{comp.sophos.hostname}</td>
-                                <td>{comp.datto.hostname}</td>
-                            </tr>
-                            )
-                        } else {
-                            return (
-                            <tr className="row-red">
-                                <td>{comp.sophos ? comp.sophos.hostname : ""}</td>
-                                <td>{comp.datto ? comp.datto.hostname : ""}</td>
-                            </tr>
-                            )
-                        }
+                            if (comp.isEqual) {
+                                return (
+                                <tr className="row-green">
+                                    <td>{comp.sophos.hostname}</td>
+                                    <td>{comp.datto.hostname}</td>
+                                </tr>
+                                )
+                            } else {
+                                return (
+                                <tr className="row-red">
+                                    <td>{comp.sophos ? comp.sophos.hostname : ""}</td>
+                                    <td>{comp.datto ? comp.datto.hostname : ""}</td>
+                                </tr>
+                                )
+                            }
                         })}
                     </tbody>
-                </table>
-            </div>
-        )
+                )
+            case "stable":
+                return (
+                    <tbody>
+                        {computers.map((comp) => {
+                            if (comp.isEqual) {
+                                return (
+                                <tr className="row-green">
+                                    <td>{comp.sophos.hostname}</td>
+                                    <td>{comp.datto.hostname}</td>
+                                </tr>
+                                )
+                            }
+                        })}
+                    </tbody>
+                )
+            case "error":
+                return (
+                    <tbody>
+                        {computers.map((comp) => {
+                            if (!comp.isEqual) {
+                                return (
+                                    <tr className="row-red">
+                                        <td>{comp.sophos ? comp.sophos.hostname : ""}</td>
+                                        <td>{comp.datto ? comp.datto.hostname : ""}</td>
+                                    </tr>
+                                )
+                            }
+                        })}
+                    </tbody>
+                )
+            default:
+
+        }
     }
 
-    async function GenerateReport() {
+    async function GenerateReport(e) {
         setLoadingReport(true);
+
+        let site;
+
+        allSiteNames.forEach(siteInfo => {
+            if (siteInfo.name === siteName) {
+                site = siteInfo;
+            }
+        })
         
-        await axios.get(`/api/agents/report/site/${siteName}`, { responseType: "arraybuffer" })
+        await axios.post(`/api/agents/report/site`, { sitename: site }, { responseType: "arraybuffer" })
             .then(res => {
                 let blob = new Blob(
                     [res.data], 
@@ -98,6 +131,10 @@ export default function DevicePage() {
           })
     }
 
+    function UpdateFilter(e) {
+        setFilterName(e.target.value);
+    }
+
     return (
         <div className="app-body">
             <div className="device-page">
@@ -107,8 +144,25 @@ export default function DevicePage() {
                         return <option value={siteName.name}>{siteName.name}</option>
                     })}
                 </select>
-                {GenerateComputerNames()}
+                <br />
+                <select className="site-name-select" value={filterName} onChange={UpdateFilter}>
+                    <option value="all">All Devices</option>
+                    <option value="stable">Stable Devices</option>
+                    <option value="error">Error Devices</option>
+                </select>
                 <Button onClick={GenerateReport} clickState={loadingReport}>Download Report</Button>
+                <div className="table-wrapper">
+                    {loadingSites && <Notify>Site list loading...</Notify>}
+                    <table>
+                        <thead>
+                            <tr>
+                            <th>Sophos Computers: {sophosCount}</th>
+                            <th>Datto Computers: {dattoCount}</th>
+                            </tr>
+                        </thead>
+                        {GenerateComputerNames()}
+                    </table>
+                </div>
                 {loadingReport && <Notify>Report Generating...</Notify>}
                 <DeviceInfoDatto />
                 <DeviceInfoSophos />

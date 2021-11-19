@@ -37,7 +37,7 @@ async function GenAllSitesAgentComparison() {
       let deviceCompList = GenerateComputerList(dattoDevices, sophosDevices);
   
       deviceCompList.forEach((val) => {
-          sheet.addRow({ sophos: val.sophos, datto: val.datto });
+          sheet.addRow({ sophos: val.sophos.hostname, datto: val.datto.hostname });
       })
     
       for (let i = 0; i < deviceCompList.length; i++) {
@@ -57,19 +57,19 @@ async function GenAllSitesAgentComparison() {
 async function GenSiteAgentComparison(siteName) {
     const workbook = new ExcelJS.Workbook();
   
-    const sheet = workbook.addWorksheet(siteName);
+    const sheet = workbook.addWorksheet(siteName.name);
     sheet.columns = [
         { header: "Sophos", key: "sophos", width: 30 }, 
         { header: "Datto", key: "datto", width: 30}
     ];
-  
+
     const dattoDevices = await DattoData.GetDevices(siteName.name);
     const sophosDevices = await SophosData.GetDevices(siteName.id);
   
     const deviceCompList = GenerateComputerList(dattoDevices, sophosDevices);
   
     deviceCompList.forEach((val) => {
-        sheet.addRow({ sophos: val.sophos, datto: val.datto });
+        sheet.addRow({ sophos: val.sophos.hostname, datto: val.datto.hostname });
     })
   
     for (let i = 0; i < deviceCompList.length; i++) {

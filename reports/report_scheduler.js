@@ -6,7 +6,7 @@ const ReportGenerator = require("../reports/report_generator");
 async function Initialize() {
     setInterval(async () => {
         Reports.forEach(async (rep) => {
-            GenerateReport(rep.generator, rep.title);
+            GenerateReport(() => rep.generator(), rep.title);
         })
     }, 60 * 60 * 1000);
 
@@ -16,7 +16,6 @@ async function Initialize() {
 }
 
 async function GenerateReport(repGen, title) {
-    console.log(`Generating report ${title}...`);
     const wb = await repGen();
 
     await wb.xlsx.writeBuffer()
