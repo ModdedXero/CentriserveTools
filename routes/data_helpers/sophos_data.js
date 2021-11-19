@@ -1,9 +1,12 @@
 // Initialize required packages (express: Server router, axios: http API)
 const axios = require("axios");
 
+const Utilities = require("../../utilities");
+
 // Initialize needed sophos access tokens
 let SophosAccessToken;
 let SophosPartnerID;
+let APIInit = false;
 
 InitSophosAPI();
 
@@ -18,6 +21,8 @@ async function InitSophosAPI() {
         { headers: { Authorization: `Bearer ${SophosAccessToken}` }})
         .then(doc => { SophosPartnerID = doc.data.id })
         .catch(err => console.log(err))
+
+    APIInit = true;
 }
 
 // Access Sophos API for array of devices based off a Site Name and returns array
@@ -45,6 +50,8 @@ async function GetDevices(id) {
 
 // Access Sophos API for array of sites and returns array
 async function GetSites() {
+    await Utilities.waitFor(() => APIInit === true);
+    
     let tenants = [];
     let sites = [];
 
@@ -63,7 +70,7 @@ async function GetSites() {
     for (let i = 0; i < tenants.length; i++) {
         if (tenants[i]) {
             for (let j = 0; j < tenants[i].length; j++) {
-                if (tenants[i][j].name && !tenants[i][j].name.includes("ZZZ") && !tenants[i][j].name.includes("XX")) {
+                if (tenants[i][j].name && !tenants[i][j].name.includes("ZZZ") && !tenants[i][j].name.includes("XX") && !tenants[i][j].name.includes("null")) {
                     sites.push(tenants[i][j]);
                 }
             }
