@@ -14,6 +14,8 @@ const fs = require("fs");
 const app = express();
 const port = process.env.PORT || 5000;
 
+app.use(express.json());
+
 // Initialize routers
 const sophosRouter = require("./routes/sophos");
 const dattoRouter = require("./routes/datto");

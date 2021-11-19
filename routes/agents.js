@@ -10,13 +10,14 @@ const ReportGenerator = require("../reports/report_generator");
 /* HTTP Request Routes */
 
 // Gets Sophos and Datto devices and creates comparison and returns JSON object
-router.route("/devices/:sitename").get(async (req, res) => {
-  const dattoDevices = await DattoData.GetDevices(req.params.sitename);
-  const sophosDevices = await SophosData.GetDevices(req.params.sitename);
+router.route("/devices").post(async (req, res) => {
+  console.log(req.body)
+  const dattoDevices = await DattoData.GetDevices(req.body.sitename);
+  const sophosDevices = await SophosData.GetDevices(req.body.sitename);
 
   res.status(200).json({ response: {
-    dattoCount: dattoDevices.length,
-    sophosCount: sophosDevices.length,
+    dattoCount: dattoDevices ? dattoDevices.length : 0,
+    sophosCount: sophosDevices ? sophosDevices.length : 0,
     comparison: GenerateComputerList(dattoDevices, sophosDevices)
   }});
 });

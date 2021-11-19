@@ -31,10 +31,12 @@ async function GetDevices(siteName) {
         await axios.get(`${process.env.SOPHOS_API_URL}/partner/v1/tenants?page=${i}`, 
             { headers: { Authorization: `Bearer ${SophosAccessToken}`, "X-Partner-ID": SophosPartnerID }})
             .then(doc => {
-                for (let j = 0; j < doc.data.items.length; j++) {
-                    if (doc.data.items[j].name.toLowerCase().includes(siteName.toLowerCase().replace("%20", " "))) {
-                        tenant = doc.data.items[j];
-                        break;
+                if (doc.data.items) {
+                    for (let j = 0; j < doc.data.items.length; j++) {
+                        if (doc.data.items[j].name.toLowerCase().includes(siteName.toLowerCase())) {
+                            tenant = doc.data.items[j];
+                            break;
+                        }
                     }
                 }
             })

@@ -32,7 +32,7 @@ export default function DevicePage() {
         setDattoCount(0);
         setComputers([]);
     
-        await axios.get(`/api/agents/devices/${e.target.value}`)
+        await axios.post(`/api/agents/devices`, { sitename: e.target.value })
             .then(res => {
                 setComputers(res.data.response.comparison);
                 setDattoCount(res.data.response.dattoCount);
