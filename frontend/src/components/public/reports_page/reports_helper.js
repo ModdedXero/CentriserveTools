@@ -29,12 +29,12 @@ async function GenerateReportAll() {
 
 async function GenerateErrorReportAll() {
     await axios.get(`/api/agents/report/site/error`, { responseType: "arraybuffer" })
-    .then(res => {
-        let blob = new Blob(
-            [res.data], 
-            { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8" }
-        );
-        
-        fileDownload(blob, `All Sites Agent Report.xlsx`);
-    })
+        .then(res => {
+            let blob = new Blob(
+                [res.data], 
+                { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8" }
+            );
+            
+            fileDownload(blob, `All Sites Error Agent Report.xlsx`);
+        })
 }

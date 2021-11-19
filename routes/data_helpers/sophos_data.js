@@ -41,7 +41,7 @@ async function GetDevices(id) {
         .catch(err => { return undefined })
 
     for (let i = 0; i < tenant.devices.length; i++) {
-        tenant.devices[i].hostname = tenant.devices[i].hostname.toUpperCase();
+        tenant.devices[i].hostname = tenant.devices[i].hostname.toUpperCase().substring(0, 15);
         deviceInfo.push(tenant.devices[i]);
     }
 
