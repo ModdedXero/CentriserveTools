@@ -32,6 +32,11 @@ router.route("/report/site/all").get(async (req, res) => {
   ReportGenerator.DownloadReport(res, "All Sites Agent Comparison");
 });
 
+// Generates an excel report of all sites devices with errors
+router.route("/report/site/error").get(async (req, res) => {
+  ReportGenerator.DownloadReport(res, "All Sites Error Agent Comparison");
+});
+
 // Generates an excel report of a specific sites devices
 router.route("/report/site").post(async (req, res) => {
   const wb = await ReportGenerator.GenSiteAgentComparison(req.body.sitename);

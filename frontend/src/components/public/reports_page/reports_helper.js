@@ -8,6 +8,10 @@ export const AvailableReports = [
     {
         report: "All Sites Agent Comparison",
         buttonHtml: <Button onClick={GenerateReportAll}>Download Report</Button>
+    },
+    {
+        report: "All Sites Error Agent Comparison",
+        buttonHtml: <Button onClick={GenerateErrorReportAll}>Download Report</Button>
     }
 ]
 
@@ -21,4 +25,16 @@ async function GenerateReportAll() {
             
             fileDownload(blob, `All Sites Agent Report.xlsx`);
         })
+}
+
+async function GenerateErrorReportAll() {
+    await axios.get(`/api/agents/report/site/error`, { responseType: "arraybuffer" })
+    .then(res => {
+        let blob = new Blob(
+            [res.data], 
+            { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8" }
+        );
+        
+        fileDownload(blob, `All Sites Agent Report.xlsx`);
+    })
 }

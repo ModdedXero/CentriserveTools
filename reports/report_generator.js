@@ -13,9 +13,8 @@ async function DownloadReport(res, repName) {
 
 async function GenAllSitesAgentComparison() {
     const workbook = new ExcelJS.Workbook();
-    let sites = [];
   
-    sites = await SophosData.GetSites();
+    const sites = await SophosData.GetSites();
   
     for await (const siteName of sites) {
       let sheet;
@@ -37,18 +36,15 @@ async function GenAllSitesAgentComparison() {
       let deviceCompList = GenerateComputerList(dattoDevices, sophosDevices);
   
       deviceCompList.forEach((val) => {
-          sheet.addRow({ sophos: val.sophos.hostname, datto: val.datto.hostname });
+          const row = sheet.addRow({ sophos: val.sophos.hostname, datto: val.datto.hostname });
+          if (val.isEqual) {
+            row.getCell(1).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "BAE7B5"} };
+            row.getCell(2).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "BAE7B5"} };
+        } else {
+            row.getCell(1).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "DDB0B1"} };
+            row.getCell(2).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "DDB0B1"} };
+        }
       })
-    
-      for (let i = 0; i < deviceCompList.length; i++) {
-          if (deviceCompList[i].isEqual) {
-              sheet.getCell(`A${i + 2}`).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "BAE7B5"} };
-              sheet.getCell(`B${i + 2}`).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "BAE7B5"} };
-          } else {
-              sheet.getCell(`A${i + 2}`).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "DDB0B1"} };
-              sheet.getCell(`B${i + 2}`).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "DDB0B1"} };
-          }
-      }
     }
 
     return workbook;
@@ -69,20 +65,50 @@ async function GenSiteAgentComparison(siteName) {
     const deviceCompList = GenerateComputerList(dattoDevices, sophosDevices);
   
     deviceCompList.forEach((val) => {
-        sheet.addRow({ sophos: val.sophos.hostname, datto: val.datto.hostname });
+      const row = sheet.addRow({ sophos: val.sophos.hostname, datto: val.datto.hostname });
+      if (val.isEqual) {
+        row.getCell(1).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "BAE7B5"} };
+        row.getCell(2).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "BAE7B5"} };
+      } else {
+        row.getCell(1).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "DDB0B1"} };
+        row.getCell(2).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "DDB0B1"} };
+      }
     })
   
-    for (let i = 0; i < deviceCompList.length; i++) {
-        if (deviceCompList[i].isEqual) {
-            sheet.getCell(`A${i + 2}`).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "BAE7B5"} };
-            sheet.getCell(`B${i + 2}`).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "BAE7B5"} };
-        } else {
-            sheet.getCell(`A${i + 2}`).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "DDB0B1"} };
-            sheet.getCell(`B${i + 2}`).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "DDB0B1"} };
-        }
-    }
-  
     return workbook;
+}
+
+async function GetSiteErrorAgentComparison() {
+  const workbook = new ExcelJS.Workbook();
+
+  const sites = await SophosData.GetSites();
+
+  const sheet = workbook.addWorksheet("Error Devices");
+
+  sheet.columns = [
+    { header: "Sophos", key: "sophos", width: 30 }, 
+    { header: "Datto", key: "datto", width: 30}
+  ];
+  
+  for await (const siteName of sites) {
+    sheet.addRow({ sophos: ""})
+    sheet.addRow({ sophos: siteName.name })
+
+    const dattoDevices = await DattoData.GetDevices(siteName.name);
+    const sophosDevices = await SophosData.GetDevices(siteName.id);
+
+    let deviceCompList = GenerateComputerList(dattoDevices, sophosDevices);
+
+    deviceCompList.forEach((val) => {
+        if (!val.isEqual) {
+          const row = sheet.addRow({ sophos: val.sophos.hostname, datto: val.datto.hostname })
+          row.getCell(1).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "DDB0B1"} };
+          row.getCell(2).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "DDB0B1"} };
+        }
+    })
+  }
+
+  return workbook;
 }
 
 /* General Functions */
@@ -141,4 +167,5 @@ function GenerateComputerList(dattoDevices, sophosDevices) {
 
 exports.GenSiteAgentComparison = GenSiteAgentComparison;
 exports.GenAllSitesAgentComparison = GenAllSitesAgentComparison;
+exports.GetSiteErrorAgentComparison = GetSiteErrorAgentComparison;
 exports.DownloadReport = DownloadReport;

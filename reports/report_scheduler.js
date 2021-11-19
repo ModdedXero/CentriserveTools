@@ -33,6 +33,10 @@ const Reports = [
     {
         title: "All Sites Agent Comparison",
         generator: () => {return ReportGenerator.GenAllSitesAgentComparison()},
+    },
+    {
+        title: "All Sites Error Agent Comparison",
+        generator: () => {return ReportGenerator.GetSiteErrorAgentComparison()}
     }
 ]
 
