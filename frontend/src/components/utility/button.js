@@ -1,7 +1,11 @@
 import React from "react";
 
-export default function Button({ onClick, clickState, children }) {
+export default function Button({ onClick, onSubmit, clickState, type, children }) {
     return (
-        <input type="button" onClick={!clickState ? onClick : undefined} value={children}/>
+        <input 
+            type={type ? type : "button"} 
+            onClick={!clickState ? onClick : undefined} 
+            value={children}
+        />
     )
 }

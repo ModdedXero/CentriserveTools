@@ -15,7 +15,7 @@ body {
     flex-direction: column;
     min-height: 100vh;
     background-color: #2e2e2e;
-    margin-top: 40px;
+    margin-top: 66px;
 }
 
 .app-header {
@@ -116,4 +116,19 @@ body {
     display: block;
     padding: 10px;
     text-decoration: none;
+}
+
+/* Login Page */
+
+.login-page {
+    margin: auto;
+    text-align: center;
+    width: 25%;
+}
+
+/* Forms */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
 }

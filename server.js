@@ -9,6 +9,7 @@ if (process.env.NODE_ENV !== "production") {
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
+const mongoose = require("mongoose");
 
 // Inititialze express server and port
 const app = express();
@@ -16,10 +17,16 @@ const port = process.env.PORT || 5000;
 
 app.use(express.json());
 
+mongoose.connect("mongodb://127.0.0.1:27017/");
+mongoose.connection.once("open", () => {
+    console.log("MongoDB connection established!");
+})
+
 // Initialize routers
 const sophosRouter = require("./routes/sophos");
 const dattoRouter = require("./routes/datto");
 const agentsRouter = require("./routes/agents");
+const userRouter = require("./routes/user");
 
 // Create Handlers
 const reports = require("./reports/report_scheduler");
@@ -31,6 +38,7 @@ app.use(express.static(path.join(__dirname, "frontend", "build")));
 app.use("/api/sophos", sophosRouter);
 app.use("/api/datto", dattoRouter);
 app.use("/api/agents", agentsRouter);
+app.use("/api/user", userRouter);
 
 // Send client Index.html for web data (Doesn't work without static build from React)
 if (process.env.NODE_ENV === "production") {
