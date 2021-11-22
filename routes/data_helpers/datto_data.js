@@ -25,7 +25,7 @@ async function GetDevices(siteName) {
         .catch(err => console.log(err))
 
     for (let i = 0; i < tenants.length; i++) {
-        if (tenants[i].name.toLowerCase() === siteName.toLowerCase()) {
+        if (tenants[i].name.toLowerCase().replace(/ /g, "") == siteName.toLowerCase().replace(/ /g, "")) {
             tenant = tenants[i];
             break;
         }

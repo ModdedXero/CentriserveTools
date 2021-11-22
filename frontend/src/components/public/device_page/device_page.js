@@ -28,6 +28,8 @@ export default function DevicePage() {
 
     async function UpdateComputerCount(e) {
         setSiteName(e.target.value);
+
+        console.log("l");
     
         setSophosCount(0);
         setDattoCount(0);
