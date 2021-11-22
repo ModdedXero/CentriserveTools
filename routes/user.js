@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const cookies = require("cookie-parser");
 
 const mongo = require("../database/mongo");
 
@@ -18,7 +17,7 @@ router.route("/login").post(async (req, res) => {
             res.status(200).json({ response: "create_password"});
             break;
         case 1:
-            res.status(200).json({ response: "authenticated" });
+            res.status(200).json({ response: "authenticated", token: { username: req.body.username, auth: "approved" } });
             break;
         case 0:
             res.status(401).json({ response: "not_authenticated" });
@@ -31,7 +30,7 @@ router.route("/login").post(async (req, res) => {
 router.route("/password").post(async (req, res) => {
     const result = await mongo.SavePassword(req.body.username, req.body.password);
     if (result) {
-        res.status(200).json({ response: "password_saved" });
+        res.status(200).json({ response: "password_saved", token: { username: req.body.username, auth: "approved" }});
     } else {
         res.status(200).json({ response: "password_notsaved" });
     }

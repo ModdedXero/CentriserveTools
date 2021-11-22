@@ -14,9 +14,15 @@ export default function LoginPage() {
         if (loginState === "login" || loginState === "bad_password") {
             const result = await Login(usernameRef.current.value, passwordRef.current.value);
             setLoginState(result);
+            if (result === "success") {
+                window.location = "/";
+            }
         } else if (loginState === "signup") {
             const result = await Signup(usernameRef.current.value, passwordRef.current.value);
             setLoginState(result);
+            if (result === "success") {
+                window.location = "/";
+            }
         }
     }
 

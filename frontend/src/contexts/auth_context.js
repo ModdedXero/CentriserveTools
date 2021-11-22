@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 
 const AuthContext = React.createContext();
@@ -9,6 +9,13 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState(undefined);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const tokenString = localStorage.getItem("token");
+        setCurrentUser(JSON.parse(tokenString));
+        setLoading(false);
+    }, [])
 
     async function Signup(username, password) {
         let result = "failure";
@@ -16,9 +23,12 @@ export function AuthProvider({ children }) {
         await axios.post("/api/user/password", { username: username, password: password })
             .then(res => {
                 if (res.data.response === "password_saved") {
-                    setCurrentUser(res.data.user);
+                    localStorage.setItem("token", JSON.stringify(res.data.token));
+                    setCurrentUser(res.data.token);
+                    result = "success";
+                } else {
+                    result = res.data.response;
                 }
-                result = res.data.response;
             })
             .catch(() => { result = "failure" })
 
@@ -31,7 +41,8 @@ export function AuthProvider({ children }) {
         await axios.post("/api/user/login", { username: username, password: password })
             .then(res => {
                 if (res.data.response === "authenticated") {
-                    setCurrentUser(res.data.user);
+                    localStorage.setItem("token", JSON.stringify(res.data.token));
+                    setCurrentUser(res.data.token);
                     result = "success";
                 } else if (res.data.response === "create_password") {
                     result = "signup";
@@ -57,7 +68,7 @@ export function AuthProvider({ children }) {
 
     return (
         <AuthContext.Provider value={values}>
-            {children}
+            {!loading && children}
         </AuthContext.Provider>
     )
 }
