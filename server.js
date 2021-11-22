@@ -10,6 +10,7 @@ const express = require("express");
 const path = require("path");
 const fs = require("fs");
 const mongoose = require("mongoose");
+const update = require("./update");
 
 // Inititialze express server and port
 const app = express();
@@ -62,3 +63,4 @@ app.listen(port, () => {
 
 // Initialize Handlers
 reports.Initialize();
+update.Initialize();

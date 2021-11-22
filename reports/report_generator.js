@@ -17,6 +17,8 @@ async function GenAllSitesAgentComparison() {
     const sites = await SophosData.GetSites();
   
     for await (const siteName of sites) {
+      await new Promise(resolve => setTimeout(resolve, 500))
+
       let sheet;
 
       try {
@@ -91,8 +93,10 @@ async function GetSiteErrorAgentComparison() {
   ];
   
   for await (const siteName of sites) {
-    sheet.addRow({ sophos: ""})
-    sheet.addRow({ sophos: siteName.name })
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    sheet.addRow({ sophos: ""});
+    sheet.addRow({ sophos: siteName.name });
 
     const dattoDevices = await DattoData.GetDevices(siteName.name);
     const sophosDevices = await SophosData.GetDevices(siteName.id);

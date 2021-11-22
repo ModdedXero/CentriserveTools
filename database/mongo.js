@@ -37,17 +37,11 @@ async function SavePassword(username, password) {
     return result;
 }
 
+async function CreateUser(username) {
+    User.create({ "username": username })
+        .catch(() => {});
+}
+
 exports.ValidateLogin = ValidateLogin;
 exports.SavePassword = SavePassword;
-
-User.findOne({ "username": "blake@centriserveit.com" })
-    .then()
-    .catch(() => {
-        User.create({ "username": "blake@centriserveit.com"});
-        User.create({ "username": "david@centriserveit.com"});
-        User.create({ "username": "jj@centriserveit.com"});
-        User.create({ "username": "tj@centriserveit.com"});
-        User.create({ "username": "ben@centriserveit.com"});
-        User.create({ "username": "oscar@centriserveit.com"});
-        User.create({ "username": "jared@centriserveit.com"});
-    })
+exports.CreateUser = CreateUser;

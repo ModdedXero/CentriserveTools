@@ -31,5 +31,8 @@
   "bugs": {
     "url": "https://github.com/ModdedXero/CentriserveTools/issues"
   },
-  "homepage": "https://github.com/ModdedXero/CentriserveTools#readme"
+  "homepage": "https://github.com/ModdedXero/CentriserveTools#readme",
+  "nodemonConfig": {
+    "ignore": ["*update.json"]
+  }
 }
