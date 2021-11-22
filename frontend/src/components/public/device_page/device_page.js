@@ -22,8 +22,10 @@ export default function DevicePage() {
         axios.get("/api/agents/sites")
             .then(res => {
                 setAllSiteNames(res.data.response);
+                console.log(res.data);
                 setLoadingSites(false);
-        })
+            })
+            .catch(err => console.log(err))
     }, [])
 
     async function UpdateComputerCount(e) {
