@@ -51,7 +51,7 @@ async function GetDevices(id) {
         .catch(err => console.log("Failed to retrieve Sophos Tenant!"))
 
     if (!tenant) return [];
-    await axios.get(`${tenant.apiHost}/endpoint/v1/endpoints`, 
+    await axios.get(`${tenant.apiHost}/endpoint/v1/endpoints?view=full`, 
         { headers: { Authorization: `Bearer ${SophosAccessToken}`, "X-Tenant-ID": tenant.id }})
         .then(doc => { tenant.devices = doc.data.items })
         .catch(err => console.log("Failed to retrieve Sophos Devices!"))

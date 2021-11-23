@@ -68,4 +68,4 @@ app.listen(port, () => {
 
 // Initialize Handlers
 reports.Initialize();
-update.Initialize();
+// update.Initialize();

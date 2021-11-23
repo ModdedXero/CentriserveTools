@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Button from "../../utility/button";
 
 export default function DeviceInfoDatto({ device, deviceList }) {
     const [deviceInfo, setDeviceInfo] = useState(undefined);
@@ -13,9 +14,16 @@ export default function DeviceInfoDatto({ device, deviceList }) {
         })
     }, [device])
 
+    function OpenDattoSiteDevice() {
+        if (deviceInfo) {
+            window.open(deviceInfo.portalUrl);
+        }
+    }
+
     return(
         <div className="device-page-info">
             <h2>Datto Device Info</h2>
+            <Button onClick={OpenDattoSiteDevice}>Open Device On Datto</Button>
             <div>
                 <h3>Hostname:</h3>
                 <h4>{deviceInfo && deviceInfo.hostname}</h4>
