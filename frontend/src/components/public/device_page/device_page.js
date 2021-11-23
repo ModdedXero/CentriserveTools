@@ -18,6 +18,7 @@ export default function DevicePage() {
     const [siteName, setSiteName] = useState("");
     const [filterName, setFilterName] = useState("all");
     const [selectedComputer, setSelectedComputer] = useState("");
+    const [selectedRow, setSelectedRow] = useState(undefined);
 
     useEffect(() => {
         axios.get("/api/agents/sites")
@@ -52,10 +53,14 @@ export default function DevicePage() {
     };
 
     function handleRowClick(e) {
+        if (selectedRow) selectedRow.className = selectedRow.className.split(" ")[0];
+
         const comp = e.target.parentElement.outerText.split('\t').find((str) => {
             return str !== "";
         });
 
+        e.target.parentElement.className = e.target.parentElement.className + " selected";
+        setSelectedRow(e.target.parentElement)
         setSelectedComputer(comp);
     }
 
