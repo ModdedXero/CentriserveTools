@@ -55,7 +55,7 @@ export default function LoginPage() {
                     </div>
                     {loginState !== "login" && <div className="form-group">
                         <label>Password</label>
-                        <input type="password" ref={passwordRef} placeholder="Enter Password"/>
+                        <input type="password" minLength="8" ref={passwordRef} placeholder="Enter Password"/>
                     </div>}
                     <div>
                         <Button type="submit">Submit</Button>

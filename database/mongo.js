@@ -42,6 +42,15 @@ async function CreateUser(username) {
         .catch(() => {});
 }
 
+async function ResetPassword(username) {
+    User.findOne({ "username": username })
+        .then(async doc => {
+            doc.password = ""
+            await doc.save();
+        })
+}
+
 exports.ValidateLogin = ValidateLogin;
 exports.SavePassword = SavePassword;
 exports.CreateUser = CreateUser;
+exports.ResetPassword = ResetPassword;

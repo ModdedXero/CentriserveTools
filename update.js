@@ -33,7 +33,8 @@ async function Initialize() {
 }
 
 const Updates = {
-    "Mongo User Init": { callback: async () => { return MongoInitUserUpdate() } }
+    "Mongo User Init": { callback: async () => { return MongoInitUserUpdate() } },
+    "Mongo User Password Reset": { callback: async () => { return MongoUserPasswordReset() } }
 }
 
 async function MongoInitUserUpdate() {
@@ -45,6 +46,16 @@ async function MongoInitUserUpdate() {
         mongo.CreateUser("ben@centriserveit.com")
         mongo.CreateUser("oscar@centriserveit.com")
         mongo.CreateUser("jared@centriserveit.com")
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+async function MongoUserPasswordReset() {
+    try {
+        mongo.ResetPassword("blake@centriserveit.com")
+        mongo.ResetPassword("david@centriserveit.com")
         return true;
     } catch {
         return false;
