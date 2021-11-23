@@ -18,10 +18,15 @@ const port = process.env.PORT || 5000;
 
 app.use(express.json());
 
-mongoose.connect("mongodb://127.0.0.1:27017/");
-mongoose.connection.once("open", () => {
-    console.log("MongoDB connection established!");
-})
+try {
+    mongoose.connect("mongodb://127.0.0.1:27017/")
+        .catch(err => console.log("MongoDB connection failed!"))
+    mongoose.connection.once("open", () => {
+        console.log("MongoDB connection established!");
+    })
+} catch {
+    console.log("MongoDB connection failed!")
+}
 
 // Initialize routers
 const sophosRouter = require("./routes/sophos");
@@ -63,4 +68,4 @@ app.listen(port, () => {
 
 // Initialize Handlers
 reports.Initialize();
-update.Initialize();
+// update.Initialize();

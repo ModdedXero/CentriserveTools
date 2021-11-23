@@ -11,7 +11,7 @@ function InitDattoAPI() {
         `grant_type=password&username=${process.env.DATTO_CLIENT_KEY}&password=${process.env.DATTO_SECRET_KEY}`,
         { headers: { "Content-Type": "application/x-www-form-urlencoded" }, auth: { username: "public-client", password: "public" }})
         .then(res => { DattoAccessToken = res.data.access_token })
-        .catch(err => console.log(err))
+        .catch(err => console.log("Failed to retrieve Datto Access Token!"))
 }
 
 // Access Datto API for array of devices based off a Site Name and returns array
@@ -22,9 +22,9 @@ async function GetDevices(siteName) {
 
     await axios.get(`${process.env.DATTO_API_URL}/api/v2/account/sites`, { headers: { Authorization: `Bearer ${DattoAccessToken}` }})
         .then(doc => { tenants = doc.data.sites })
-        .catch(err => console.log(err))
+        .catch(err => console.log("Failed to retrieve Datto Sites!"))
 
-    for (let i = 0; i < tenants.length; i++) {
+    for (let i = 0; i < (tenants ? tenants.length : 0); i++) {
         if (tenants[i].name.toLowerCase().includes(siteName.toLowerCase())) {
             tenant = tenants[i];
             break;
@@ -38,9 +38,9 @@ async function GetDevices(siteName) {
     await axios.get(`${process.env.DATTO_API_URL}/api/v2/site/${tenant.uid}/devices`,
         { headers: { Authorization: `Bearer ${DattoAccessToken}` }})
         .then(doc => { tenant.devices = doc.data.devices })
-        .catch(err => console.log(err))
+        .catch(err => console.log("Failed to retrieve Datto Devices!"))
 
-    for (let i = 0; i < tenant.devices.length; i++) {
+    for (let i = 0; i < (tenant.devices ? tenant.devices.length : 0); i++) {
         tenant.devices[i].hostname = tenant.devices[i].hostname.toUpperCase();
         deviceInfo.push(tenant.devices[i]);
     }
@@ -55,7 +55,7 @@ async function GetSites() {
 
     await axios.get(`${process.env.DATTO_API_URL}/api/v2/account/sites`, { headers: { Authorization: `Bearer ${DattoAccessToken}` }})
         .then(doc => { tenants = doc.data.sites })
-        .catch(err => console.log(err))
+        .catch(err => console.log("Failed to retrieve Datto Sites!"))
 
     if (!tenants) {
         res.status(302);

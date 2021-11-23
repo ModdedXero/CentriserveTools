@@ -26,7 +26,15 @@ body {
     padding: 50px;
 }
 
-.site-name-select {
+/* Select */
+
+.select-full {
+    font-size: 20px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.select-fit {
     font-size: 20px;
     margin-bottom: 10px;
 }
@@ -131,4 +139,19 @@ body {
 .form-group {
     display: flex;
     flex-direction: column;
+}
+
+/* Device Page */
+
+.device-page {
+    margin: 0;
+    padding: 0;
+    display: table;
+    width: 100%;
+}
+
+.device-page > div {
+    float: left;
+    width: 30%;
+    margin-right: 10px;
 }

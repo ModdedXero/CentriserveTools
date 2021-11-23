@@ -33,6 +33,8 @@
   },
   "homepage": "https://github.com/ModdedXero/CentriserveTools#readme",
   "nodemonConfig": {
-    "ignore": ["*update.json"]
+    "ignore": [
+      "*update.json"
+    ]
   }
 }
