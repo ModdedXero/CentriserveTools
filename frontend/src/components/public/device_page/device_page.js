@@ -17,6 +17,8 @@ export default function DevicePage() {
     const [loadingSites, setLoadingSites] = useState(true);
     const [siteName, setSiteName] = useState("");
     const [filterName, setFilterName] = useState("all");
+    const [selectedComputer, setSelectedComputer] = useState("");
+    const [selectedRow, setSelectedRow] = useState(undefined);
 
     useEffect(() => {
         axios.get("/api/agents/sites")
@@ -36,6 +38,7 @@ export default function DevicePage() {
         setSophosCount(0);
         setDattoCount(0);
         setComputers([]);
+        setSelectedComputer("");
 
         let site;
 
@@ -53,63 +56,40 @@ export default function DevicePage() {
             })
     };
 
-    function GenerateComputerNames() {
-        switch(filterName) {
-            case "all":
-                return (
-                    <tbody>
-                        {computers.map((comp) => {
-                            if (comp.isEqual) {
-                                return (
-                                <tr className="row-green">
-                                    <td>{comp.sophos.hostname}</td>
-                                    <td>{comp.datto.hostname}</td>
-                                </tr>
-                                )
-                            } else {
-                                return (
-                                <tr className="row-red">
-                                    <td>{comp.sophos ? comp.sophos.hostname : ""}</td>
-                                    <td>{comp.datto ? comp.datto.hostname : ""}</td>
-                                </tr>
-                                )
-                            }
-                        })}
-                    </tbody>
-                )
-            case "stable":
-                return (
-                    <tbody>
-                        {computers.map((comp) => {
-                            if (comp.isEqual) {
-                                return (
-                                <tr className="row-green">
-                                    <td>{comp.sophos.hostname}</td>
-                                    <td>{comp.datto.hostname}</td>
-                                </tr>
-                                )
-                            }
-                        })}
-                    </tbody>
-                )
-            case "error":
-                return (
-                    <tbody>
-                        {computers.map((comp) => {
-                            if (!comp.isEqual) {
-                                return (
-                                    <tr className="row-red">
-                                        <td>{comp.sophos ? comp.sophos.hostname : ""}</td>
-                                        <td>{comp.datto ? comp.datto.hostname : ""}</td>
-                                    </tr>
-                                )
-                            }
-                        })}
-                    </tbody>
-                )
-            default:
+    function handleRowClick(e) {
+        if (selectedRow) selectedRow.className = selectedRow.className.split(" ")[0];
 
-        }
+        const comp = e.target.parentElement.outerText.split('\t').find((str) => {
+            return str !== "";
+        });
+
+        e.target.parentElement.className = e.target.parentElement.className + " selected";
+        setSelectedRow(e.target.parentElement)
+        setSelectedComputer(comp);
+    }
+
+    function GenerateComputerNames() {
+        return (
+            <tbody>
+                {computers.map((comp) => {
+                    if (comp.isEqual && (filterName === "all" || filterName === "stable")) {
+                        return (
+                            <tr onClick={(e) => console.log(e.target.outerText)} className="row-green">
+                                <td onClick={handleRowClick}>{comp.sophos.hostname}</td>
+                                <td onClick={handleRowClick}>{comp.datto.hostname}</td>
+                            </tr>
+                        )
+                    } else if (!comp.isEqual && filterName !== "stable") {
+                        return (
+                            <tr className="row-red">
+                                <td onClick={handleRowClick}>{comp.sophos ? comp.sophos.hostname : ""}</td>
+                                <td onClick={handleRowClick}>{comp.datto ? comp.datto.hostname : ""}</td>
+                            </tr>
+                        )
+                    }
+                })}
+            </tbody>
+        )
     }
 
     async function GenerateReport(e) {
@@ -142,34 +122,37 @@ export default function DevicePage() {
     return (
         <div className="app-body">
             <div className="device-page">
-                <select className="site-name-select" value={siteName} onChange={UpdateComputerCount}>
-                    <option>Select Site...</option>
-                    {allSiteNames.map((siteName) => {
-                        return <option value={siteName.name}>{siteName.name}</option>
-                    })}
-                </select>
-                <br />
-                <select className="site-name-select" value={filterName} onChange={UpdateFilter}>
-                    <option value="all">All Devices</option>
-                    <option value="stable">Stable Devices</option>
-                    <option value="error">Error Devices</option>
-                </select>
-                <Button onClick={GenerateReport} clickState={loadingReport}>Download Report</Button>
-                <div className="table-wrapper">
-                    {loadingSites && <Notify>Site list loading...</Notify>}
-                    <table>
-                        <thead>
-                            <tr>
-                            <th>Sophos Computers: {sophosCount}</th>
-                            <th>Datto Computers: {dattoCount}</th>
-                            </tr>
-                        </thead>
-                        {GenerateComputerNames()}
-                    </table>
+                <div>
+                    <select className="select-full" value={siteName} onChange={UpdateComputerCount}>
+                        <option>Select Site...</option>
+                        {allSiteNames.map((siteName) => {
+                            return <option value={siteName.name}>{siteName.name}</option>
+                        })}
+                    </select>
+                    <br />
+                    <select className="select-fit" value={filterName} onChange={UpdateFilter}>
+                        <option value="all">All Devices</option>
+                        <option value="stable">Stable Devices</option>
+                        <option value="error">Error Devices</option>
+                    </select>
+                    <br />
+                    <Button onClick={GenerateReport} clickState={loadingReport}>Download Report</Button>
+                    <div className="table-wrapper">
+                        {loadingSites && <Notify>Site list loading...</Notify>}
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Sophos Computers: {sophosCount}</th>
+                                    <th>Datto Computers: {dattoCount}</th>
+                                </tr>
+                            </thead>
+                            {GenerateComputerNames()}
+                        </table>
+                    </div>
                 </div>
+                <DeviceInfoDatto device={selectedComputer} deviceList={computers} />
+                <DeviceInfoSophos device={selectedComputer} deviceList={computers} />
                 {loadingReport && <Notify>Report Generating...</Notify>}
-                <DeviceInfoDatto />
-                <DeviceInfoSophos />
             </div>
         </div>
     );

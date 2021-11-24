@@ -54,7 +54,7 @@ function strcmp(a, b) {
 
 // Filters Datto and Sophos device arrays into comparison
 function GenerateComputerList(dattoDevices, sophosDevices) {
-    const length = sophosDevices.length + dattoDevices.length;
+    const length = (sophosDevices ? sophosDevices.length : 0) + (dattoDevices ? dattoDevices.length : 0);
     let deviceList = [];
 
     for (let i = 0; i < length; i++) {
