@@ -13,6 +13,7 @@ export default function Navbar({ children }) {
                 <ul>
                     <li><DynamicLink className="navbar-link" to="/">Device Charts</DynamicLink></li>
                     <li><DynamicLink className="navbar-link" to="/reports">Reports</DynamicLink></li>
+                    <li><DynamicLink className="navbar-link" to="/downloads">Downloads</DynamicLink></li>
                 </ul>
             </nav>
             <div className="app-wrapper">

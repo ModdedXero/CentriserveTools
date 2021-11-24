@@ -48,8 +48,25 @@ app.use("/api/user", userRouter);
 
 // Send client Index.html for web data (Doesn't work without static build from React)
 if (process.env.NODE_ENV === "production") {
+    const filePath = path.join(__dirname, "frontend", "build", "index.html");
+
+    app.get("/reports", (req, res) => {
+        RenderSite(res);
+    });
+
+    app.get("/downloads", (req, res) => {
+        RenderSite(res);
+    });
+
+    app.get("/login", (req, res) => {
+        RenderSite(res);
+    });
+    
     app.get("/*", (req, res) => {
-        const filePath = path.join(__dirname, "frontend", "build", "index.html");
+        RenderSite(res);
+    });
+
+    function RenderSite(res) {
         fs.readFile(filePath, "utf8", (err, data) => {
             if (err) {
                 return console.log(err);
@@ -57,7 +74,7 @@ if (process.env.NODE_ENV === "production") {
                 res.send(data);
             }
         });
-    });
+    }
 }
 
 // Start server listening on port
