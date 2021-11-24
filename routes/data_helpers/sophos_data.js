@@ -14,6 +14,7 @@ InitSophosAPI();
 async function InitSophosAPI() {
     let APICount = 0;
     while (true) {
+        await new Promise(resolve => setTimeout(resolve, 1500));
 
         if (!SophosAccessToken) {
             await axios.post("https://id.sophos.com/api/v2/oauth2/token", 
