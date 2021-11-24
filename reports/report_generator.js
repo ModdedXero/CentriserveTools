@@ -95,21 +95,57 @@ async function GetSiteErrorAgentComparison() {
   for await (const siteName of sites) {
     await new Promise(resolve => setTimeout(resolve, 500));
 
-    sheet.addRow({ sophos: ""});
-    sheet.addRow({ sophos: siteName.name });
-
     const dattoDevices = await DattoData.GetDevices(siteName.name);
     const sophosDevices = await SophosData.GetDevices(siteName.id);
 
     let deviceCompList = GenerateComputerList(dattoDevices, sophosDevices);
 
-    deviceCompList.forEach((val) => {
-        if (!val.isEqual) {
-          const row = sheet.addRow({ sophos: val.sophos.hostname, datto: val.datto.hostname })
-          row.getCell(1).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "DDB0B1"} };
-          row.getCell(2).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "DDB0B1"} };
-        }
-    })
+    let filteredDevices = deviceCompList.filter(val => val.isEqual);
+
+    if (filteredDevices !== []) {
+      sheet.addRow({ sophos: ""});
+      sheet.addRow({ sophos: siteName.name });
+  
+      filteredDevices.forEach((val) => {
+          if (!val.isEqual) {
+            const row = sheet.addRow({ sophos: val.sophos.hostname, datto: val.datto.hostname })
+            row.getCell(1).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "DDB0B1"} };
+            row.getCell(2).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "DDB0B1"} };
+          }
+      })
+    }
+  }
+
+  return workbook;
+}
+
+async function GetSitesTamperProtectionCheck() {
+  const workbook = new ExcelJS.Workbook();
+
+  const sites = await SophosData.GetSites();
+
+  const sheet = workbook.addWorksheet("Error Devices");
+
+  sheet.columns = [
+    { header: "Device", key: "sophos", width: 30 }, 
+  ];
+  
+  for await (const siteName of sites) {
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    const sophosDevices = await SophosData.GetDevices(siteName.id);
+
+    let filteredDevices = sophosDevices.filter(val => !val.tamperProtectionEnabled);
+
+    if (filteredDevices.length) {
+      sheet.addRow({ sophos: ""});
+      sheet.addRow({ sophos: siteName.name });
+  
+      filteredDevices.forEach((val) => {
+        const row = sheet.addRow({ sophos: val.hostname })
+        row.getCell(1).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "c2b92b"} };
+      })
+    }
   }
 
   return workbook;
@@ -172,4 +208,5 @@ function GenerateComputerList(dattoDevices, sophosDevices) {
 exports.GenSiteAgentComparison = GenSiteAgentComparison;
 exports.GenAllSitesAgentComparison = GenAllSitesAgentComparison;
 exports.GetSiteErrorAgentComparison = GetSiteErrorAgentComparison;
+exports.GetSitesTamperProtectionCheck = GetSitesTamperProtectionCheck;
 exports.DownloadReport = DownloadReport;

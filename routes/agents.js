@@ -28,13 +28,18 @@ router.route("/sites").get(async (req, res) => {
 });
 
 // Generates an excel report of all sites devices
-router.route("/report/site/all").get(async (req, res) => {
+router.route("/report/all").get(async (req, res) => {
   ReportGenerator.DownloadReport(res, "All Sites Agent Comparison");
 });
 
 // Generates an excel report of all sites devices with errors
-router.route("/report/site/error").get(async (req, res) => {
+router.route("/report/error").get(async (req, res) => {
   ReportGenerator.DownloadReport(res, "All Sites Error Agent Comparison");
+});
+
+// Generates an excel report of all sites devices with tamper protection disabled
+router.route("/report/tamperprotection").get(async (req, res) => {
+  ReportGenerator.DownloadReport(res, "All Sites Tamper Protection Check");
 });
 
 // Generates an excel report of a specific sites devices

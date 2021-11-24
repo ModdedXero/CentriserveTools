@@ -6,12 +6,12 @@ const ReportGenerator = require("../reports/report_generator");
 async function Initialize() {
     setInterval(async () => {
         Reports.forEach(async (rep) => {
-            GenerateReport(() => rep.generator(), rep.title);
+            await GenerateReport(() => rep.generator(), rep.title);
         })
     }, 60 * 60 * 1000);
 
     Reports.forEach(async (rep) => {
-        GenerateReport(() => rep.generator(), rep.title);
+        await GenerateReport(() => rep.generator(), rep.title);
     })
 }
 
@@ -30,6 +30,10 @@ async function GenerateReport(repGen, title) {
         }
 
 const Reports = [
+    {
+        title: "All Sites Tamper Protection Check",
+        generator: () => {return ReportGenerator.GetSitesTamperProtectionCheck()}
+    },
     {
         title: "All Sites Agent Comparison",
         generator: () => {return ReportGenerator.GenAllSitesAgentComparison()},

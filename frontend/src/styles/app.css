@@ -33,6 +33,7 @@ body {
     background-color: #3b8f8f;
     border: 1px solid white;
     padding: 7px;
+    margin: 7px;
     color: white;
     cursor: pointer;
 }
@@ -40,11 +41,51 @@ body {
     background-color: #2a6666;
 }
 
+/* Div Tags */
+
+.flex-row {
+    display: flex;
+}
+
+/* Tooltip */
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    margin: 5px;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 10px;
+    position: absolute;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+.tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+.box {
+    width: 20px;
+    height: 30px;
+    margin:  0 5px 15px 5px;
+    clear: both;
+}
+
 /* Select */
 
 .react-select {
     color: black;
-    margin: 0;
+    margin-bottom: 10px;
 }
 
 .select-full {
@@ -62,7 +103,6 @@ body {
 
 .table-wrapper {
     display: flex;
-    padding: 20px 0;
 }
 
 .table-wrapper table {

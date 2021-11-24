@@ -157,30 +157,41 @@ export default function DevicePage() {
                         value={siteName} 
                         onChange={UpdateComputerCount}
                     />
-                    <br />
-                    <Select 
-                        className="react-select select-fit" 
-                        options={[
-                            { value: "all", label: "All Devices" },
-                            { value: "stable", label: "Stable Devices" },
-                            { value: "error", label: "Error Devices" }
-                        ]}
-                        value={filterValue} 
-                        onChange={UpdateFilter}
-                    />
-                    <br />
-                    <Button onClick={GenerateReport} clickState={loadingReport}>Download Report</Button>
-                    <div className="table-wrapper">
-                        {loadingSites && <Notify>Site list loading...</Notify>}
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Sophos Computers: {sophosCount}</th>
-                                    <th>Datto Computers: {dattoCount}</th>
-                                </tr>
-                            </thead>
-                            {GenerateComputerNames()}
-                        </table>
+                    <div className="flex-row">
+                        <Select 
+                            className="react-select select-fit" 
+                            options={[
+                                { value: "all", label: "All Devices" },
+                                { value: "stable", label: "Stable Devices" },
+                                { value: "error", label: "Error Devices" }
+                            ]}
+                            value={filterValue} 
+                            onChange={UpdateFilter}
+                        />
+                        <Button onClick={GenerateReport} clickState={loadingReport}>Download Report</Button>
+                    </div>
+                    <div className="flex-row">
+                        <div className="table-wrapper">
+                            {loadingSites && <Notify>Site list loading...</Notify>}
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Sophos Computers: {sophosCount}</th>
+                                        <th>Datto Computers: {dattoCount}</th>
+                                    </tr>
+                                </thead>
+                                {GenerateComputerNames()}
+                            </table>
+                        </div>
+                        <div className="tooltip">
+                            [i]
+                            <span className="tooltip-text">
+                                <div className="flex-row">Missing Agent: <div className="row-red box" /></div>
+                                <div className="flex-row">Installed Agents: <div className="row-green box" /></div>
+                                <div className="flex-row">Server Agent: <div className="row-dark-green box" /></div>
+                                <div className="flex-row">Tamper Protection Disabled: <div className="row-yellow box" /></div>
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <DeviceInfoDatto device={selectedComputer} deviceList={computers} />

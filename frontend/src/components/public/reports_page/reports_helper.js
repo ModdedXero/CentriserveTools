@@ -12,29 +12,33 @@ export const AvailableReports = [
     {
         report: "All Sites Error Agent Comparison",
         buttonHtml: <Button onClick={GenerateErrorReportAll}>Download Report</Button>
+    },
+    {
+        report: "All Sites Tamper Protection Check",
+        buttonHtml: <Button onClick={GenerateTamperCheckReport}>Download Report</Button>
     }
 ]
 
 async function GenerateReportAll() {
-    await axios.get(`/api/agents/report/site/all`, { responseType: "arraybuffer" })
-        .then(res => {
-            let blob = new Blob(
-                [res.data], 
-                { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8" }
-            );
-            
-            fileDownload(blob, `All Sites Agent Report.xlsx`);
-        })
+    await DownloadReport("all", "All Sites Agent Report");
 }
 
 async function GenerateErrorReportAll() {
-    await axios.get(`/api/agents/report/site/error`, { responseType: "arraybuffer" })
+    await DownloadReport("error", "All Sites Error Agent Report");
+}
+
+async function GenerateTamperCheckReport() {
+    await DownloadReport("tamperprotection", "All Sites Tamper Protection Check");
+}
+
+async function DownloadReport(url, title) {
+    await axios.get(`/api/agents/report/${url}`, { responseType: "arraybuffer" })
         .then(res => {
             let blob = new Blob(
                 [res.data], 
                 { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8" }
             );
             
-            fileDownload(blob, `All Sites Error Agent Report.xlsx`);
+            fileDownload(blob, `${title}.xlsx`);
         })
 }
