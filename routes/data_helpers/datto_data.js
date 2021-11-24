@@ -38,13 +38,8 @@ async function GetDevices(siteName) {
         .then(doc => { tenants = doc.data.sites })
         .catch(err => console.log("Failed to retrieve Datto Sites!"))
 
-<<<<<<< HEAD
     for (let i = 0; i < tenants.length; i++) {
         if (tenants[i].name.toLowerCase().replace(/ /g, "") == siteName.toLowerCase().replace(/ /g, "")) {
-=======
-    for (let i = 0; i < (tenants ? tenants.length : 0); i++) {
-        if (tenants[i].name.toLowerCase().includes(siteName.toLowerCase())) {
->>>>>>> working
             tenant = tenants[i];
             break;
         }
