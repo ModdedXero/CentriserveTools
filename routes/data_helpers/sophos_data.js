@@ -64,6 +64,23 @@ async function GetDevices(id) {
     return deviceInfo.sort((a, b) => a.hostname.localeCompare(b.hostname));
 }
 
+async function EnableTamper(id, tenantId) {
+    let result = false;
+    let tenant;
+
+    await axios.get(`${process.env.SOPHOS_API_URL}/partner/v1/tenants/${tenantId}`, 
+        { headers: { Authorization: `Bearer ${SophosAccessToken}`, "X-Partner-ID": SophosPartnerID }})
+        .then(doc => { tenant = doc.data })
+        .catch(err => APICheck("Failed to retrieve Sophos Tenant!"))
+
+    await axios.post(`${tenant.apiHost}/endpoint/v1/endpoints/${id}/tamper-protection`, { "enabled": true, "regeneratePassword": false },
+        { headers: { Authorization: `Bearer ${SophosAccessToken}`, "X-Tenant-ID": tenant.id }})
+        .then(result = true)
+        .catch(APICheck("Failed to enable Tamper Protection!"))
+
+    return result;
+}
+
 // Access Sophos API for array of sites and returns array
 async function GetSites() {
     await Utilities.waitFor(() => APICheck());
@@ -127,5 +144,6 @@ async function APICheck(error) {
     return error ? result : APIInit;
 }
 
-exports.GetDevices = GetDevices
+exports.GetDevices = GetDevices;
+exports.EnableTamper = EnableTamper;
 exports.GetSites = GetSites;

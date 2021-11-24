@@ -30,7 +30,7 @@ export default function DeviceInfoDatto({ device, deviceList }) {
             </div>
             <div>
                 <h3>Type:</h3>
-                <h4>{deviceInfo && deviceInfo.deviceType.type}</h4>
+                <h4>{deviceInfo && deviceInfo.deviceType.category}</h4>
             </div>
             <div>
                 <h3>Platform:</h3>
@@ -47,6 +47,10 @@ export default function DeviceInfoDatto({ device, deviceList }) {
             <div>
                 <h3>Internal IP:</h3>
                 <h4>{deviceInfo && deviceInfo.intIpAddress}</h4>
+            </div>
+            <div>
+                <h3>External IP:</h3>
+                <h4>{deviceInfo && deviceInfo.extIpAddress}</h4>
             </div>
             <div>
                 <h3>Antivirus:</h3>

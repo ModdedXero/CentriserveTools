@@ -72,12 +72,28 @@ export default function DevicePage() {
             <tbody>
                 {computers.map((comp) => {
                     if (comp.isEqual && (filterName === "all" || filterName === "stable")) {
-                        return (
-                            <tr className="row-green">
-                                <td onClick={handleRowClick}>{comp.sophos.hostname}</td>
-                                <td onClick={handleRowClick}>{comp.datto.hostname}</td>
-                            </tr>
-                        )
+                        if (comp.sophos.os.isServer) {
+                            return (
+                                <tr className="row-dark-green">
+                                    <td onClick={handleRowClick}>{comp.sophos.hostname}</td>
+                                    <td onClick={handleRowClick}>{comp.datto.hostname}</td>
+                                </tr>
+                            )
+                        } else if (!comp.sophos.tamperProtectionEnabled) {
+                            return (
+                                <tr className="row-yellow">
+                                    <td onClick={handleRowClick}>{comp.sophos.hostname}</td>
+                                    <td onClick={handleRowClick}>{comp.datto.hostname}</td>
+                                </tr>
+                            )
+                        } else {
+                            return (
+                                <tr className="row-green">
+                                    <td onClick={handleRowClick}>{comp.sophos.hostname}</td>
+                                    <td onClick={handleRowClick}>{comp.datto.hostname}</td>
+                                </tr>
+                            )
+                        }
                     } else if (!comp.isEqual && filterName !== "stable") {
                         return (
                             <tr className="row-red">
