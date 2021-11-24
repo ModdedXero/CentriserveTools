@@ -25,6 +25,12 @@ router.route("/devices/:sitename").get(async (req, res) => {
     }
 });
 
+// Enables Tamper Protection for a device
+router.route("/enabletamper").post(async (req, res) => {
+    const result = await SophosData.EnableTamper(req.body.id, req.body.tenantId);
+    res.status(200).json({ response: "Tamper Protection Enabled!" });
+});
+
 // Access Sophos API for array of sites and returns array
 router.route("/sites").get(async (req, res) => {
     const siteNames = await SophosData.GetSites();

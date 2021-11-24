@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
+import Button from "../../utility/button"
 
 export default function DeviceInfoSophos({ device, deviceList }) {
     const [deviceInfo, setDeviceInfo] = useState(undefined);
@@ -12,6 +14,12 @@ export default function DeviceInfoSophos({ device, deviceList }) {
             }
         })
     }, [device])
+
+    async function EnableTamperProtection() {
+        await axios.post(`/api/sophos/enabletamper`, { id: deviceInfo.id, tenantId: deviceInfo.tenant.id })
+            .then(res => { window.location.reload(); })
+            .catch(err => console.log(err));
+    }
 
     return(
         <div className="device-page-info">
@@ -39,6 +47,11 @@ export default function DeviceInfoSophos({ device, deviceList }) {
             <div>
                 <h3>Tamper Protection:</h3>
                 <h4>{deviceInfo && (deviceInfo.tamperProtectionEnabled ? "Enabled" : "Disabled")}</h4>
+                {
+                    deviceInfo && 
+                    !deviceInfo.tamperProtectionEnabled &&
+                    <Button onClick={EnableTamperProtection}>Enable Tamper Protection</Button>
+                }
             </div>
             <div>
                 <h3>Overall Health:</h3>

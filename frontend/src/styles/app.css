@@ -34,6 +34,10 @@ body {
     border: 1px solid white;
     padding: 7px;
     color: white;
+    cursor: pointer;
+}
+.btn:hover {
+    background-color: #2a6666;
 }
 
 /* Select */
@@ -80,11 +84,18 @@ body {
 .row-green {
     background-color: #04AA6D;
 }
+.row-dark-green {
+    background-color: #027349;
+}
+.row-yellow {
+    background-color: #c2b92b;
+}
 .row-red {
     background-color: #a64146;
 }
 
-.row-green.selected > td, .row-red.selected > td {
+.row-green.selected > td, .row-red.selected > td,
+.row-dark-green.selected > td, .row-yellow.selected > td {
     border: 3px solid orange
 }
 
