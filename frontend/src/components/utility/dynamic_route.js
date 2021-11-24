@@ -7,7 +7,7 @@ import Navbar from "../public/navbar";
 export default function DynamicRoute({ component: Component, nonav, notsecure }) {
     const { currentUser } = useAuth();
 
-    if (!notsecure) {
+    if (notsecure) {
         return (
             <Navbar>
                 <Component />

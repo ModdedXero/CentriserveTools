@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Button from "../../utility/button";
 
 export default function DeviceInfoSophos({ device, deviceList }) {
     const [deviceInfo, setDeviceInfo] = useState(undefined);
@@ -14,31 +13,9 @@ export default function DeviceInfoSophos({ device, deviceList }) {
         })
     }, [device])
 
-    function OpenSophosSiteDevice() {
-        if (deviceInfo) {
-            let idCopy = deviceInfo.id;
-            let strArray = [];
-            for (let i = 0; i < idCopy.length; i++) {
-                if (idCopy[i] === "-") {
-                    strArray.push("-");
-                    idCopy = idCopy.split("").splice(i, 1).join("");
-                }
-
-                if (i % 2 === 0) {
-                    strArray.push(idCopy[i]);
-                    strArray.push(idCopy[i - 1]);
-                }
-            }
-
-            console.log(deviceInfo);
-            window.open(`https://cloud.sophos.com/manage/devices/computers/${deviceInfo.cloud.instanceId}`);
-        }
-    }
-
     return(
         <div className="device-page-info">
             <h2>Sophos Device Info</h2>
-            <Button onClick={OpenSophosSiteDevice}>Open Device On Sophos</Button>
             <div>
                 <h3>Hostname:</h3>
                 <h4>{deviceInfo && deviceInfo.hostname}</h4>
