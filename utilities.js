@@ -1,7 +1,7 @@
-function waitFor(conditionFunction) {
+async function waitFor(conditionFunction) {
 
-    const poll = resolve => {
-      if(conditionFunction()) resolve();
+    const poll = async resolve => {
+      if(await conditionFunction()) resolve();
       else setTimeout(_ => poll(resolve), 400);
     }
   

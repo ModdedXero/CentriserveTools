@@ -24,7 +24,6 @@ export default function DevicePage() {
         axios.get("/api/agents/sites")
             .then(res => {
                 setAllSiteNames(res.data.response);
-                console.log(res.data);
                 setLoadingSites(false);
             })
             .catch(err => console.log(err))
@@ -33,8 +32,6 @@ export default function DevicePage() {
     async function UpdateComputerCount(e) {
         setSiteName(e.target.value);
 
-        console.log("l");
-    
         setSophosCount(0);
         setDattoCount(0);
         setComputers([]);
@@ -74,7 +71,7 @@ export default function DevicePage() {
                 {computers.map((comp) => {
                     if (comp.isEqual && (filterName === "all" || filterName === "stable")) {
                         return (
-                            <tr onClick={(e) => console.log(e.target.outerText)} className="row-green">
+                            <tr className="row-green">
                                 <td onClick={handleRowClick}>{comp.sophos.hostname}</td>
                                 <td onClick={handleRowClick}>{comp.datto.hostname}</td>
                             </tr>

@@ -40,7 +40,7 @@ async function InitSophosAPI() {
 
 // Access Sophos API for array of devices based off a Site Name and returns array
 async function GetDevices(id) {
-    await Utilities.waitFor(() => APIInit === true);
+    await Utilities.waitFor(() => APICheck());
 
     let tenant;
     let deviceInfo = [];
@@ -66,7 +66,7 @@ async function GetDevices(id) {
 
 // Access Sophos API for array of sites and returns array
 async function GetSites() {
-    await Utilities.waitFor(() => APIInit === true);
+    await Utilities.waitFor(() => APICheck());
     
     let tenants = [];
     let sites = [];
@@ -103,6 +103,27 @@ async function GetSites() {
     })
 
     return sitesUniq;
+}
+
+/* Helper Function */
+
+async function APICheck() {
+    let result = false;
+
+    if (APIInit === true) {
+        if (SophosAccessToken) {
+            await axios.get(`${process.env.SOPHOS_API_URL}/whoami/v1`,
+                { headers: { Authorization: `Bearer ${SophosAccessToken}` }})
+                .then(doc => { result = true; })
+                .catch(err => { console.log("Failed to use Sophos API!") })
+        }
+
+        if (!result) {
+            InitSophosAPI();
+        }
+    }
+
+    return result;
 }
 
 exports.GetDevices = GetDevices
