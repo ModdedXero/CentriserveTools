@@ -31,6 +31,10 @@ export default function DevicePage() {
             .catch(err => console.log(err))
     }, [])
 
+    function RefreshSite() {
+        UpdateComputerCount(siteName);
+    }
+
     async function UpdateComputerCount(e) {
         setSiteName(e);
 
@@ -195,7 +199,7 @@ export default function DevicePage() {
                     </div>
                 </div>
                 <DeviceInfoDatto device={selectedComputer} deviceList={computers} />
-                <DeviceInfoSophos device={selectedComputer} deviceList={computers} />
+                <DeviceInfoSophos device={selectedComputer} deviceList={computers} refreshSite={RefreshSite} />
                 {loadingReport && <Notify>Report Generating...</Notify>}
             </div>
         </div>
