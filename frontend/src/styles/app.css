@@ -26,7 +26,22 @@ body {
     padding: 50px;
 }
 
+/* Button */
+
+.btn {
+    border-radius: 10px;
+    background-color: #3b8f8f;
+    border: 1px solid white;
+    padding: 7px;
+    color: white;
+}
+
 /* Select */
+
+.react-select {
+    color: black;
+    margin: 0;
+}
 
 .select-full {
     font-size: 20px;
@@ -36,7 +51,7 @@ body {
 
 .select-fit {
     font-size: 20px;
-    margin-bottom: 10px;
+    width: fit-content;
 }
 
 /* Table */
@@ -159,6 +174,12 @@ body {
     width: 30%;
     margin-right: 10px;
     padding: 15px;
+}
+
+.device-page-info {
+    border: 1px solid gray;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px 0 rgba(94, 94, 94, 0.2), 0 6px 20px 0 rgba(109, 109, 109, 0.19);;
 }
 
 .device-page-info  h2 {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import fileDownload from "js-file-download";
+import Select from "react-select";
 
 import Notify from "../../utility/notify";
 import Button from "../../utility/button";
@@ -17,6 +18,7 @@ export default function DevicePage() {
     const [loadingSites, setLoadingSites] = useState(true);
     const [siteName, setSiteName] = useState("");
     const [filterName, setFilterName] = useState("all");
+    const [filterValue, setFilterValue] = useState({ value: "all", label: "All Devices"});
     const [selectedComputer, setSelectedComputer] = useState("");
     const [selectedRow, setSelectedRow] = useState(undefined);
 
@@ -30,7 +32,7 @@ export default function DevicePage() {
     }, [])
 
     async function UpdateComputerCount(e) {
-        setSiteName(e.target.value);
+        setSiteName(e);
 
         setSophosCount(0);
         setDattoCount(0);
@@ -40,7 +42,7 @@ export default function DevicePage() {
         let site;
 
         allSiteNames.forEach(siteInfo => {
-            if (siteInfo.name === e.target.value) {
+            if (siteInfo.name === e.value) {
                 site = siteInfo;
             }
         })
@@ -113,25 +115,43 @@ export default function DevicePage() {
     }
 
     function UpdateFilter(e) {
-        setFilterName(e.target.value);
+        setFilterValue(e);
+        setFilterName(e.value);
+    }
+
+    const options = GetSelectOptions();
+
+    function GetSelectOptions() {
+        let options = [];
+
+        allSiteNames.map((siteName) => {
+            options.push({ value: siteName.name, label: siteName.name });
+        })
+
+        return options;
     }
 
     return (
         <div className="app-body">
             <div className="device-page">
                 <div>
-                    <select className="select-full" value={siteName} onChange={UpdateComputerCount}>
-                        <option>Select Site...</option>
-                        {allSiteNames.map((siteName) => {
-                            return <option value={siteName.name}>{siteName.name}</option>
-                        })}
-                    </select>
+                    <Select
+                        className="react-select" 
+                        options={options} 
+                        value={siteName} 
+                        onChange={UpdateComputerCount}
+                    />
                     <br />
-                    <select className="select-fit" value={filterName} onChange={UpdateFilter}>
-                        <option value="all">All Devices</option>
-                        <option value="stable">Stable Devices</option>
-                        <option value="error">Error Devices</option>
-                    </select>
+                    <Select 
+                        className="react-select select-fit" 
+                        options={[
+                            { value: "all", label: "All Devices" },
+                            { value: "stable", label: "Stable Devices" },
+                            { value: "error", label: "Error Devices" }
+                        ]}
+                        value={filterValue} 
+                        onChange={UpdateFilter}
+                    />
                     <br />
                     <Button onClick={GenerateReport} clickState={loadingReport}>Download Report</Button>
                     <div className="table-wrapper">

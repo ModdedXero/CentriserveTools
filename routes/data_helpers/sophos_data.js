@@ -48,13 +48,13 @@ async function GetDevices(id) {
     await axios.get(`${process.env.SOPHOS_API_URL}/partner/v1/tenants/${id}`, 
         { headers: { Authorization: `Bearer ${SophosAccessToken}`, "X-Partner-ID": SophosPartnerID }})
         .then(doc => { tenant = doc.data })
-        .catch(err => console.log("Failed to retrieve Sophos Tenant!"))
+        .catch(err => APICheck("Failed to retrieve Sophos Tenant!"))
 
     if (!tenant) return [];
     await axios.get(`${tenant.apiHost}/endpoint/v1/endpoints?view=full`, 
         { headers: { Authorization: `Bearer ${SophosAccessToken}`, "X-Tenant-ID": tenant.id }})
         .then(doc => { tenant.devices = doc.data.items })
-        .catch(err => console.log("Failed to retrieve Sophos Devices!"))
+        .catch(err => APICheck("Failed to retrieve Sophos Devices!"))
 
     for (let i = 0; i < (tenant.devices ? tenant.devices.length : 0); i++) {
         tenant.devices[i].hostname = tenant.devices[i].hostname.toUpperCase().substring(0, 15);
@@ -78,7 +78,7 @@ async function GetSites() {
                 await axios.get(`${process.env.SOPHOS_API_URL}/partner/v1/tenants?page=${i}&pageSize=100&pageTotal=true`, 
                 { headers: { Authorization: `Bearer ${SophosAccessToken}`, "X-Partner-ID": SophosPartnerID }})
                     .then(doc => { tenants.push(doc.data.items) })
-                    .catch(err => console.log("Failed to get sites!"));
+                    .catch(err => APICheck("Failed to get sites!"));
             }
         })
         .catch(err => console.log(err))
@@ -107,10 +107,11 @@ async function GetSites() {
 
 /* Helper Function */
 
-async function APICheck() {
+async function APICheck(error) {
     let result = false;
 
-    if (APIInit === true) {
+    if (error && APIInit) {
+        console.log(error);
         if (SophosAccessToken) {
             await axios.get(`${process.env.SOPHOS_API_URL}/whoami/v1`,
                 { headers: { Authorization: `Bearer ${SophosAccessToken}` }})
@@ -119,11 +120,11 @@ async function APICheck() {
         }
 
         if (!result) {
-            InitSophosAPI();
+            await InitSophosAPI();
         }
     }
 
-    return result;
+    return error ? result : APIInit;
 }
 
 exports.GetDevices = GetDevices
