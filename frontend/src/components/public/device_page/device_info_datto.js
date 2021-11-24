@@ -29,6 +29,10 @@ export default function DeviceInfoDatto({ device, deviceList }) {
                 <h4>{deviceInfo && deviceInfo.hostname}</h4>
             </div>
             <div>
+                <h3>Hostname:</h3>
+                <h4>{deviceInfo && deviceInfo.online}</h4>
+            </div>
+            <div>
                 <h3>Type:</h3>
                 <h4>{deviceInfo && deviceInfo.deviceType.type}</h4>
             </div>
