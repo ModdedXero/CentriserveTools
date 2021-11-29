@@ -17,10 +17,10 @@ async function Initialize() {
                     for await (const [update, callback] of Object.entries(Updates)) {
                         if (updateCache[update] && !updateCache[update].installed) {
                             const result = await callback.callback();
-                            updateCache[update] = { installed: result };
+                            updateCache[update].installed = result;
                         } else if (!updateCache[update]) {
                             const result = await callback.callback();
-                            updateCache[update] = { installed: result };
+                            updateCache[update].installed = result;
                         }
                     }
 
