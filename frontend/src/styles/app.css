@@ -1,6 +1,10 @@
 body {
     margin: 0;
     color: #ffff;
+    overflow: auto;
+    height: 100%;
+    width: 100%;
+    background-color: #2e2e2e;
 }
 
 .site-wrapper {
@@ -12,11 +16,8 @@ body {
 /* App */
 
 .app-wrapper {
-    position: static;
-    display: flex;
-    flex-direction: column;
+    position: relative;
     height: 100%;
-    background-color: #2e2e2e;
     padding-top: 66px;
 }
 
@@ -236,14 +237,13 @@ body {
 
 .device-page > div {
     float: left;
-    width: 30%;
+    width: 45%;
     margin-right: 10px;
     padding: 15px;
 }
 
 .device-page-info {
     border: 1px solid gray;
-    border-radius: 15px;
     box-shadow: 0 4px 8px 0 rgba(94, 94, 94, 0.2), 0 6px 20px 0 rgba(109, 109, 109, 0.19);;
 }
 
