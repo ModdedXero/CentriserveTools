@@ -12,8 +12,11 @@ export function AuthProvider({ children }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const tokenString = localStorage.getItem("token");
-        setCurrentUser(JSON.parse(tokenString));
+        const tokenString = sessionStorage.getItem("token");
+        if (tokenString && tokenString.auth === "approved") {
+            setToken("token", tokenString);
+        }
+
         setLoading(false);
     }, [])
 
@@ -23,8 +26,8 @@ export function AuthProvider({ children }) {
         await axios.post("/api/user/password", { username: username, password: password })
             .then(res => {
                 if (res.data.response === "password_saved") {
-                    localStorage.setItem("token", JSON.stringify(res.data.token));
-                    setCurrentUser(res.data.token);
+                    console.log(res.data.token)
+                    setToken("token", JSON.stringify(res.data.token));
                     result = "success";
                 } else {
                     result = res.data.response;
@@ -41,10 +44,11 @@ export function AuthProvider({ children }) {
         await axios.post("/api/user/login", { username: username, password: password })
             .then(res => {
                 if (res.data.response === "authenticated") {
-                    localStorage.setItem("token", JSON.stringify(res.data.token));
-                    setCurrentUser(res.data.token);
+                    console.log(res.data.token);
+                    setToken("token", JSON.stringify(res.data.token));
                     result = "success";
                 } else if (res.data.response === "create_password") {
+                    console.log(res.data.response)
                     result = "signup";
                 } else {
                     result = res.data.response;
@@ -57,6 +61,12 @@ export function AuthProvider({ children }) {
     
     async function Logout() {
 
+    }
+
+    function setToken(token) {
+        console.log(token);
+        sessionStorage.setItem("token", token);
+        setCurrentUser(token);
     }
 
     const values = {
