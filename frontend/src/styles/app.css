@@ -6,16 +6,18 @@ body {
 .site-wrapper {
     display: flex;
     flex-flow: column;
+    height: 100vh;
 }
 
 /* App */
 
 .app-wrapper {
+    position: static;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    height: 100%;
     background-color: #2e2e2e;
-    margin-top: 66px;
+    padding-top: 66px;
 }
 
 .app-header {
@@ -29,16 +31,27 @@ body {
 /* Button */
 
 .btn {
-    border-radius: 10px;
-    background-color: #3b8f8f;
-    border: 1px solid white;
+    background-color: #578b85;
+    border: none;
     padding: 7px;
-    margin: 7px;
+    margin: 10px;
     color: white;
     cursor: pointer;
 }
 .btn:hover {
     background-color: #2a6666;
+}
+
+/* Link */
+
+.sub-link {
+    display: block;
+    text-decoration: underline;
+    margin: 5px;
+    color: #578b85;
+}
+.sub-link:hover {
+    color: #2a6666;
 }
 
 /* Div Tags */
@@ -165,6 +178,7 @@ body {
     display: flex;
     background-color: #262626;
     position: fixed;
+    z-index: 1000;
     top: 0;
     width: 100%;
     box-shadow: 0 4px 8px 0 rgba(150, 150, 150, 0.2), 0 6px 20px 0 rgba(88, 88, 88, 0.19);

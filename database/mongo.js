@@ -27,10 +27,15 @@ async function SavePassword(username, password) {
 
     const hashedPass = await bcrypt.hash(password, 10);
 
-    let user = await User.findOne({ "username": username });
-    user.password = hashedPass;
-    await user.save()
-        .then(doc => { result = true; })
+    await User.findOne({ "username": username })
+            .then(async doc => {
+                if (!doc.password) {
+                    doc.password = hashedPass;
+                    await doc.save();
+                    result = true;
+                }
+            })
+
 
     return result;
 }
