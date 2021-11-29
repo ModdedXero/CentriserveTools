@@ -12,9 +12,10 @@ InitSophosAPI();
 
 // Use Client and Secret keys in config to obtain API Access Token
 async function InitSophosAPI() {
-    let APICount = 0;
+    APIInit = false;
     
     while (true) {
+        let APICount = 0;
         await new Promise(resolve => setTimeout(resolve, 1500));
 
         if (!SophosAccessToken) {

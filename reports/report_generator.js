@@ -100,9 +100,9 @@ async function GetSiteErrorAgentComparison() {
 
     let deviceCompList = GenerateComputerList(dattoDevices, sophosDevices);
 
-    let filteredDevices = deviceCompList.filter(val => val.isEqual);
+    let filteredDevices = deviceCompList.filter(val => !val.isEqual);
 
-    if (filteredDevices !== []) {
+    if (filteredDevices.length) {
       sheet.addRow({ sophos: ""});
       sheet.addRow({ sophos: siteName.name });
   
