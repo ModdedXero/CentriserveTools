@@ -20,15 +20,16 @@ router.route("/login").post(async (req, res) => {
             res.status(200).json({ response: "authenticated", token: { username: req.body.username, auth: "approved" } });
             break;
         case 0:
-            res.status(401).json({ response: "not_authenticated" });
+            res.status(200).json({ response: "not_authenticated" });
             break;
         default:
-            res.status(401).json({ response: "not_authenticated" });
+            res.status(2000).json({ response: "not_authenticated" });
     }
 });
 
 router.route("/password").post(async (req, res) => {
     const result = await mongo.SavePassword(req.body.username, req.body.password);
+
     if (result) {
         res.status(200).json({ response: "password_saved", token: { username: req.body.username, auth: "approved" }});
     } else {

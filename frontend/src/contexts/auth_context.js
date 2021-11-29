@@ -12,9 +12,9 @@ export function AuthProvider({ children }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const tokenString = sessionStorage.getItem("token");
+        const tokenString = JSON.parse(sessionStorage.getItem("token"));
         if (tokenString && tokenString.auth === "approved") {
-            setToken("token", tokenString);
+            setToken(tokenString);
         }
 
         setLoading(false);
@@ -26,8 +26,7 @@ export function AuthProvider({ children }) {
         await axios.post("/api/user/password", { username: username, password: password })
             .then(res => {
                 if (res.data.response === "password_saved") {
-                    console.log(res.data.token)
-                    setToken("token", JSON.stringify(res.data.token));
+                    setToken(res.data.token);
                     result = "success";
                 } else {
                     result = res.data.response;
@@ -44,12 +43,8 @@ export function AuthProvider({ children }) {
         await axios.post("/api/user/login", { username: username, password: password })
             .then(res => {
                 if (res.data.response === "authenticated") {
-                    console.log(res.data.token);
-                    setToken("token", JSON.stringify(res.data.token));
+                    setToken(res.data.token);
                     result = "success";
-                } else if (res.data.response === "create_password") {
-                    console.log(res.data.response)
-                    result = "signup";
                 } else {
                     result = res.data.response;
                 }
@@ -64,8 +59,7 @@ export function AuthProvider({ children }) {
     }
 
     function setToken(token) {
-        console.log(token);
-        sessionStorage.setItem("token", token);
+        sessionStorage.setItem("token", JSON.stringify(token));
         setCurrentUser(token);
     }
 

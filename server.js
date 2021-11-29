@@ -50,15 +50,15 @@ app.use("/api/user", userRouter);
 if (process.env.NODE_ENV === "production") {
     const filePath = path.join(__dirname, "frontend", "build", "index.html");
 
+    app.get("/login", (req, res) => {
+        RenderSite(res);
+    });
+
     app.get("/reports", (req, res) => {
         RenderSite(res);
     });
 
     app.get("/downloads", (req, res) => {
-        RenderSite(res);
-    });
-
-    app.get("/login", (req, res) => {
         RenderSite(res);
     });
     
