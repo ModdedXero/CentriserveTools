@@ -18,12 +18,10 @@ async function InitSophosAPI() {
         let APICount = 0;
         await new Promise(resolve => setTimeout(resolve, 1500));
 
-        if (!SophosAccessToken) {
-            await axios.post("https://id.sophos.com/api/v2/oauth2/token", 
-                `grant_type=client_credentials&client_id=${process.env.SOPHOS_CLIENT_KEY}&client_secret=${process.env.SOPHOS_SECRET_KEY}&scope=token`)
-                .then(doc => { SophosAccessToken = doc.data.access_token; APICount++; })
-                .catch(err => { console.log("Failed to retrieve Sophos Access Token!") })
-        }
+        await axios.post("https://id.sophos.com/api/v2/oauth2/token", 
+            `grant_type=client_credentials&client_id=${process.env.SOPHOS_CLIENT_KEY}&client_secret=${process.env.SOPHOS_SECRET_KEY}&scope=token`)
+            .then(doc => { SophosAccessToken = doc.data.access_token; APICount++; })
+            .catch(err => { console.log("Failed to retrieve Sophos Access Token!") })
 
         if (SophosAccessToken) {
             await axios.get(`${process.env.SOPHOS_API_URL}/whoami/v1`,
@@ -128,23 +126,13 @@ async function GetSites() {
 /* Helper Function */
 
 async function APICheck(error) {
-    let result = false;
-
     if (error && APIInit) {
         console.log(error);
-        if (SophosAccessToken) {
-            await axios.get(`${process.env.SOPHOS_API_URL}/whoami/v1`,
-                { headers: { Authorization: `Bearer ${SophosAccessToken}` }})
-                .then(doc => { result = true; })
-                .catch(err => { console.log("Failed to use Sophos API!") })
-        }
 
-        if (!result) {
-            await InitSophosAPI();
-        }
+        await InitSophosAPI();
     }
 
-    return error ? result : APIInit;
+    return APIInit;
 }
 
 exports.GetDevices = GetDevices;
