@@ -5,30 +5,30 @@ const mongo = require("./database/mongo");
 async function Initialize() {
     let updateCache = {};
 
-    fs.access("update.json", (err) => {
+    fs.access("update.json", async (err) => {
         if (err) {
-            console.log(err);
+            console.log("err");
             fs.writeFile("update.json", JSON.stringify({}), () => {});
         } else {
-            fs.readFile("update.json", (err, data) => {
+            fs.readFile("update.json", "utf-8" , async (err, data) => {
                 if (data) {
                     updateCache = JSON.parse(data);
+
+                    for await (const [update, callback] of Object.entries(Updates)) {
+                        if (updateCache[update] && !updateCache[update].installed) {
+                            const result = await callback.callback();
+                            updateCache[update].installed = result;
+                        } else if (!updateCache[update]) {
+                            const result = await callback.callback();
+                            updateCache[update].installed = result;
+                        }
+                    }
+
+                    fs.writeFile("update.json", JSON.stringify(updateCache), () => {});
                 }
             });
         }
     });
-
-    for await (const [update, callback] of Object.entries(Updates)) {
-        if (updateCache[update] && !updateCache[update].installed) {
-            const result = await callback.callback();
-            updateCache[update] = { installed: result };
-        } else if (!updateCache[update]) {
-            const result = await callback.callback();
-            updateCache[update] = { installed: result };
-        }
-    }
-
-    fs.writeFile("update.json", JSON.stringify(updateCache), () => {});
 }
 
 const Updates = {
@@ -53,6 +53,7 @@ async function MongoInitUserUpdate() {
 
 async function MongoUserPasswordReset() {
     try {
+        console.log("R")
         mongo.ResetPassword("blake@centriserveit.com")
         mongo.ResetPassword("david@centriserveit.com")
         return true;

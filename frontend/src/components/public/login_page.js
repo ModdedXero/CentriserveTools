@@ -7,7 +7,7 @@ import DynamicLink from "../utility/dynamic_link";
 export default function LoginPage() {
     const usernameRef = useRef("");
     const passwordRef = useRef("");
-    const { Login, Signup } = useAuth();
+    const { Login } = useAuth();
     const [loginState, setLoginState] = useState("login");
 
     async function handleSubmit(e) {
