@@ -204,12 +204,7 @@ export default function DevicePage() {
                         </div>
                     </div>
                 </div>
-<<<<<<< HEAD
-                <DeviceInfoDatto device={selectedComputer} deviceList={computers} />
-                <DeviceInfoSophos device={selectedComputer} deviceList={computers} refreshSite={RefreshSite} />
-=======
                 <DeviceInfo device={GetSelectedComputer()} refreshSite={RefreshSite} />
->>>>>>> working
                 {loadingReport && <Notify>Report Generating...</Notify>}
             </div>
         </div>
