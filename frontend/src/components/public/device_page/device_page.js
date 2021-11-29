@@ -5,8 +5,7 @@ import Select from "react-select";
 
 import Notify from "../../utility/notify";
 import Button from "../../utility/button";
-import DeviceInfoDatto from "./device_info_datto";
-import DeviceInfoSophos from "./device_info_sophos";
+import DeviceInfo from "./device_info";
 
 export default function DevicePage() {
     const [sophosCount, setSophosCount] = useState(0);
@@ -30,6 +29,10 @@ export default function DevicePage() {
             })
             .catch(err => console.log(err))
     }, [])
+
+    function RefreshSite() {
+        UpdateComputerCount(siteName);
+    }
 
     async function UpdateComputerCount(e) {
         setSiteName(e);
@@ -147,6 +150,13 @@ export default function DevicePage() {
         return options;
     }
 
+    function GetSelectedComputer() {
+        return computers.filter((comp) => {
+            return ((comp.datto && comp.datto.hostname === selectedComputer)
+                || (comp.sophos && comp.sophos.hostname === selectedComputer));
+        })[0];
+    }
+
     return (
         <div className="app-body">
             <div className="device-page">
@@ -194,8 +204,7 @@ export default function DevicePage() {
                         </div>
                     </div>
                 </div>
-                <DeviceInfoDatto device={selectedComputer} deviceList={computers} />
-                <DeviceInfoSophos device={selectedComputer} deviceList={computers} />
+                <DeviceInfo device={GetSelectedComputer()} refreshSite={RefreshSite} />
                 {loadingReport && <Notify>Report Generating...</Notify>}
             </div>
         </div>
