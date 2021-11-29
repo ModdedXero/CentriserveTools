@@ -17,7 +17,7 @@ export default function LoginPage() {
             const result = await Login(usernameRef.current.value, passwordRef.current.value);
             setLoginState(result);
             if (result === "success") {
-                // window.location = "/";
+                window.location = "/";
             }
         }
     }
