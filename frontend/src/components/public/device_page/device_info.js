@@ -30,7 +30,6 @@ export default function DeviceInfo({ device, refreshSite }) {
             dattoLink: ""
         }
 
-        console.log(device)
         if (device && device.datto) {
             currentDevice.hostname = device.datto.hostname;
             currentDevice.type = device.datto.deviceType.category;
@@ -55,6 +54,9 @@ export default function DeviceInfo({ device, refreshSite }) {
         if (device && device.sophos) {
             currentDevice.tamper = device.sophos.tamperProtectionEnabled ? "Enabled" : "Disabled";
             currentDevice.sophosHealth = device.sophos.health.overall;
+        } else if (device && !device.sophos) {
+            currentDevice.tamper = "Unavailable";
+            currentDevice.sophosHealth = "Unavailable";
         }
 
         return (
