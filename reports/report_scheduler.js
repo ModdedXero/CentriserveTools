@@ -1,5 +1,5 @@
 const Blob = require("node:buffer").Blob;
-const fs = require("fs");
+const fs = require("../utilities/file_saver");
 
 const ReportGenerator = require("../reports/report_generator");
 
@@ -23,7 +23,7 @@ async function GenerateReport(repGen, title) {
             const blob = new Blob([data], {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8" });
             await blob.arrayBuffer()
                 .then(async array => {
-                    fs.writeFile(`./reports/reports/${title}.xlsx`, Buffer.from(array), () => {})
+                    fs.WriteFile(`${title}.xlsx`, Buffer.from(array), fs.FileTypes.Report);
                 })
             })
             .catch(err => console.log(err))

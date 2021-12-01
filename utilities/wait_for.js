@@ -8,4 +8,4 @@ async function waitFor(conditionFunction) {
     return new Promise(poll);
 }
 
-exports.waitFor = waitFor;
+module.exports = waitFor;
