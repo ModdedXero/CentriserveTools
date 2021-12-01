@@ -10,14 +10,19 @@ export default function SignupPage() {
     const { Signup } = useAuth();
     const [loginState, setLoginState] = useState("signup");
 
+    const [loading, setLoading] = useState(false);
+
     async function handleSubmit(e) {
-        e.preventDefault(); 
+        e.preventDefault();
+        setLoading(true);
 
         const result = await Signup(usernameRef.current.value, passwordRef.current.value);
         setLoginState(result);
         if (result === "success") {
             window.location = "/";
         }
+
+        setLoading(false);
     }
 
     function GenerateHeader() {
@@ -41,15 +46,15 @@ export default function SignupPage() {
                 <form className="form" onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label>Username</label>
-                        <input type="email" ref={usernameRef} placeholder="Enter Email"/>
+                        <input required type="email" ref={usernameRef} placeholder="Enter Email"/>
                     </div>
                     <div className="form-group">
                         <label>Password</label>
-                        <input type="password" minLength="8" ref={passwordRef} placeholder="Enter Password"/>
+                        <input required type="password" minLength="8" ref={passwordRef} placeholder="Enter Password"/>
                     </div>
                     <div>
                         <DynamicLink className="sub-link" to="/login">Login</DynamicLink>
-                        <Button type="submit">Submit</Button>
+                        <Button disabled={loading} type="submit">Submit</Button>
                     </div>
                 </form>
             </div>

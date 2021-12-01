@@ -1,9 +1,7 @@
 // Current HTTP Request method is REST API
 
 // Load environment variables from file if not on production server
-if (process.env.NODE_ENV !== "production") {
-    require("dotenv").config();
-}
+require("dotenv").config();
 
 // Initialize required packages (express: Server router, path: string concat, fs: file reader)
 const express = require("express");
@@ -33,6 +31,7 @@ const sophosRouter = require("./routes/sophos");
 const dattoRouter = require("./routes/datto");
 const agentsRouter = require("./routes/agents");
 const userRouter = require("./routes/user");
+const repoRouter = require("./routes/repo");
 
 // Create Handlers
 const reports = require("./reports/report_scheduler");
@@ -45,12 +44,17 @@ app.use("/api/sophos", sophosRouter);
 app.use("/api/datto", dattoRouter);
 app.use("/api/agents", agentsRouter);
 app.use("/api/user", userRouter);
+app.use("/api/repo", repoRouter);
 
 // Send client Index.html for web data (Doesn't work without static build from React)
 if (process.env.NODE_ENV === "production") {
     const filePath = path.join(__dirname, "frontend", "build", "index.html");
 
     app.get("/login", (req, res) => {
+        RenderSite(res);
+    });
+
+    app.get("/signup", (req, res) => {
         RenderSite(res);
     });
 

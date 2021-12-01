@@ -15,6 +15,9 @@ async function InitSophosAPI() {
     APIInit = false;
     
     while (true) {
+        SophosAccessToken = "";
+        SophosPartnerID = "";
+
         let APICount = 0;
         await new Promise(resolve => setTimeout(resolve, 1500));
 

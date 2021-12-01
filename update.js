@@ -20,7 +20,7 @@ async function Initialize() {
                             updateCache[update].installed = result;
                         } else if (!updateCache[update]) {
                             const result = await callback.callback();
-                            updateCache[update].installed = result;
+                            updateCache[update] = { installed: result };
                         }
                     }
 
@@ -53,7 +53,6 @@ async function MongoInitUserUpdate() {
 
 async function MongoUserPasswordReset() {
     try {
-        console.log("R")
         mongo.ResetPassword("blake@centriserveit.com")
         mongo.ResetPassword("david@centriserveit.com")
         return true;
