@@ -17,6 +17,9 @@ export function AuthProvider({ children }) {
             setToken(tokenString);
         }
 
+        // Send JWT Auth token to server for verification
+        // await axios.post()
+
         setLoading(false);
     }, [])
 
@@ -55,7 +58,7 @@ export function AuthProvider({ children }) {
     }
     
     async function Logout() {
-
+        setToken({});
     }
 
     function setToken(token) {

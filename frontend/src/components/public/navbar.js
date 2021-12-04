@@ -3,6 +3,10 @@ import React from "react";
 import DynamicLink from "../utility/dynamic_link";
 
 export default function Navbar({ children }) {
+    const agentsDropdown = [
+        { value: "/", label: "Chart" },
+        { value: "/reports", label: "Reports" }
+    ]
 
     return (
         <div className="site-wrapper">
@@ -11,8 +15,7 @@ export default function Navbar({ children }) {
                     <img src="/logo_with_name.png" />
                 </DynamicLink>
                 <ul>
-                    <li><DynamicLink className="navbar-link" to="/">Device Charts</DynamicLink></li>
-                    <li><DynamicLink className="navbar-link" to="/reports">Reports</DynamicLink></li>
+                    <li><DynamicLink className="navbar-link" dropdown={agentsDropdown} to="/">Agents</DynamicLink></li>
                     <li><DynamicLink className="navbar-link" to="/downloads">Downloads</DynamicLink></li>
                 </ul>
             </nav>

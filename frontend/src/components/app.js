@@ -18,7 +18,7 @@ export default function App() {
             <DynamicRoute path="/reports" component={Reports} />
             <DynamicRoute path="/login" nonav notsecure component={LoginPage} />
             <DynamicRoute path="/signup" nonav notsecure component={SignupPage} />
-            <DynamicRoute path="/downloads" nonav notsecure component={DownloadPage} />
+            <DynamicRoute path="/downloads" notsecure component={DownloadPage} />
         </Switch>
     )
 }

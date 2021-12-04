@@ -40,23 +40,25 @@ export default function SignupPage() {
     return (
         <div className="app-body">
             <div className="login-page">
-                <h1>
-                    {GenerateHeader()}
-                </h1>
-                <form className="form" onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label>Username</label>
-                        <input required type="email" ref={usernameRef} placeholder="Enter Email"/>
-                    </div>
-                    <div className="form-group">
-                        <label>Password</label>
-                        <input required type="password" minLength="8" ref={passwordRef} placeholder="Enter Password"/>
-                    </div>
-                    <div>
-                        <DynamicLink className="sub-link" to="/login">Login</DynamicLink>
-                        <Button disabled={loading} type="submit">Submit</Button>
-                    </div>
-                </form>
+                <div className="login-page-form">
+                    <form className="form" onSubmit={handleSubmit}>
+                        <h1>
+                            {GenerateHeader()}
+                        </h1>
+                        <div className="form-group">
+                            <input required type="email" ref={usernameRef} placeholder="Enter Email"/>
+                            <label>Username</label>
+                        </div>
+                        <div className="form-group">
+                            <input required type="password" minLength="8" ref={passwordRef} placeholder="Enter Password"/>
+                            <label>Password</label>
+                        </div>
+                        <div className="form-buttons">
+                            <DynamicLink className="sub-link" to="/login">Login</DynamicLink>
+                            <Button disabled={loading} type="submit">Submit</Button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     )

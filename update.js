@@ -1,6 +1,6 @@
 const fs = require("./utilities/file_saver");
 
-const mongo = require("./database/mongo");
+const auth = require("./database/auth");
 
 async function Initialize() {
     const updateFile = await fs.ReadFile("update.json", fs.FileTypes.Update);
@@ -26,13 +26,13 @@ const Updates = {
 
 async function MongoInitUserUpdate() {
     try {
-        mongo.CreateUser("blake@centriserveit.com")
-        mongo.CreateUser("david@centriserveit.com")
-        mongo.CreateUser("jj@centriserveit.com")
-        mongo.CreateUser("tj@centriserveit.com")
-        mongo.CreateUser("ben@centriserveit.com")
-        mongo.CreateUser("oscar@centriserveit.com")
-        mongo.CreateUser("jared@centriserveit.com")
+        auth.CreateUser("blake@centriserveit.com")
+        auth.CreateUser("david@centriserveit.com")
+        auth.CreateUser("jj@centriserveit.com")
+        auth.CreateUser("tj@centriserveit.com")
+        auth.CreateUser("ben@centriserveit.com")
+        auth.CreateUser("oscar@centriserveit.com")
+        auth.CreateUser("jared@centriserveit.com")
         return true;
     } catch {
         return false;
