@@ -17,6 +17,9 @@ async function WriteFile(fileName, data, type) {
 async function ReadFile(fileName, type) {
     let rFile = "";
 
+    console.log(__dirname);
+    console.log(path.dirname(__dirname));
+    console.log(path.basename(path.dirname(__dirname)));
     console.log(path.dirname(path.basename(path.dirname(__dirname))))
     await fs.access(`${type}/${fileName}`)
         .then(async err => {
