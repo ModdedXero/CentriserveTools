@@ -1,10 +1,27 @@
+:root {
+    --color-shadow: #0a1a1c;
+    --color-0: #0d2326;
+    --color-1: #17242a;
+    --color-2: #2b7a77;
+    --color-3: #3aafa9;
+    --color-4: #def2f1;
+    --color-5: #ffffff;
+    --color-text: white;
+    --shadow-simple: var(--color-shadow) 0px 0px 25px;
+}
+
 body {
     margin: 0;
-    color: #ffff;
+    padding: 0;
+    color: var(--color-text);
     overflow: auto;
-    height: 100%;
+    height: 100vh;
     width: 100%;
-    background-color: #2e2e2e;
+    background-color: var(--color-1);
+}
+
+div#root {
+    display: inline;
 }
 
 .site-wrapper {
@@ -18,7 +35,7 @@ body {
 .app-wrapper {
     position: relative;
     height: 100%;
-    padding-top: 66px;
+    padding-top: 80px;
 }
 
 .app-header {
@@ -26,21 +43,90 @@ body {
 }
 
 .app-body {
-    padding: 50px;
+    height: 100%;
+}
+
+/* Animations */
+
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes slide-up {
+    from {
+        transform: translateY(50%);
+    }
+    to {
+        transform: translateY(0%);
+    }
 }
 
 /* Button */
 
 .btn {
-    background-color: #578b85;
-    border: none;
+    background-color: transparent;
+    border: 1px solid var(--color-3);
     padding: 7px;
-    margin: 10px;
-    color: white;
+    color: var(--color-text);
     cursor: pointer;
+    transition: background-color .2s, color .2s;
+    text-decoration: none;
+    height: fit-content;
 }
 .btn:hover {
-    background-color: #2a6666;
+    background-color: var(--color-4);
+    color: var(--color-1);
+}
+
+.dropdown > button {
+    background-color: transparent;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+  
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+  
+.dropdown > div {
+    display: none;
+    position: absolute;
+    background-color: var(--color-2);
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    animation: fade-in .25s;
+}
+  
+.dropdown > div a {
+    color: var(--color-text);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+  
+.dropdown > div a:hover {
+    background-color: var(--color-3)
+}
+  
+.dropdown:hover > div {
+    display: block;
+}
+
+/* Div */
+
+.margin-right * {
+    margin: 5px 0;
+    margin-right: 5px;
 }
 
 /* Link */
@@ -49,10 +135,10 @@ body {
     display: block;
     text-decoration: underline;
     margin: 5px;
-    color: #578b85;
+    color: var(--color-5);
 }
 .sub-link:hover {
-    color: #2a6666;
+    color: var(--color-4);
 }
 
 /* Div Tags */
@@ -113,10 +199,15 @@ body {
     width: fit-content;
 }
 
+.site-select {
+    width: 480px;
+}
+
 /* Table */
 
 .table-wrapper {
     display: flex;
+    width: fit-content;
 }
 
 .table-wrapper table {
@@ -125,36 +216,33 @@ body {
 }
 
 .table-wrapper th {
-    padding: 12px 10px;
     text-align: left;
-    background-color: #3b8f8f;
+    background-color: var(--color-3);
 }
 
 .table-wrapper td, .table-wrapper th {
     border: 1px solid #ddd;
+    padding: 8px 0;
+    text-align: center;
+}
+.table-wrapper td {
     padding: 8px;
 }
 
-.row-green {
-    background-color: #04AA6D;
-}
-.row-dark-green {
-    background-color: #027349;
-}
-.row-yellow {
-    background-color: #c2b92b;
-}
-.row-red {
-    background-color: #a64146;
+.table-wrapper tbody tr:nth-child(2n - 1) {
+    background-color: var(--color-2);
 }
 
-.row-green.selected > td, .row-red.selected > td,
-.row-dark-green.selected > td, .row-yellow.selected > td {
-    border: 3px solid orange
+.table-info {
+    display: flex;
+    margin-bottom: 5px;
 }
 
-.table-wrapper tbody tr:hover {
-    background-color: #212121;
+.table-info p {
+    margin: 0;
+    margin-right: 5px;
+    padding: 5px;
+    border: 1px solid var(--color-3);
 }
 
 /* Notify Modal */
@@ -177,12 +265,11 @@ body {
 
 .navbar-app {
     display: flex;
-    background-color: #262626;
+    background-color: var(--color-1);
     position: fixed;
     z-index: 1000;
     top: 0;
     width: 100%;
-    box-shadow: 0 4px 8px 0 rgba(150, 150, 150, 0.2), 0 6px 20px 0 rgba(88, 88, 88, 0.19);
 }
 
 .navbar-app ul {
@@ -203,6 +290,11 @@ body {
     display: block;
     text-decoration: none;
     color: white;
+    padding: 16px;
+}
+
+.navbar-link.active {
+    border-bottom: 1px solid var(--color-5);
 }
 
 .navbar-logo {
@@ -214,32 +306,102 @@ body {
 /* Login Page */
 
 .login-page {
-    margin: auto;
-    text-align: center;
-    width: 25%;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-page-form {
+    width: 400px;
+    height: 450px;
+    border: 1px solid var(--color-4);
+    background-color: var(--color-2);
+    animation: 1s ease-out 0s 1 fade-in, 1s ease-out 0s 1 slide-up;
+    box-shadow: var(--color-shadow) 0px 0px 25px;
+}
+
+.login-page h1 {
+    animation-fill-mode: forwards;
+    animation: 2s ease-out 0s 1 fade-in, 1.5s ease-out 0s 1 slide-up;
 }
 
 /* Forms */
 
-.form-group {
+.form {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+.form > div {
+    display: flex;
+    flex-direction: column;
+    margin: 10px 0;
+}
+.form > .form-group {
+    position: relative;
+    width: 80%;
+    padding: 15px 0 0;
+    margin-top: 10px;
+}
+.form > .form-group > input {
+    width: 100%;
+    border: 0;
+    border-bottom: 2px solid var(--color-3);
+    outline: 0;
+    font-size: 1.3rem;
+    color: white;
+    padding: 7px 0;
+    background: transparent;
+}
+.form > .form-group > input::placeholder {
+    color: transparent;
+}
+.form > .form-group > input:placeholder-shown ~ label {
+    font-size: 1.3rem;
+    cursor: text;
+    top: 20px;
+}
+.form > .form-group > label {
+    position: absolute;
+    top: 0;
+    display: block;
+    transition: 0.2s;
+    font-size: 1rem;
+    color: var(--color-text);
+}
+.form > .form-group > input:focus {
+    padding-bottom: 6px;  
+    border-width: 3px;
+    border-image-slice: 1;
+}
+.form > .form-group > input:focus + label {
+    position: absolute;
+    top: 0;
+    display: block;
+    transition: 0.3s;
+    font-size: 0.8rem;
+    color: var(--color-4);
+    font-weight:700;
+}
+.form-buttons {
+    width: 30%;
+    text-align: center;
 }
 
 /* Device Page */
 
 .device-page {
-    margin: 0;
-    padding: 0;
-    display: table;
-    width: 100%;
-}
-
-.device-page > div {
-    float: left;
-    width: 45%;
-    margin-right: 10px;
-    padding: 15px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    padding: 10px;
+    width: 95%;
+    height: 95%;
 }
 
 .device-page-info {
@@ -265,4 +427,12 @@ body {
 
 .device-page-info h4 {
     font-weight: normal;
+}
+
+/* Report Page */
+
+.report-page {
+    padding: 10px;
+    width: 95%;
+    height: 95%;
 }

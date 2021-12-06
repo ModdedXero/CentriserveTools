@@ -1,5 +1,5 @@
 const axios = require("axios");
-const utilities = require("../../utilities");
+const waitFor = require("../../utilities/wait_for");
 
 // Initialize needed datto access tokens
 let DattoAccessToken;
@@ -28,7 +28,7 @@ async function InitDattoAPI() {
 
 // Access Datto API for array of devices based off a Site Name and returns array
 async function GetDevices(siteName) {
-    await utilities.waitFor(() => APIInit === true);
+    await waitFor(() => APIInit === true);
     
     let tenants;
     let tenant;
@@ -46,7 +46,7 @@ async function GetDevices(siteName) {
     }
 
     if (!tenant) {
-        return undefined;
+        return [];
     }
 
     await axios.get(`${process.env.DATTO_API_URL}/api/v2/site/${tenant.uid}/devices`,
@@ -64,7 +64,7 @@ async function GetDevices(siteName) {
 
 // Access Datto API for array of sites and returns array
 async function GetSites() {
-    await utilities.waitFor(() => APIInit === true);
+    await waitFor(() => APIInit === true);
 
     let tenants;
     let siteNames = [];

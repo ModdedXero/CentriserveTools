@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { isDate } = require("util");
 
 const Schema = mongoose.Schema;
 
@@ -9,7 +10,9 @@ const userSchema = new Schema({
         unique: true
     },
     password: String,
-    security: String
+    security: String,
+    hash: String,
+    lastLogin: Date
 })
 
 const User = mongoose.model("User", userSchema);

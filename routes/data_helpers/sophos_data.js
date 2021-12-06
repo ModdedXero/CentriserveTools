@@ -1,7 +1,8 @@
 // Initialize required packages (express: Server router, axios: http API)
 const axios = require("axios");
 
-const Utilities = require("../../utilities");
+const fs = require("../../utilities/file_saver");
+const waitFor = require("../../utilities/wait_for");
 
 // Initialize needed sophos access tokens
 let SophosAccessToken;
@@ -44,7 +45,7 @@ async function InitSophosAPI() {
 
 // Access Sophos API for array of devices based off a Site Name and returns array
 async function GetDevices(id) {
-    await Utilities.waitFor(() => APICheck());
+    await waitFor(() => APICheck());
 
     let tenant;
     let deviceInfo = [];
@@ -87,7 +88,12 @@ async function EnableTamper(id, tenantId) {
 
 // Access Sophos API for array of sites and returns array
 async function GetSites() {
-    await Utilities.waitFor(() => APICheck());
+    await waitFor(() => APICheck());
+
+    if (fs.IsFile("sites.txt", fs.FileTypes.Agents)) {
+        if ((await fs.ModifiedDate("sites.txt", fs.FileTypes.Agents) - Date.now()) < 60 * 60 * 1000)
+        return JSON.parse(await fs.ReadFile("sites.txt", fs.FileTypes.Agents)).sites;
+    }
     
     let tenants = [];
     let sites = [];
@@ -123,6 +129,7 @@ async function GetSites() {
         }
     })
 
+    fs.WriteFile("sites.txt", JSON.stringify({ sites: sitesUniq }), fs.FileTypes.Agents);
     return sitesUniq;
 }
 

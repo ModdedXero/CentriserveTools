@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch } from "react-router";
+import { Switch, withRouter } from "react-router";
 
 import DynamicRoute from "./utility/dynamic_route";
 
@@ -11,14 +11,16 @@ import SignupPage from "./public/signup_page";
 
 import "../styles/app.css"
 
-export default function App() {
+function App() {
     return (
         <Switch>
             <DynamicRoute exact path="/" component={DevicePage} />
             <DynamicRoute path="/reports" component={Reports} />
             <DynamicRoute path="/login" nonav notsecure component={LoginPage} />
             <DynamicRoute path="/signup" nonav notsecure component={SignupPage} />
-            <DynamicRoute path="/downloads" nonav notsecure component={DownloadPage} />
+            <DynamicRoute path="/downloads" notsecure component={DownloadPage} />
         </Switch>
     )
 }
+
+export default withRouter(App);

@@ -11,10 +11,20 @@ export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState(undefined);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const tokenString = JSON.parse(sessionStorage.getItem("token"));
-        if (tokenString && tokenString.auth === "approved") {
-            setToken(tokenString);
+    useEffect(async () => {
+        setLoading(true);
+
+        const tokenString = JSON.parse(localStorage.getItem("token"));
+
+        if (Object.keys(tokenString).length) {
+            await axios.post("/api/user/2fahash", ({ username: tokenString.username, hash: tokenString.encrypt }))
+                    .then(res => {
+                        if (res.data.response === "authenticated") {
+                            setToken(tokenString);
+                        } else {
+                            setToken(undefined);
+                        }
+                    })
         }
 
         setLoading(false);
@@ -55,11 +65,11 @@ export function AuthProvider({ children }) {
     }
     
     async function Logout() {
-
+        setToken({});
     }
 
     function setToken(token) {
-        sessionStorage.setItem("token", JSON.stringify(token));
+        localStorage.setItem("token", JSON.stringify(token));
         setCurrentUser(token);
     }
 

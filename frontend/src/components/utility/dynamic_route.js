@@ -8,11 +8,17 @@ export default function DynamicRoute({ component: Component, nonav, notsecure })
     const { currentUser } = useAuth();
 
     if (notsecure) {
-        return (
-            <Navbar>
+        if (nonav) {
+            return (
                 <Component />
-            </Navbar>
-        )
+            )
+        } else {
+            return (
+                <Navbar>
+                    <Component />
+                </Navbar>
+            )
+        }
     } else {
         return (
             <Navbar>
