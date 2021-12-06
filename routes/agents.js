@@ -11,6 +11,8 @@ const ReportGenerator = require("../reports/report_generator");
 
 // Gets Sophos and Datto devices and creates comparison and returns JSON object
 router.route("/devices").post(async (req, res) => {
+  if (!req.body.sitename) res.status(400).json({ response: "No site in body" });
+
   const dattoDevices = await DattoData.GetDevices(req.body.sitename.name);
   const sophosDevices = await SophosData.GetDevices(req.body.sitename.id);
 

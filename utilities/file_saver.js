@@ -38,13 +38,26 @@ async function IsFile(fileName, type) {
     return file;
 }
 
+async function ModifiedDate(fileName, type) {
+    let date = undefined;
+
+    await fs.stat(`${type}/${fileName}`)
+            .then(data => {
+                date = data.mtime;
+            })
+
+    return date;
+}
+
 const FileTypes = {
     Report: path.join(path.dirname(__dirname), "file_repo", "reports"),
     FileStore: path.join(path.dirname(__dirname), "file_repo", "file_store"),
-    Update: path.join(path.dirname(__dirname), "file_repo", "updates")
+    Update: path.join(path.dirname(__dirname), "file_repo", "updates"),
+    Agents: path.join(path.dirname(__dirname), "file_repo", "agents"),
 }
 
 exports.WriteFile = WriteFile;
 exports.ReadFile = ReadFile;
 exports.IsFile = IsFile;
+exports.ModifiedDate = ModifiedDate;
 exports.FileTypes = FileTypes;

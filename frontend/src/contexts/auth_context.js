@@ -11,14 +11,21 @@ export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState(undefined);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const tokenString = JSON.parse(localStorage.getItem("token"));
-        if (tokenString && tokenString.auth === "approved") {
-            setToken(tokenString);
-        }
+    useEffect(async () => {
+        setLoading(true);
 
-        // Send JWT Auth token to server for verification
-        // await axios.post()
+        const tokenString = JSON.parse(localStorage.getItem("token"));
+
+        if (Object.keys(tokenString).length) {
+            await axios.post("/api/user/2fahash", ({ username: tokenString.username, hash: tokenString.encrypt }))
+                    .then(res => {
+                        if (res.data.response === "authenticated") {
+                            setToken(tokenString);
+                        } else {
+                            setToken(undefined);
+                        }
+                    })
+        }
 
         setLoading(false);
     }, [])
