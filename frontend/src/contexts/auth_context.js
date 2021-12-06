@@ -12,7 +12,7 @@ export function AuthProvider({ children }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const tokenString = JSON.parse(sessionStorage.getItem("token"));
+        const tokenString = JSON.parse(localStorage.getItem("token"));
         if (tokenString && tokenString.auth === "approved") {
             setToken(tokenString);
         }
@@ -62,7 +62,7 @@ export function AuthProvider({ children }) {
     }
 
     function setToken(token) {
-        sessionStorage.setItem("token", JSON.stringify(token));
+        localStorage.setItem("token", JSON.stringify(token));
         setCurrentUser(token);
     }
 

@@ -73,8 +73,6 @@ div#root {
     background-color: transparent;
     border: 1px solid var(--color-3);
     padding: 7px;
-    margin: 10px 0;
-    margin-right: 10px;
     color: var(--color-text);
     cursor: pointer;
     transition: background-color .2s, color .2s;
@@ -122,6 +120,13 @@ div#root {
   
 .dropdown:hover > div {
     display: block;
+}
+
+/* Div */
+
+.margin-right * {
+    margin: 5px 0;
+    margin-right: 5px;
 }
 
 /* Link */
@@ -194,10 +199,15 @@ div#root {
     width: fit-content;
 }
 
+.site-select {
+    width: 480px;
+}
+
 /* Table */
 
 .table-wrapper {
     display: flex;
+    width: fit-content;
 }
 
 .table-wrapper table {
@@ -206,15 +216,17 @@ div#root {
 }
 
 .table-wrapper th {
-    padding: 12px 10px;
     text-align: left;
     background-color: var(--color-3);
 }
 
 .table-wrapper td, .table-wrapper th {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 8px 0;
     text-align: center;
+}
+.table-wrapper td {
+    padding: 8px;
 }
 
 .table-wrapper tbody tr:nth-child(2n - 1) {
@@ -306,13 +318,13 @@ div#root {
     height: 450px;
     border: 1px solid var(--color-4);
     background-color: var(--color-2);
-    animation: 2s ease-out 0s 1 fade-in, 1.5s ease-out 0s 1 slide-up;
+    animation: 1s ease-out 0s 1 fade-in, 1s ease-out 0s 1 slide-up;
     box-shadow: var(--color-shadow) 0px 0px 25px;
 }
 
 .login-page h1 {
     animation-fill-mode: forwards;
-    animation: 3s ease-out 0s 1 fade-in, 2s ease-out 0s 1 slide-up;
+    animation: 2s ease-out 0s 1 fade-in, 1.5s ease-out 0s 1 slide-up;
 }
 
 /* Forms */
@@ -390,12 +402,6 @@ div#root {
     padding: 10px;
     width: 95%;
     height: 95%;
-}
-
-.device-page > div {
-    float: left;
-    width: 45%;
-    margin-right: 10px;
 }
 
 .device-page-info {

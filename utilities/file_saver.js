@@ -24,12 +24,27 @@ async function ReadFile(fileName, type) {
     return rFile;
 }
 
+async function IsFile(fileName, type) {
+    let file = "";
+
+    await fs.access(`${type}/${fileName}`)
+            .then(_ => {
+                file = `${type}\\${fileName}`;
+            })
+            .catch(_ => {
+                file = undefined;
+            })
+
+    return file;
+}
+
 const FileTypes = {
-    Report: path.join(path.dirname(path.basename(__dirname)), "file_repo", "reports"),
-    FileStore: path.join(path.dirname(path.basename(__dirname)), "file_repo", "file_store"),
-    Update: path.join(path.dirname(path.basename(__dirname)), "file_repo", "updates")
+    Report: path.join(path.dirname(__dirname), "file_repo", "reports"),
+    FileStore: path.join(path.dirname(__dirname), "file_repo", "file_store"),
+    Update: path.join(path.dirname(__dirname), "file_repo", "updates")
 }
 
 exports.WriteFile = WriteFile;
 exports.ReadFile = ReadFile;
+exports.IsFile = IsFile;
 exports.FileTypes = FileTypes;

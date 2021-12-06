@@ -87,8 +87,8 @@ export default function DevicePage() {
         <div className="app-body">
             <div className="device-page">
                 <div>
-                    <Select 
-                        className="react-select"
+                    <Select
+                        className="react-select site-select"
                         options={options}
                         value={siteName}
                         onChange={UpdateComputerCount}
@@ -104,7 +104,7 @@ export default function DevicePage() {
                         onChange={UpdateFilter}
                     />
                 </div>
-                <div>
+                <div className="margin-right">
                     <Button onClick={DownloadAgent}>Download Datto Agent</Button>
                     <Button onClick={RefreshSite}>Refresh Site</Button>
                 </div>
@@ -114,20 +114,20 @@ export default function DevicePage() {
                         <p>{`Computer Count: ${computers.length}`}</p>
                     </div>
                 <div className="table-wrapper">
-                    <table>
+                    <table style={{ width: "100%" }}>
                         <thead>
-                            <tr>
-                                <th>Hostname</th>
-                                <th>Type</th>
-                                <th>Platform</th>
-                                <th>Last User</th>
-                                <th>Domain</th>
-                                <th>Internal IP</th>
-                                <th>External IP</th>
-                                <th>Antivirus</th>
-                                <th>Datto</th>
-                                <th>Sophos Portal</th>
-                                <th>Tamper Protection</th>
+                            <tr style={{ width: "100%" }}>
+                                <th style={{ width: "104px" }}>Hostname</th>
+                                <th style={{ width: "70px" }}>Type</th>
+                                <th style={{ width: "101px" }}>Platform</th>
+                                <th style={{ width: "127px" }}>Last User</th>
+                                <th style={{ width: "75px" }}>Domain</th>
+                                <th style={{ width: "101px" }}>Internal IP</th>
+                                <th style={{ width: "101px" }}>External IP</th>
+                                <th style={{ width: "82px" }}>Antivirus</th>
+                                <th style={{ width: "83px" }}>Datto</th>
+                                <th style={{ width: "72px" }}>Sophos Portal</th>
+                                <th style={{ width: "88px" }}>Tamper Protection</th>
                             </tr>
                         </thead>
                         <tbody>

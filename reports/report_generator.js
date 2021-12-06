@@ -1,12 +1,19 @@
 const ExcelJS = require("exceljs");
 
+const fs = require("../utilities/file_saver");
+
 const DattoData = require("../routes/data_helpers/datto_data");
 const SophosData = require("../routes/data_helpers/sophos_data");
 
 /* Helper Functions */
 
 async function DownloadReport(res, repName) {
-  res.sendFile(`${__dirname}/reports/${repName}.xlsx`);
+  const file = await fs.IsFile(repName + ".xlsx", fs.FileTypes.Report);
+  if (file) {
+    res.sendFile(file);
+  } else {
+    res.status(401).json({ response: "Failed to retrieve report!" });
+  }
 }
 
 /* Report Generators */
