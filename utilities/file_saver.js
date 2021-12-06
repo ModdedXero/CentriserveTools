@@ -1,6 +1,10 @@
 const fs = require("fs/promises");
 const path = require("path");
 
+const repoPath = process.platform === "win32" 
+    ? path.dirname(__dirname)
+    : path.basename(path.dirname(__dirname))
+
 async function WriteFile(fileName, data, type) {
     let result = false;
     await fs.mkdir(type + "\\", { recursive: true });
@@ -49,11 +53,12 @@ async function ModifiedDate(fileName, type) {
     return date;
 }
 
+
 const FileTypes = {
-    Report: path.join(path.dirname(__dirname), "file_repo", "reports"),
-    FileStore: path.join(path.dirname(__dirname), "file_repo", "file_store"),
-    Update: path.join(path.dirname(__dirname), "file_repo", "updates"),
-    Agents: path.join(path.dirname(__dirname), "file_repo", "agents"),
+    Report: path.join(repoPath, "file_repo", "reports"),
+    FileStore: path.join(repoPath, "file_repo", "file_store"),
+    Update: path.join(repoPath, "file_repo", "updates"),
+    Agents: path.join(repoPath, "file_repo", "agents"),
 }
 
 exports.WriteFile = WriteFile;
