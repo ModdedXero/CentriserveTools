@@ -3,7 +3,7 @@ const path = require("path");
 
 const repoPath = process.platform === "win32" 
     ? path.dirname(__dirname)
-    : path.basename(path.dirname(__dirname))
+    : path.basename("/home/centriserve/programming/", path.dirname(__dirname))
 
 async function WriteFile(fileName, data, type) {
     let result = false;
@@ -25,6 +25,7 @@ async function ReadFile(fileName, type) {
             rFile = undefined;
         })
 
+    console.log(__dirname)
     return rFile;
 }
 
