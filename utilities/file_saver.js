@@ -1,9 +1,7 @@
 const fs = require("fs/promises");
 const path = require("path");
 
-const repoPath = process.platform === "win32" 
-    ? path.dirname(__dirname) 
-    : path.dirname(__dirname)
+const repoPath = path.dirname(__dirname);
 
 async function WriteFile(fileName, data, type) {
     let result = false;
