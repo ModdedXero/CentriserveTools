@@ -17,17 +17,8 @@ async function WriteFile(fileName, data, type) {
 async function ReadFile(fileName, type) {
     let rFile = "";
 
-    console.log(__dirname);
-    console.log(path.dirname(__dirname));
-    console.log(path.basename(path.dirname(__dirname)));
-    console.log(path.dirname(path.basename(path.dirname(__dirname))))
-    await fs.access(`${type}/${fileName}`)
-        .then(async err => {
-            rFile = await fs.readFile(`${type}/${fileName}`, "utf-8")
-        })
-        .catch(err => {
-            rFile = undefined;
-        })
+    if (!await IsFile(fileName, type)) return undefined;
+    rFile = await fs.readFile(`${type}/${fileName}`, "utf-8")
     
     return rFile;
 }
@@ -48,6 +39,8 @@ async function IsFile(fileName, type) {
 
 async function ModifiedDate(fileName, type) {
     let date = undefined;
+
+    if (!await IsFile(fileName, type)) return undefined;
 
     await fs.stat(`${type}/${fileName}`)
             .then(data => {

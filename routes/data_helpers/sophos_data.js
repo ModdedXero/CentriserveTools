@@ -90,7 +90,7 @@ async function EnableTamper(id, tenantId) {
 async function GetSites() {
     await waitFor(() => APICheck());
 
-    if (fs.IsFile("sites.txt", fs.FileTypes.Agents)) {
+    if (await fs.IsFile("sites.txt", fs.FileTypes.Agents)) {
         if ((await fs.ModifiedDate("sites.txt", fs.FileTypes.Agents) - Date.now()) < 60 * 60 * 1000)
         return JSON.parse(await fs.ReadFile("sites.txt", fs.FileTypes.Agents)).sites;
     }
