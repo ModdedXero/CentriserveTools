@@ -32,7 +32,18 @@ router.route("/register").post(async (req, res) => {
     const result = await auth.SavePassword(req.body.username, req.body.password);
 
     if (result) {
-        res.status(200).json({ response: "password_saved", token: { username: req.body.username, auth: "approved" }});
+        await auth.ValidateLogin(req.body.username, req.body.password)
+                .then(usr => {
+                    res.status(200).json({
+                        response: "authenticated",
+                        token: {
+                            username: req.body.username,
+                            auth: "approved",
+                            encrypt: usr[0],
+                            security: usr[1]
+                        }
+                    })
+                })
     } else {
         res.status(200).json({ response: "password_notsaved" });
     }

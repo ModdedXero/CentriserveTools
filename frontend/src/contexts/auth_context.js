@@ -35,7 +35,7 @@ export function AuthProvider({ children }) {
 
         await axios.post("/api/user/register", { username: username, password: password })
             .then(res => {
-                if (res.data.response === "password_saved") {
+                if (res.data.response === "authenticated") {
                     setToken(res.data.token);
                     result = "success";
                 } else {
@@ -69,8 +69,13 @@ export function AuthProvider({ children }) {
     }
 
     function setToken(token) {
-        localStorage.setItem("token", JSON.stringify(token));
-        setCurrentUser(token);
+        if (token) {
+            localStorage.setItem("token", JSON.stringify(token));
+            setCurrentUser(token);
+        } else {
+            localStorage.removeItem("token");
+            setCurrentUser(undefined);
+        }
     }
 
     const values = {
