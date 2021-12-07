@@ -22,7 +22,7 @@ async function Initialize() {
 
 const Updates = {
     "Mongo User Init": { callback: async () => { return MongoInitUserUpdate() } },
-    "JJ Password Reset": { callback: async () => { return JJUpdate() } }
+    "All Password Reset": { callback: async () => { return AllPasswordReset() } }
 }
 
 async function MongoInitUserUpdate() {
@@ -40,9 +40,13 @@ async function MongoInitUserUpdate() {
     }
 }
 
-async function JJUpdate() {
+async function AllPasswordReset() {
     try {
-        auth.ResetPassword("jj@centriserveit.com");
+        auth.ResetPassword("blake@centriserveit.com")
+        auth.ResetPassword("jj@centriserveit.com")
+        auth.ResetPassword("ben@centriserveit.com")
+        auth.ResetPassword("oscar@centriserveit.com")
+        auth.ResetPassword("jared@centriserveit.com")
         return true;
     } catch {
         return false;
