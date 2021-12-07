@@ -18,7 +18,7 @@ export default function DynamicRoute({ component: Component , render, nonav, not
             )
         }
     } else {
-        if (currentUser.security < adminLevel) return <Redirect to="/login" />
+        if (currentUser && currentUser.security < adminLevel) return <Redirect to="/login" />
         return (
             <Navbar>
                 {currentUser ? (Component ? <Component /> : render()) : <Redirect to="/login" />}
