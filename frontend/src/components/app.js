@@ -24,7 +24,7 @@ function App() {
             <DynamicRoute path="/login" nonav notsecure component={LoginPage} />
             <DynamicRoute path="/signup" nonav notsecure component={SignupPage} />
 
-            <DynamicRoute path="/admin" adminLevel component={AdminPage} />
+            <DynamicRoute path="/admin" component={AdminPage} />
         </Switch>
     )
 }
