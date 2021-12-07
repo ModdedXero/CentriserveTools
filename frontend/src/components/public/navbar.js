@@ -16,7 +16,6 @@ export default function Navbar({ children }) {
                 </DynamicLink>
                 <ul>
                     <li><DynamicLink className="navbar-link" dropdown={agentsDropdown} to="/">Agents</DynamicLink></li>
-                    <li><DynamicLink className="navbar-link" to="/downloads">Downloads</DynamicLink></li>
                 </ul>
             </nav>
             <div className="app-wrapper">

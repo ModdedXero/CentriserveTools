@@ -33,7 +33,7 @@ export function AuthProvider({ children }) {
     async function Signup(username, password) {
         let result = "failure";
 
-        await axios.post("/api/user/password", { username: username, password: password })
+        await axios.post("/api/user/register", { username: username, password: password })
             .then(res => {
                 if (res.data.response === "password_saved") {
                     setToken(res.data.token);

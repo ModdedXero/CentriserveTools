@@ -104,15 +104,15 @@ export default function DevicePage() {
                         onChange={UpdateFilter}
                     />
                 </div>
-                <div className="margin-right">
+                <div className="flex margin-top add-gap">
                     <Button onClick={DownloadAgent}>Download Datto Agent</Button>
                     <Button onClick={RefreshSite}>Refresh Site</Button>
                 </div>
                 <div className="table-info">
-                        <p>{`Sophos Count: ${sophosCount}`}</p>
-                        <p>{`Datto Count: ${dattoCount}`}</p>
-                        <p>{`Computer Count: ${computers.length}`}</p>
-                    </div>
+                    <p>{`Sophos Count: ${sophosCount}`}</p>
+                    <p>{`Datto Count: ${dattoCount}`}</p>
+                    <p>{`Computer Count: ${computers.length}`}</p>
+                </div>
                 <div className="table-wrapper">
                     <table style={{ width: "100%" }}>
                         <thead>

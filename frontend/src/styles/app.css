@@ -113,11 +113,11 @@ div#root {
     text-decoration: none;
     display: block;
 }
-  
+
 .dropdown > div a:hover {
     background-color: var(--color-3)
 }
-  
+ 
 .dropdown:hover > div {
     display: block;
 }
@@ -126,9 +126,12 @@ div#root {
 
 .flex {
     display: flex;
+}
+.flex-column {
     flex-direction: column;
 }
 .add-gap {
+    display: flex;
     gap: 5px;
 }
 .margin-top {
