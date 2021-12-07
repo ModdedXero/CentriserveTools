@@ -16,7 +16,7 @@ export function AuthProvider({ children }) {
 
         const tokenString = JSON.parse(localStorage.getItem("token"));
 
-        if (Object.keys(tokenString).length) {
+        if (tokenString && Object.keys(tokenString).length) {
             await axios.post("/api/user/2fahash", ({ username: tokenString.username, hash: tokenString.encrypt }))
                     .then(res => {
                         if (res.data.response === "authenticated") {
