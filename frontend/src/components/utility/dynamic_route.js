@@ -4,25 +4,24 @@ import { useAuth } from "../../contexts/auth_context";
 
 import Navbar from "../public/navbar";
 
-export default function DynamicRoute({ component: Component, nonav, notsecure }) {
+export default function DynamicRoute({ component: Component , render, nonav, notsecure, adminLevel=0 }) {
     const { currentUser } = useAuth();
 
     if (notsecure) {
         if (nonav) {
-            return (
-                <Component />
-            )
+            return (Component ? <Component /> : render());
         } else {
             return (
                 <Navbar>
-                    <Component />
+                    {(Component ? <Component /> : render())}
                 </Navbar>
             )
         }
     } else {
+        if (currentUser.security < adminLevel) return <Redirect to="/login" />
         return (
             <Navbar>
-                {currentUser ? <Component /> : <Redirect to="/login" />}
+                {currentUser ? (Component ? <Component /> : render()) : <Redirect to="/login" />}
             </Navbar>
         )
     }

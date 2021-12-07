@@ -5,6 +5,7 @@ const User = require("./models/user");
 async function ValidateLogin(username, password) {
     let result = 0;
     let encrypt;
+    let security = 0;
 
     await User.findOne({ "username": username })
         .then(async doc => {
@@ -13,6 +14,7 @@ async function ValidateLogin(username, password) {
                     encrypt = await bcrypt.genSalt();
                     doc.hash = encrypt;
                     doc.lastLogin = Date.now();
+                    security = doc.security;
                     await doc.save();
                     result = 1;
                 } else {
@@ -27,7 +29,7 @@ async function ValidateLogin(username, password) {
     if (result !== 1) {
         return Promise.reject(result);
     } else {
-        return Promise.resolve(encrypt);
+        return Promise.resolve([encrypt, security]);
     }
 }
 
@@ -64,9 +66,26 @@ async function SavePassword(username, password) {
     return result;
 }
 
-async function CreateUser(username) {
-    User.create({ "username": username })
-        .catch(() => {});
+async function CreateUser(username, security=0) {
+    let result = false;
+
+    User.create({
+        username: username,
+        security: security
+    })
+    .then(_ => { result = true })
+    .catch(() => {});
+
+    return result;
+}
+
+async function UpdateUser(data) {
+    let result = false;
+
+    User.findOneAndUpdate({ username: data.username }, data, { new: true })
+        .then(result = true)
+        .catch()
+    return result;
 }
 
 async function ResetPassword(username) {
@@ -77,8 +96,23 @@ async function ResetPassword(username) {
         })
 }
 
+async function GetAllUsers() {
+    const users = [];
+
+    await User.find()
+        .then(doc => {
+            doc.forEach(usr => {
+                users.push(usr);
+            })
+        })
+
+    return users;
+}
+
 exports.ValidateLogin = ValidateLogin;
 exports.ValidateEncryptionKey = ValidateEncryptionKey;
 exports.SavePassword = SavePassword;
 exports.CreateUser = CreateUser;
+exports.UpdateUser = UpdateUser;
 exports.ResetPassword = ResetPassword;
+exports.GetAllUsers = GetAllUsers;

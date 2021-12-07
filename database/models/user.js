@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { isDate } = require("util");
 
 const Schema = mongoose.Schema;
 
@@ -9,8 +8,12 @@ const userSchema = new Schema({
         required: true,
         unique: true
     },
+    security: {
+        type: Number,
+        required: true,
+        default: 0
+    },
     password: String,
-    security: String,
     hash: String,
     lastLogin: Date
 })
