@@ -55,11 +55,9 @@ async function SavePassword(username, password) {
 
     await User.findOne({ "username": username })
             .then(async doc => {
-                if (!doc.password) {
-                    doc.password = hashedPass;
-                    await doc.save();
-                    result = true;
-                }
+                doc.password = hashedPass;
+                await doc.save();
+                result = true;
             })
 
 
