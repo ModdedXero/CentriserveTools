@@ -22,35 +22,23 @@ async function Initialize() {
 
 const Updates = {
     "Mongo User Init": { callback: async () => { return MongoInitUserUpdate() } },
-    "All Password Reset": { callback: async () => { return AllPasswordReset() } }
+    "MongoAdminSecurityUpdate": { callback: async () => { return MongoAdminSecurityUpdate() }}
 }
 
 async function MongoInitUserUpdate() {
-    try {
-        auth.CreateUser("blake@centriserveit.com")
-        auth.CreateUser("david@centriserveit.com")
-        auth.CreateUser("jj@centriserveit.com")
-        auth.CreateUser("tj@centriserveit.com")
-        auth.CreateUser("ben@centriserveit.com")
-        auth.CreateUser("oscar@centriserveit.com")
-        auth.CreateUser("jared@centriserveit.com")
-        return true;
-    } catch {
-        return false;
-    }
+    if (!await auth.CreateUser("blake@centriserveit.com")) return false;
+    if (!await auth.CreateUser("david@centriserveit.com")) return false;
+    if (!await auth.CreateUser("jj@centriserveit.com")) return false;
+    if (!await auth.CreateUser("tj@centriserveit.com")) return false;
+    if (!await auth.CreateUser("ben@centriserveit.com")) return false;
+    if (!await auth.CreateUser("oscar@centriserveit.com")) return false;
+    if (!await auth.CreateUser("jared@centriserveit.com")) return false;
+    return true;
 }
 
-async function AllPasswordReset() {
-    try {
-        auth.ResetPassword("blake@centriserveit.com")
-        auth.ResetPassword("jj@centriserveit.com")
-        auth.ResetPassword("ben@centriserveit.com")
-        auth.ResetPassword("oscar@centriserveit.com")
-        auth.ResetPassword("jared@centriserveit.com")
-        return true;
-    } catch {
-        return false;
-    }
+async function MongoAdminSecurityUpdate() {
+    if (!await auth.SetSecurityLevel("blake@centriserveit.com", 5)) return false;
+    return true;
 }
 
 exports.Initialize = Initialize;

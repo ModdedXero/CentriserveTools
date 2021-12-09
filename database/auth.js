@@ -59,6 +59,7 @@ async function SavePassword(username, password) {
                 await doc.save();
                 result = true;
             })
+            .catch()
 
 
     return result;
@@ -67,7 +68,7 @@ async function SavePassword(username, password) {
 async function CreateUser(username, security=0) {
     let result = false;
 
-    User.create({
+    await User.create({
         username: username,
         security: security
     })
@@ -80,18 +81,38 @@ async function CreateUser(username, security=0) {
 async function UpdateUser(data) {
     let result = false;
 
-    User.findOneAndUpdate({ username: data.username }, data, { new: true })
+    await User.findOneAndUpdate({ username: data.username }, data, { new: true })
         .then(result = true)
         .catch()
+
+    return result;
+}
+
+async function DeleteUser(username) {
+    let result = false;
+
+    await User.findOneAndDelete({ username: username })
+            .then(_ => {
+                result = true;
+            })
+            .catch()
+
     return result;
 }
 
 async function ResetPassword(username) {
-    User.findOne({ "username": username })
+    let result = false;
+
+    await User.findOne({ "username": username })
         .then(async doc => {
+            if (!doc) return;
             doc.password = ""
             await doc.save();
+            result = true;
         })
+        .catch()
+
+    return result;
 }
 
 async function GetAllUsers() {
@@ -107,10 +128,28 @@ async function GetAllUsers() {
     return users;
 }
 
+async function SetSecurityLevel(username, level) {
+    let result = false;
+
+    await User.findOne({ username: username })
+            .then(async doc => {
+                if (!doc) return;
+
+                doc.security = level;
+                await doc.save();
+                result = true;
+            })
+            .catch()
+
+    return result;
+}
+
 exports.ValidateLogin = ValidateLogin;
 exports.ValidateEncryptionKey = ValidateEncryptionKey;
 exports.SavePassword = SavePassword;
 exports.CreateUser = CreateUser;
 exports.UpdateUser = UpdateUser;
+exports.DeleteUser = DeleteUser;
 exports.ResetPassword = ResetPassword;
 exports.GetAllUsers = GetAllUsers;
+exports.SetSecurityLevel = SetSecurityLevel;

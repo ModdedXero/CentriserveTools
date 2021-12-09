@@ -13,7 +13,10 @@ const userSchema = new Schema({
         required: true,
         default: 0
     },
-    password: String,
+    password: {
+        type: String,
+        default: ""
+    },
     hash: String,
     lastLogin: Date
 })

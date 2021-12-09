@@ -1,14 +1,14 @@
 import React, { useRef, useState } from "react";
-import { useAuth } from "../../contexts/auth_context";
+import { useAuth } from "../../../contexts/auth_context";
 
-import Button from "../utility/button";
-import DynamicLink from "../utility/dynamic_link";
+import Button from "../../utility/button";
+import DynamicLink from "../../utility/dynamic_link";
 
-export default function LoginPage() {
+export default function SignupPage() {
     const usernameRef = useRef("");
     const passwordRef = useRef("");
-    const { Login } = useAuth();
-    const [loginState, setLoginState] = useState("login");
+    const { Signup } = useAuth();
+    const [loginState, setLoginState] = useState("signup");
 
     const [loading, setLoading] = useState(false);
 
@@ -16,7 +16,7 @@ export default function LoginPage() {
         e.preventDefault();
         setLoading(true);
 
-        const result = await Login(usernameRef.current.value, passwordRef.current.value);
+        const result = await Signup(usernameRef.current.value, passwordRef.current.value);
         setLoginState(result);
         if (result === "success") {
             window.location = "/";
@@ -25,19 +25,15 @@ export default function LoginPage() {
         setLoading(false);
     }
 
-    function GenerateTitle() {
-        if (loginState === "login") {
-            return "Enter Login";
+    function GenerateHeader() {
+        if (loginState === "signup") {
+            return "Register";
+        } else if (loginState === "password_notsaved") {
+            return "Email not registered. Contact support!";
         } else if (loginState === "success") {
-            return "Login Successful!"
-        } else if (loginState === "create_password"){
-            return "Email not registered. Signup below."
-        } else if (loginState === "bad_password") {
-            return "Incorrect Password"
-        } else if (loginState === "not_authenticated") {
-            return "Email not registered. Contact support!"
+            return "Please Login"
         } else {
-            return "Error";
+            return "error";
         }
     }
 
@@ -47,7 +43,7 @@ export default function LoginPage() {
                 <div className="login-page-form">
                     <form className="form" onSubmit={handleSubmit}>
                         <h1>
-                            {GenerateTitle()}
+                            {GenerateHeader()}
                         </h1>
                         <div className="form-group">
                             <input required type="email" ref={usernameRef} placeholder="Enter Email"/>
@@ -58,7 +54,7 @@ export default function LoginPage() {
                             <label>Password</label>
                         </div>
                         <div className="form-buttons">
-                            <DynamicLink className="sub-link" to="/signup">Register Login</DynamicLink>
+                            <DynamicLink className="sub-link" to="/login">Login</DynamicLink>
                             <Button disabled={loading} type="submit">Submit</Button>
                         </div>
                     </form>

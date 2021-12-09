@@ -7,8 +7,8 @@ import DevicePage from "./public/device_page/device_page";
 import Reports from "./public/reports_page/reports_page";
 import DownloadPage from "./public/download_page";
 
-import LoginPage from "./public/login_page";
-import SignupPage from "./public/signup_page";
+import LoginPage from "./public/login/login_page";
+import SignupPage from "./public/login/signup_page";
 
 import AdminPage from "./admin/admin_page/admin_page";
 
@@ -24,7 +24,7 @@ function App() {
             <DynamicRoute path="/login" nonav notsecure component={LoginPage} />
             <DynamicRoute path="/signup" nonav notsecure component={SignupPage} />
 
-            <DynamicRoute path="/admin" component={AdminPage} />
+            <DynamicRoute path="/admin" adminLevel={5} component={AdminPage} />
         </Switch>
     )
 }

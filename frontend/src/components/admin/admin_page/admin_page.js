@@ -33,6 +33,8 @@ export default function AdminPage() {
                             <tr>
                                 <th>Users</th>
                                 <th></th>
+                                <th></th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>

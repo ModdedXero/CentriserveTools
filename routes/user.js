@@ -64,8 +64,11 @@ router.route("/all").get(async (req, res) => {
     res.status(200).json({ response: users })
 });
 
-router.route("/resetpassword").get(async (req, res) => {
+router.route("/resetpassword").post(async (req, res) => {
+    result = await auth.ResetPassword(req.body.username);
 
+    if (result) res.status(200).json({ response: "Password reset!" })
+    else res.json({ response: "Failed to reset password!" })
 });
 
 router.route("/update").post(async (req, res) => {
@@ -85,8 +88,11 @@ router.route("/create").post(async (req, res) => {
     }
 });
 
-/* Helper Functions */
+router.route("/delete").delete(async (req, res) => {
+    const result = await auth.DeleteUser(req.body.username);
 
-
+    if (result) res.status(200).json({ response: "User deleted!" });
+    else res.json({ response: "Failed to delete user!" });
+});
 
 module.exports = router;
