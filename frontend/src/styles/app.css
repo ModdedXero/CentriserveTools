@@ -478,3 +478,13 @@ div#root {
     top: 5px;
     right: 5px;
 }
+
+/* Downloads Page */
+
+.download-page {
+
+}
+
+.file-tree {
+    border: 1px solid white;
+}

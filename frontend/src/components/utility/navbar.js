@@ -1,6 +1,6 @@
 import React from "react";
 
-import DynamicLink from "../utility/dynamic_link";
+import DynamicLink from "./dynamic_link";
 
 export default function Navbar({ children }) {
     const agentsDropdown = [

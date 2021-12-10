@@ -5,7 +5,7 @@ import DynamicRoute from "./utility/dynamic_route";
 
 import DevicePage from "./public/device_page/device_page";
 import Reports from "./public/reports_page/reports_page";
-import DownloadPage from "./public/download_page";
+import DownloadPage from "./public/download_page/download_page";
 
 import LoginPage from "./public/login/login_page";
 import SignupPage from "./public/login/signup_page";

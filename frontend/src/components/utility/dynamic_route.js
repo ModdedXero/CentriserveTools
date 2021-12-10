@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 import { useAuth } from "../../contexts/auth_context";
 
-import Navbar from "../public/navbar";
+import Navbar from "./navbar";
 
 export default function DynamicRoute({ component: Component , render, nonav, notsecure, adminLevel=0 }) {
     const { currentUser } = useAuth();
