@@ -372,6 +372,9 @@ div#root {
 .search-bar {
     position: relative;
 }
+.search-bar input:focus ~ .search-bar-container {
+    display: flex;
+}
 .search-bar:hover .search-bar-container {
     display: flex;
 }

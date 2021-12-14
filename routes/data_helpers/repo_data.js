@@ -5,11 +5,14 @@ async function GenerateFileTree(force) {
     if (!force && await fs.IsFile("tree.index", fs.FileTypes.FileStore)) return;
 
     const fileTree = await fs.FileTree(fs.FileTypes.FileStore);
-    const indexedTree = await indexBranch(fileTree, "");
+    const indexedTree = await indexBranch(fileTree, "", 
+        (await fs.IsFile("tree.index", fs.FileTypes.FileStore) ?
+            await GetRepoFileTree() : undefined));
+
     await fs.WriteFile("tree.index", JSON.stringify(indexedTree), fs.FileTypes.FileStore);
 }
 
-async function indexBranch(tree, path) {
+async function indexBranch(tree, path, currentIndex=undefined) {
     const indexedTree = {};
 
     for (const [key, value] of Object.entries(tree)) {
@@ -19,16 +22,42 @@ async function indexBranch(tree, path) {
             indexedTree[key].type = "dir";
             indexedTree[key].name = key;
             indexedTree[key].path = path + "/" + key;
-            indexedTree[key].content = await indexBranch(value, path + "/" + key);
+            indexedTree[key].content = await indexBranch(value, path + "/" + key, currentIndex);
         } else if (key !== "tree.index") {
             indexedTree[key].type = "file";
             indexedTree[key].content = value;
-            indexedTree[key].id = uuid();
+            indexedTree[key].id = checkForID(`${path}/${value}`, value, currentIndex);
             indexedTree[key].path = path;
         }
     }
 
     return indexedTree;
+}
+
+function checkForID(path, content, tree) {
+    if (!tree) return uuid();
+
+    const prop = getDecsendantProp(tree, path.split("/").splice(1));
+    
+    if (prop.content === content) {
+        return prop.id;
+    }
+
+    return uuid();
+}
+
+function getDecsendantProp(obj, array) {
+    let target = obj;
+
+    for (const prop of array) {
+        if (typeof(target[prop].content) !== "string") {
+            target = target[prop].content;
+        } else {
+            target = target[prop];
+        }
+    }
+
+    return target ? target : undefined;
 }
 
 async function GetRepoFileTree() {
@@ -86,6 +115,7 @@ async function CreateFolder(folderName, path) {
     return result;
 }
 
+exports.GenerateFileTree = GenerateFileTree;
 exports.GetRepoFileTree = GetRepoFileTree;
 exports.DownloadFile = DownloadFile;
 exports.SaveFile = SaveFile;

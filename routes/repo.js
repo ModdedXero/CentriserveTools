@@ -35,4 +35,9 @@ router.route("/new-folder").post(async (req, res) => {
     }
 });
 
+router.route("/reindex").get(async (req, res) => {
+    Repo.GenerateFileTree(true);
+    res.status(200).send("Repo reindexed!");
+})
+
 module.exports = router;
