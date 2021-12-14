@@ -32,6 +32,7 @@ const dattoRouter = require("./routes/datto");
 const agentsRouter = require("./routes/agents");
 const userRouter = require("./routes/user");
 const repoRouter = require("./routes/repo");
+const downloadsRouter = require("./routes/downloads");
 
 // Create Handlers
 const reports = require("./reports/report_scheduler");
@@ -45,6 +46,7 @@ app.use("/api/datto", dattoRouter);
 app.use("/api/agents", agentsRouter);
 app.use("/api/user", userRouter);
 app.use("/api/repo", repoRouter);
+app.use("/downloads", downloadsRouter);
 
 // Send client Index.html for web data (Doesn't work without static build from React)
 if (process.env.NODE_ENV === "production") {

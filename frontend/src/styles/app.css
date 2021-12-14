@@ -67,6 +67,30 @@ div#root {
     }
 }
 
+@keyframes topBubbles {
+    0%{
+      background-position: 5% 90%, 10% 90%, 10% 90%, 15% 90%, 25% 90%, 25% 90%, 40% 90%, 55% 90%, 70% 90%;
+    }
+      50% {
+        background-position: 0% 80%, 0% 20%, 10% 40%, 20% 0%, 30% 30%, 22% 50%, 50% 50%, 65% 20%, 90% 30%;}
+   100% {
+      background-position: 0% 70%, 0% 10%, 10% 30%, 20% -10%, 30% 20%, 22% 40%, 50% 40%, 65% 10%, 90% 20%;
+    background-size: 0% 0%, 0% 0%,  0% 0%,  0% 0%,  0% 0%,  0% 0%;
+    }
+  }
+  
+  @keyframes bottomBubbles {
+    0%{
+      background-position: 10% -10%, 30% 10%, 55% -10%, 70% -10%, 85% -10%, 70% -10%, 70% 0%;
+    }
+    50% {
+      background-position: 0% 80%, 20% 80%, 45% 60%, 60% 100%, 75% 70%, 95% 60%, 105% 0%;}
+   100% {
+      background-position: 0% 90%, 20% 90%, 45% 70%, 60% 110%, 75% 80%, 95% 70%, 110% 10%;
+    background-size: 0% 0%, 0% 0%,  0% 0%,  0% 0%,  0% 0%,  0% 0%;
+    }
+  }
+
 /* Button */
 
 .btn {
@@ -268,6 +292,29 @@ div#root {
     background-color: white;
     color: #178033;
     overflow: auto;
+}
+
+.pop-open {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    width: 75px;
+    height: 75px;
+}
+
+.pop-open button {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: var(--color-3);
+    transition: transform .2s;
+}
+.pop-open button:hover {
+    transform: scale(1.1);
+}
+
+.pop-open i {
+    font-size: 3vw;
 }
 
 /* Navbar */
@@ -482,9 +529,73 @@ div#root {
 /* Downloads Page */
 
 .download-page {
-
+    width: 95%;
+    height: 95%;
+    padding: 10px;
+    margin: auto;
 }
 
 .file-tree {
-    border: 1px solid white;
+    padding: 0;
+}
+
+.file-tree div {
+    display: flex;
+}
+
+.file-tree li {
+    display: block;
+    border: 1px solid var(--color-4);
+    margin: 5px;
+    padding: 5px;
+    width: 400px;
+    cursor: pointer;
+    text-transform: uppercase;
+    background-color: var(--color-2);
+    transition: transform .2s;
+}
+.file-tree li:hover {
+    transform: scale(1.05);
+}
+
+.file-tree li i {
+    width: 15px;
+    padding-right: 10px;
+}
+
+.file-tree-buttons {
+    display: flex;
+    margin: 15px 0;
+    gap: 5px;
+}
+
+.file-tree-path button, .file-tree button {
+    position: relative;
+    background-color: transparent;
+    border: none;
+    color: var(--color-5);
+    padding: 0;
+    margin: 0;
+    margin-left: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+.file-tree-path button:hover {
+    color: var(--color-3);
+}
+
+.file-tree button {
+    margin-left: 15px;
+    transition: all 5s;
+}
+.file-tree button:hover {
+    transition: transform .2s, color 5s;
+    transform: scale(1.5);
+}
+.file-tree button:active {
+    transition: color .001s;
+    color: var(--color-3);
+}
+.file-tree button:visited {
+    color: var(--color-5);
 }
