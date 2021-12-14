@@ -39,7 +39,7 @@ export default function DownloadPage() {
                     value: value.path,
                     label: key,
                     description: value.path,
-                    icon: <i className="fas fa-folder" />
+                    icon: <i className="far fa-folder" />
                 })
                 options = options.concat(getSearchOptions(value.content))
             } else {
