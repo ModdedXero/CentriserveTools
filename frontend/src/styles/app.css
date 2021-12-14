@@ -6,6 +6,7 @@
     --color-3: #3aafa9;
     --color-4: #def2f1;
     --color-5: #ffffff;
+    --color-grayed-out: #f0f0f096;
     --color-text: white;
     --shadow-simple: var(--color-shadow) 0px 0px 25px;
 }
@@ -214,6 +215,55 @@ div#root {
     clear: both;
 }
 
+/* Cool Input */
+
+.cool-input {
+    position: relative;
+    width: 80%;
+    padding: 15px 0 0;
+    margin-top: 10px;
+}
+.cool-input {
+    width: 100%;
+    border: 0;
+    border-bottom: 2px solid var(--color-3);
+    outline: 0;
+    font-size: 1.3rem;
+    color: white;
+    padding: 7px 0;
+    background: transparent;
+}
+.cool-input::placeholder {
+    color: transparent;
+}
+.cool-input:placeholder-shown ~ label {
+    font-size: 1.3rem;
+    cursor: text;
+    top: 20px;
+}
+.cool-input + label {
+    position: absolute;
+    top: 0;
+    display: block;
+    transition: 0.2s;
+    font-size: 1rem;
+    color: var(--color-text);
+}
+.cool-input:focus {
+    padding-bottom: 6px;  
+    border-width: 3px;
+    border-image-slice: 1;
+}
+.cool-input:focus + label {
+    position: absolute;
+    top: 0;
+    display: block;
+    transition: 0.3s;
+    font-size: 0.8rem;
+    color: var(--color-4);
+    font-weight:700;
+}
+
 /* Select */
 
 .react-select {
@@ -315,6 +365,44 @@ div#root {
 
 .pop-open i {
     font-size: 3vw;
+}
+
+/* Search Bar */
+
+.search-bar {
+    position: relative;
+}
+.search-bar:hover .search-bar-container {
+    display: flex;
+}
+
+.search-bar-container {
+    display: none;
+    z-index: 100;
+    flex-direction: column;
+    position: absolute;
+    background-color: var(--color-2);
+    padding-top: 10px;
+    width: 100%;
+}
+
+.search-bar-item {
+    display: flex;
+    color: var(--color-5);
+    gap: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+.search-bar-item:hover {
+    background-color: var(--color-3);
+}
+
+.search-bar-icon {
+    width: 20px;
+}
+
+.search-bar-desc {
+    color: var(--color-grayed-out);
 }
 
 /* Navbar */
@@ -513,11 +601,20 @@ div#root {
 
 .modal-content {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
     background-color: var(--color-2);
     width: fit-content;
     margin: auto;
-    padding: 45px 40px 20px 20px;
+    padding: 45px 20px 20px 20px;
     animation: fade-in 1.5s;
+}
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
 .modal-close {
@@ -533,6 +630,12 @@ div#root {
     height: 95%;
     padding: 10px;
     margin: auto;
+}
+
+.file-tree-search {
+    width: 50%;
+    margin: auto;
+    margin-bottom: 20px;
 }
 
 .file-tree {

@@ -6,7 +6,7 @@ const repoPath = path.dirname(__dirname);
 async function WriteFile(fileName, data, type) {
     let result = false;
 
-    await validateDir(type);
+    await ValidateDir(type);
 
     await fs.writeFile(`${type}/${fileName}`, data, "utf-8")
             .then(data => { result = true; })
@@ -51,7 +51,7 @@ async function ModifiedDate(fileName, type) {
 }
 
 async function FileTree(type) {
-    await validateDir(FileTypes.FileStore);
+    await ValidateDir(FileTypes.FileStore);
     return await sortTree(type);
 }
 
@@ -71,12 +71,16 @@ async function sortTree(dir) {
     return tree;
 }
 
-async function validateDir(type) {
+async function ValidateDir(type) {
+    let result = false;
+
     await fs.access(type)
-        .then()
+        .then(_ => { result = true })
         .catch(_ => {
             fs.mkdir(type, { recursive: true });
         })
+
+    return result;
 }
 
 
@@ -92,4 +96,5 @@ exports.ReadFile = ReadFile;
 exports.IsFile = IsFile;
 exports.ModifiedDate = ModifiedDate;
 exports.FileTree = FileTree;
+exports.ValidateDir = ValidateDir;
 exports.FileTypes = FileTypes;

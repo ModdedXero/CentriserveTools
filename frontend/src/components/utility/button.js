@@ -4,7 +4,8 @@ export default function Button({ onClick, onSubmit, className, disabled, type, h
     return (
         <button 
             className={className ? className : "btn"}
-            onClick={!disabled ? onClick : undefined} 
+            onClick={!disabled ? onClick : undefined}
+            type={type ? type : "button"}
         >
             {children}
         </button>

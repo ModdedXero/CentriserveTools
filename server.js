@@ -8,6 +8,7 @@ const express = require("express");
 const path = require("path");
 const fs = require("fs");
 const mongoose = require("mongoose");
+const fileUpload = require("express-fileupload");
 const update = require("./update");
 
 // Inititialze express server and port
@@ -15,6 +16,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(express.json());
+app.use(fileUpload());
 
 try {
     mongoose.connect("mongodb://127.0.0.1:27017/")

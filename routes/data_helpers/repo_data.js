@@ -1,8 +1,8 @@
 const fs = require("../../utilities/file_saver");
 const uuid = require("uuid").v4;
 
-async function GenerateFileTree() {
-    if (await fs.IsFile("tree.index", fs.FileTypes.FileStore)) return;
+async function GenerateFileTree(force) {
+    if (!force && await fs.IsFile("tree.index", fs.FileTypes.FileStore)) return;
 
     const fileTree = await fs.FileTree(fs.FileTypes.FileStore);
     const indexedTree = await indexBranch(fileTree, "");
@@ -13,11 +13,12 @@ async function indexBranch(tree, path) {
     const indexedTree = {};
 
     for (const [key, value] of Object.entries(tree)) {
-        indexedTree[key] = {};
+        if (key !== "tree.index") indexedTree[key] = {};
 
         if (typeof(value) !== "string") {
             indexedTree[key].type = "dir";
             indexedTree[key].name = key;
+            indexedTree[key].path = path + "/" + key;
             indexedTree[key].content = await indexBranch(value, path + "/" + key);
         } else if (key !== "tree.index") {
             indexedTree[key].type = "file";
@@ -60,5 +61,32 @@ function findFile(tree, uuid) {
     return undefined;
 }
 
+async function SaveFile(file, path) {
+    let result = false;
+
+    const dir = fs.FileTypes.FileStore + "/" + path.replaceAll(",", "/");
+
+    file.mv(`${dir}/${file.name}`, (err) => {
+        if (err) {
+            console.log(err)
+            result = false;
+        } else {
+            result = true;
+        }
+    });
+
+    await GenerateFileTree(true);
+    return result;
+}
+
+async function CreateFolder(folderName, path) {
+    const result = await fs.ValidateDir(`${fs.FileTypes.FileStore}/${path.join("/")}/${folderName}`);
+    await GenerateFileTree(true);
+
+    return result;
+}
+
 exports.GetRepoFileTree = GetRepoFileTree;
 exports.DownloadFile = DownloadFile;
+exports.SaveFile = SaveFile;
+exports.CreateFolder = CreateFolder;
