@@ -132,8 +132,32 @@ export default function DownloadPage() {
     }
 
     function LinkToClipboard(fileId) {
-        console.log(fileId)
-        navigator.clipboard.writeText(window.location.origin + `/downloads/repo/${fileId.id}`);
+        copyToClipboard(window.location.origin + `/downloads/repo/${fileId}`)
+    }
+
+    // return a promise
+    function copyToClipboard(textToCopy) {
+        // navigator clipboard api needs a secure context (https)
+        if (navigator.clipboard && window.isSecureContext) {
+            // navigator clipboard api method'
+            return navigator.clipboard.writeText(textToCopy);
+        } else {
+            // text area method
+            let textArea = document.createElement("textarea");
+            textArea.value = textToCopy;
+            // make the textarea out of viewport
+            textArea.style.position = "fixed";
+            textArea.style.left = "-999999px";
+            textArea.style.top = "-999999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            return new Promise((res, rej) => {
+                // here the magic happens
+                document.execCommand('copy') ? res() : rej();
+                textArea.remove();
+            });
+        }
     }
 
     function OnSearchChange(item) {
@@ -196,7 +220,7 @@ export default function DownloadPage() {
                                 </li>
                                 {
                                     value.type === "file" &&
-                                    <Button className="none" onClick={_ => LinkToClipboard(value)}>
+                                    <Button className="none" onClick={_ => LinkToClipboard(value.id)}>
                                         <i className="fas fa-link" />
                                     </Button>
                                 }
