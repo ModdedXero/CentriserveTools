@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Select from "react-select";
+import "../../../styles/device_page.css";
 
-import Notify from "../../utility/notify";
 import Button from "../../utility/button";
 import DeviceInfo from "./device_info";
 

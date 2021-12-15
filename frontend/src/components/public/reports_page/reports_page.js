@@ -1,4 +1,5 @@
 import React from "react";
+import "../../../styles/reports_page.css";
 
 import { AvailableReports } from "./reports_helper";
 

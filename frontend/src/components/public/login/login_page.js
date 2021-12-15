@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { useAuth } from "../../../contexts/auth_context";
+import "../../../styles/login_page.css";
 
 import Button from "../../utility/button";
 import DynamicLink from "../../utility/dynamic_link";
