@@ -16,7 +16,10 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(express.json());
-app.use(fileUpload());
+app.use(fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/file_repo/temp"
+}));
 
 try {
     mongoose.connect("mongodb://127.0.0.1:27017/")
