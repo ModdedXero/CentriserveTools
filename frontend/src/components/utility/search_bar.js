@@ -29,7 +29,7 @@ export default function SearchBar({ options, setValue }) {
                                     {item.label.toUpperCase()}
                                 </div>
                                 <div className="search-bar-desc">
-                                    {item.description && item.description}
+                                    {item.description && item.description.toLowerCase()}
                                 </div>
                             </div>
                         )
