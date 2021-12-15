@@ -39,7 +39,7 @@ function checkForID(path, content, tree) {
 
     const prop = getDecsendantProp(tree, path.split("/").splice(1));
     
-    if (prop.content === content) {
+    if (prop && prop.content === content) {
         return prop.id;
     }
 
@@ -50,7 +50,7 @@ function getDecsendantProp(obj, array) {
     let target = obj;
 
     for (const prop of array) {
-        if (typeof(target[prop].content) !== "string") {
+        if (target[prop] && typeof(target[prop].content) !== "string") {
             target = target[prop].content;
         } else {
             target = target[prop];

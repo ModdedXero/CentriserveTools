@@ -5,6 +5,7 @@ import SearchBar from "../../utility/search_bar";
 
 import Button from "../../utility/button";
 import Modal from "../../utility/modal";
+import ProgressBar from "../../utility/progress_bar";
 
 export default function DownloadPage() {
     const [fileTree, setFileTree] = useState([]);
@@ -15,6 +16,7 @@ export default function DownloadPage() {
     const [folderModal, setFolderModal] = useState(false);
     const [fileModal, setFileModal] = useState(false);
     const [selectedFile, setSelectedFile] = useState({});
+    const [uploadProgress, updateUploadProgress] = useState(0);
     const folderNameRef = useRef("");
 
     useEffect(() => {
@@ -70,22 +72,28 @@ export default function DownloadPage() {
             .catch(err => console.log(err))
     }
     
-    function UploadFile(e) {
+    async function UploadFile(e) {
         e.preventDefault();
 
         const formData = new FormData();
         formData.append("file", selectedFile);
         formData.append("path", treePath)
 
-        axios.post("/api/repo/upload-file", formData)
-            .then(_ => {
-                axios.get("/api/repo/file-tree")
-                    .then(res => {
-                        CreateFileTree(res.data.response);
-                    });
+        await axios.post("/api/repo/upload-file", formData, {
+            onUploadProgress: (ev) => {
+                const progress = ev.loaded / ev.total * 100;
+                updateUploadProgress(Math.round(progress));
+            }
+        }).catch(err => {});
 
-                setFileModal(false);
+        axios.get("/api/repo/file-tree")
+            .then(res => {
+                CreateFileTree(res.data.response);
             })
+            .catch(err => console.log(err))
+
+        updateUploadProgress(0);
+        setFileModal(false);
     }
 
     function OnFileChange(e) {
@@ -170,6 +178,7 @@ export default function DownloadPage() {
                 <Modal visible={fileModal} onClose={setFileModal}>
                     <form className="modal-form" onSubmit={UploadFile}>
                         <input type="file" required onChange={OnFileChange} />
+                        <ProgressBar progress={uploadProgress} />
                         <Button type="submit">Upload</Button>
                     </form>
                 </Modal>
