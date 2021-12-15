@@ -89,7 +89,7 @@ const FileTypes = {
     FileStore: path.join(repoPath, "file_repo", "file_store"),
     Update: path.join(repoPath, "file_repo", "updates"),
     Agents: path.join(repoPath, "file_repo", "agents"),
-    Root: path.join(repoPath, "file_repo")
+    Temp: path.join(repoPath, "file_repo", "temp")
 }
 
 exports.WriteFile = WriteFile;

@@ -62,7 +62,7 @@ async function AddMockInventoryNotes() {
 }
 
 async function AddRepoTempDir() {
-    await fs.ValidateDir(fs.FileTypes.Root);
+    await fs.ValidateDir(fs.FileTypes.Temp);
     return true;
 }
 

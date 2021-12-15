@@ -7,6 +7,7 @@ require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
+const filePaths = require("./utilities/file_saver").FileTypes;
 const mongoose = require("mongoose");
 const fileUpload = require("express-fileupload");
 const update = require("./update");
@@ -18,7 +19,7 @@ const port = process.env.PORT || 5000;
 app.use(express.json());
 app.use(fileUpload({
     useTempFiles: true,
-    tempFileDir: "/file_repo/temp"
+    tempFileDir: filePaths.Temp
 }));
 
 try {
