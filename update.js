@@ -1,6 +1,7 @@
 const fs = require("./utilities/file_saver");
 
 const auth = require("./database/auth");
+const warehouse = require("./database/warehouse");
 
 async function Initialize() {
     const updateFile = await fs.ReadFile("update.json", fs.FileTypes.Update);
@@ -22,7 +23,10 @@ async function Initialize() {
 
 const Updates = {
     "Mongo User Init": { callback: async () => { return MongoInitUserUpdate() } },
-    "MongoAdminSecurityUpdate": { callback: async () => { return MongoAdminSecurityUpdate() }}
+    "MongoAdminSecurityUpdate": { callback: async () => { return MongoAdminSecurityUpdate() }},
+    "Create Mock Inventory": { callback: async () => { return CreateMockInventory()}},
+    "Add Mock Inventory Items": { callback: async () => { return AddMockInventoryItems()}},
+    "Add Mock Inventory Notes": { callback: async () => { return AddMockInventoryNotes()}},
 }
 
 async function MongoInitUserUpdate() {
@@ -38,6 +42,21 @@ async function MongoInitUserUpdate() {
 
 async function MongoAdminSecurityUpdate() {
     if (!await auth.SetSecurityLevel("blake@centriserveit.com", 5)) return false;
+    return true;
+}
+
+async function CreateMockInventory() {
+    if (!await warehouse.CreateNewInventory({ title: "Computers", location: "test" })) return false;
+    return true;
+}
+
+async function AddMockInventoryItems() {
+    await warehouse.UpdateInventoryItems("Computers", "test", { name: "Sophos XG", count: 12 })
+    return true;
+}
+
+async function AddMockInventoryNotes() {
+    await warehouse.UpdateInventoryNotes("Computers", "test", { items: [{ name: "Dell SFF", count: 2 }], reason: "Because" })
     return true;
 }
 

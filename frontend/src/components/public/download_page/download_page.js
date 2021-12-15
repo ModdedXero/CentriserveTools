@@ -77,7 +77,9 @@ export default function DownloadPage() {
         e.preventDefault();
 
         const formData = new FormData();
-        formData.append("file", selectedFile);
+        for (let i = 0; i < selectedFile.length; i++) {
+            formData.append("file" + i, selectedFile[i]);
+        }
         formData.append("path", treePath)
 
         await axios.post("/api/repo/upload-file", formData, {
@@ -98,7 +100,7 @@ export default function DownloadPage() {
     }
 
     function OnFileChange(e) {
-        setSelectedFile(e.target.files[0])
+        setSelectedFile(e.target.files)
     }
 
     function BranchClick(branch) {
@@ -203,7 +205,7 @@ export default function DownloadPage() {
                 </Modal>
                 <Modal visible={fileModal} onClose={setFileModal}>
                     <form className="modal-form" onSubmit={UploadFile}>
-                        <input type="file" required onChange={OnFileChange} />
+                        <input type="file" multiple required onChange={OnFileChange} />
                         <ProgressBar progress={uploadProgress} />
                         <Button type="submit">Upload</Button>
                     </form>

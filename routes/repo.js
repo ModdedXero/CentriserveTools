@@ -15,8 +15,10 @@ router.route("/upload-file").post(async (req, res) => {
         return res.status(400).send("No Files were uploaded");
     }
 
-    let file = req.files.file;
-    const result = await Repo.SaveFile(file, req.body.path);
+    let result = true;
+    for (const [key, value] of Object.entries(req.files)) {
+        await Repo.SaveFile(req.files[key], req.body.path);
+    }
 
     if (result) {
         res.status(200).send("File saved!");
