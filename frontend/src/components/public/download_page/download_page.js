@@ -132,7 +132,8 @@ export default function DownloadPage() {
     }
 
     function LinkToClipboard(fileId) {
-        navigator.clipboard.writeText(window.location.origin + `/downloads/repo/${fileId}`);
+        console.log(fileId)
+        navigator.clipboard.writeText(window.location.origin + `/downloads/repo/${fileId.id}`);
     }
 
     function OnSearchChange(item) {
@@ -195,7 +196,7 @@ export default function DownloadPage() {
                                 </li>
                                 {
                                     value.type === "file" &&
-                                    <Button className="none" onClick={_ => LinkToClipboard(value.id)}>
+                                    <Button className="none" onClick={_ => LinkToClipboard(value)}>
                                         <i className="fas fa-link" />
                                     </Button>
                                 }
