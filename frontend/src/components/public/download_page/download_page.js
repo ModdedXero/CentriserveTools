@@ -108,14 +108,7 @@ export default function DownloadPage() {
             treePath.push(branch.name);
             setVisibleTree(branch.content);
         } else {
-            axios.get(`/downloads/repo/${branch.id}`)
-                .then(res => {
-                    let blob = new Blob(
-                        [res.data]
-                    );
-                    
-                    fileDownload(blob, `${branch.content}`);
-                })
+            window.open(window.location.origin + `/downloads/repo/${branch.id}`);
         }
     }
 
