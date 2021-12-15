@@ -27,6 +27,7 @@ const Updates = {
     "Create Mock Inventory": { callback: async () => { return CreateMockInventory()}},
     "Add Mock Inventory Items": { callback: async () => { return AddMockInventoryItems()}},
     "Add Mock Inventory Notes": { callback: async () => { return AddMockInventoryNotes()}},
+    "Add Repo Temp Dir": { callback: async () => { return AddRepoTempDir()}},
 }
 
 async function MongoInitUserUpdate() {
@@ -57,6 +58,11 @@ async function AddMockInventoryItems() {
 
 async function AddMockInventoryNotes() {
     await warehouse.UpdateInventoryNotes("Computers", "test", { items: [{ name: "Dell SFF", count: 2 }], reason: "Because" })
+    return true;
+}
+
+async function AddRepoTempDir() {
+    await fs.ValidateDir(fs.FileTypes.Root);
     return true;
 }
 
