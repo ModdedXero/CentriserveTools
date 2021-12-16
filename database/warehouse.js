@@ -40,8 +40,6 @@ async function UpdateInventoryNotes(title, location, notes) {
         location: location
     })
 
-    console.log(inventory)
-
     inventory.notes = notes;
     await inventory.save();
 }
