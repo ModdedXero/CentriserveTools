@@ -13,7 +13,6 @@ export default function DevicePage() {
     const [computers, setComputers] = useState([]);
     const [allSiteNames, setAllSiteNames] = useState([]);
 
-    const [loadingSites, setLoadingSites] = useState(true);
     const [siteName, setSiteName] = useState("");
     const [filterName, setFilterName] = useState("all");
     const [filterValue, setFilterValue] = useState({ value: "all", label: "All Devices"});
@@ -22,7 +21,6 @@ export default function DevicePage() {
         axios.get("/api/agents/sites")
             .then(res => {
                 setAllSiteNames(res.data.response);
-                setLoadingSites(false);
             })
             .catch(err => console.log(err))
     }, [])
@@ -58,6 +56,8 @@ export default function DevicePage() {
                         setDattoAgentLink(comp.datto.siteUid);
                         return true;
                     }
+
+                    return false;
                 })
             })
     };
@@ -73,7 +73,7 @@ export default function DevicePage() {
         let options = [];
 
         allSiteNames.map((siteName) => {
-            options.push({ value: siteName.name, label: siteName.name });
+            return options.push({ value: siteName.name, label: siteName.name });
         })
 
         return options;

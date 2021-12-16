@@ -1,0 +1,74 @@
+.inventory-page {
+    width: 95%;
+    height: 95%;
+    margin: auto;
+    padding: 10px;
+    border: 1px solid var(--color-2);
+}
+
+.inventory-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.inventory-items {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    gap: 10px;
+}
+
+.inventory-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    background-color: var(--color-2);
+    text-align: center;
+}
+
+.inventory-item h1 {
+    margin: 10px;
+    margin-bottom: 10px;
+}
+
+.inventory-item-list {
+    width: 300px;
+    height: 300px;
+    overflow: auto;
+}
+
+.inventory-item-buttons {
+    display: flex;
+    width: 50%;
+    margin: 10px auto;
+    justify-content: space-between;
+}
+
+.inventory-item-value {
+    display: flex;
+    justify-content: space-around;
+}
+
+.inventory-item-value div {
+    display: flex;
+    gap: 5px;
+    margin: auto 0 auto 15px;
+    border: 1px solid var(--color-3);
+    height: 20px;
+}
+
+.inventory-item-value div p {
+    cursor: default;
+    margin: auto;
+}
+
+.inventory-item-value button {
+    background-color: transparent;
+    border: none;
+    color: var(--color-5);
+    cursor: pointer;
+}
+.inventory-item-value button:hover {
+    color: var(--color-1);
+}

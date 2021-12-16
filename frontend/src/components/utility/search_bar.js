@@ -19,6 +19,7 @@ export default function SearchBar({ options, setValue }) {
                         } else if (item.label.toLowerCase().includes(query.toLowerCase())) {
                             return item;
                         }
+                        return null;
                     }).map((item, index) => {
                         return (
                             <div className="search-bar-item" key={index} onClick={_ => SelectItem(item)}>

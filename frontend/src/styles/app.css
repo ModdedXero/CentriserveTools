@@ -25,6 +25,24 @@ div#root {
     display: inline;
 }
 
+/* Webkit */
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-2); 
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-3); 
+}
+  
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-4); 
+}
+
 .site-wrapper {
     display: flex;
     flex-flow: column;
@@ -386,6 +404,8 @@ div#root {
     position: absolute;
     background-color: var(--color-2);
     padding-top: 10px;
+    max-height: 300px;
+    overflow-y: auto;
     width: 100%;
 }
 

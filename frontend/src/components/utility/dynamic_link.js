@@ -15,8 +15,8 @@ export default function DynamicLink({ className, to, dropdown, children }) {
             <div className="dropdown">
                 <button className={className}>{children}</button>
                 <div>
-                    {dropdown.map(el => {
-                        return <Link to={el.value}>{el.label}</Link>
+                    {dropdown.map((el, index) => {
+                        return <Link to={el.value} key={index}>{el.label}</Link>
                     })}
                 </div>
             </div>
