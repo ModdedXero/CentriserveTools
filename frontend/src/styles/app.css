@@ -112,7 +112,7 @@ div#root {
 
 /* Button */
 
-.btn {
+.btn, .btn-borderless {
     background-color: transparent;
     border: 1px solid var(--color-3);
     padding: 7px;
@@ -122,9 +122,13 @@ div#root {
     text-decoration: none;
     height: fit-content;
 }
-.btn:hover {
+.btn:hover, .btn-borderless:hover {
     background-color: var(--color-4);
     color: var(--color-1);
+}
+
+.btn-borderless {
+    border: none;
 }
 
 .dropdown > button {
@@ -585,7 +589,7 @@ div#root {
     width: fit-content;
     margin: auto;
     padding: 45px 20px 20px 20px;
-    animation: fade-in 1.5s;
+    animation: fade-in 1s;
 }
 
 .modal-form {

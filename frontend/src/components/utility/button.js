@@ -1,9 +1,19 @@
 import React from "react";
 
-export default function Button({ onClick, onSubmit, className, disabled, type, href, children }) {
+export default function Button({ onClick, onSubmit, className, disabled, type, borderless, children }) {
+    function getClassName() {
+        if (className) {
+            return className;
+        } else if (borderless) {
+            return "btn-borderless"
+        } else {
+            return "btn"
+        }
+    }
+
     return (
         <button 
-            className={className ? className : "btn"}
+            className={getClassName()}
             onClick={!disabled ? onClick : undefined}
             type={type ? type : "button"}
         >
