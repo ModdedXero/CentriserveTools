@@ -14,7 +14,7 @@ const itemSchema = new Schema({
 const categorySchema = new Schema({
     name: {
         type: String,
-        required: true
+        required: true,
     },
     items: [itemSchema]
 })
@@ -22,7 +22,8 @@ const categorySchema = new Schema({
 const inventorySchema = new Schema({
     location: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     categories: [categorySchema]
 })

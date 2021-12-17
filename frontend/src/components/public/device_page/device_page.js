@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Select from "react-select";
 import "../../../styles/device_page.css";
 
+import Select from "../../utility/search_bar";
 import Button from "../../utility/button";
 import DeviceInfo from "./device_info";
 
@@ -88,20 +88,22 @@ export default function DevicePage() {
             <div className="device-page">
                 <div>
                     <Select
-                        className="react-select site-select"
+                        className="site-select"
                         options={options}
                         value={siteName}
-                        onChange={UpdateComputerCount}
+                        setValue={UpdateComputerCount}
+                        select
                     />
                     <Select 
-                        className="react-select select-fit"
+                        className="select-fit"
                         options={[
                             { value: "all", label: "All Devices" },
                             { value: "stable", label: "Stable Devices" },
                             { value: "error", label: "Error Devices" },
                         ]}
-                        value={filterValue}
-                        onChange={UpdateFilter}
+                        defaultValue={filterValue}
+                        setValue={UpdateFilter}
+                        select
                     />
                 </div>
                 <div className="flex margin-top add-gap">

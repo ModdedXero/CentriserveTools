@@ -1,0 +1,29 @@
+.inventory-page {
+    display: flex;
+    width: 95%;
+    height: 95%;
+    margin: auto;
+}
+
+.inventory-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 5px;
+    width: 150px;
+    height: 100%;
+    margin: 0;
+    border: 3px solid var(--color-2);
+}
+
+.inventory-data {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 20px;
+    padding-left: 20px;
+}
+
+.inventory-list {
+    
+}

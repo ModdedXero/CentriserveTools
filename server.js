@@ -23,7 +23,7 @@ app.use(fileUpload({
 }));
 
 try {
-    mongoose.connect("mongodb://127.0.0.1:27017/")
+    mongoose.connect(process.env.MONGODB)
         .catch(err => console.log("MongoDB connection failed!"))
     mongoose.connection.once("open", () => {
         console.log("MongoDB connection established!");
@@ -38,6 +38,7 @@ const dattoRouter = require("./routes/datto");
 const agentsRouter = require("./routes/agents");
 const userRouter = require("./routes/user");
 const repoRouter = require("./routes/repo");
+const inventoryRouter = require("./routes/inventory");
 const downloadsRouter = require("./routes/downloads");
 
 // Create Handlers
@@ -52,6 +53,7 @@ app.use("/api/datto", dattoRouter);
 app.use("/api/agents", agentsRouter);
 app.use("/api/user", userRouter);
 app.use("/api/repo", repoRouter);
+app.use("/api/inventory", inventoryRouter);
 app.use("/downloads", downloadsRouter);
 
 // Send client Index.html for web data (Doesn't work without static build from React)

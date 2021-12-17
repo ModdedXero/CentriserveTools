@@ -1,19 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
-export default function SearchBar({ options, setValue }) {
+export default function SearchBar({ options = [], setValue, select, defaultValue, noSort, className }) {
     const [query, setQuery] = useState("");
+    const [currentValue, setCurrentValue] = useState(defaultValue || {
+        value: "none",
+        label: select ? "Select" : "Search"
+    });
+
+    const searchBarRef = useRef();
+
+    function OnQueryChange(e) {
+        setQuery(e.target.value);
+    }
 
     function SelectItem(item) {
+        if (select) {
+            searchBarRef.current.value = "";
+            setQuery("");
+            setCurrentValue(item)
+        }
         setValue(item);
     }
 
     return (
-        <div className="search-bar">
-            <input className="cool-input" placeholder="Search" type="text" onChange={e => setQuery(e.target.value)} />
-            <label>Search</label>
+        <div className={`search-bar ${className}`}>
+            <input ref={searchBarRef} className="cool-input" placeholder={currentValue.label} type="text" onChange={OnQueryChange} />
+            <label>{currentValue.label}</label>
             <div className="search-bar-container">
                 {
-                    options.sort((a, b) => a.label.localeCompare(b.label)).filter(item => {
+                    (noSort ? options : options.sort((a, b) => a.label.localeCompare(b.label))).filter(item => {
                         if (!query) {
                             return item;
                         } else if (item.label.toLowerCase().includes(query.toLowerCase())) {
