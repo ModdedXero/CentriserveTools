@@ -25,6 +25,10 @@ div#root {
     display: inline;
 }
 
+p {
+    margin: 0;
+}
+
 /* Webkit */
 
 ::-webkit-scrollbar {
@@ -511,6 +515,10 @@ div#root {
     flex-direction: column;
     margin: 10px 0;
 }
+.form > .checkbox {
+    flex-direction: row;
+    margin-right: auto;
+}
 .form > .form-group {
     position: relative;
     width: 80%;
@@ -602,4 +610,19 @@ div#root {
     position: absolute;
     top: 5px;
     right: 5px;
+}
+
+/* Context Menu */
+
+.react-contextmenu {
+    z-index: 1000;
+    background-color: var(--color-2);
+    text-align: center;
+}
+
+.react-contextmenu-item {
+    padding: 10px;
+}
+.react-contextmenu-item:hover {
+    background-color: var(--color-3);
 }

@@ -7,8 +7,9 @@ const itemSchema = new Schema({
         type: String,
         required: true
     },
-    cost: String,
-    serial: String
+    price: String,
+    serial: String,
+    amount: Number
 })
 
 const categorySchema = new Schema({

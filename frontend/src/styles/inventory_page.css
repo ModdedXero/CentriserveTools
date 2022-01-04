@@ -19,11 +19,137 @@
 .inventory-data {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: 50%;
     gap: 20px;
     padding-left: 20px;
 }
 
+.inventory-header {
+    display: flex;
+    margin-left: auto;
+    gap: 5px;
+}
+.inventory-header p {
+    margin: auto;
+}
+
 .inventory-list {
-    
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.inventory-category {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--color-2);
+    padding: 10px;
+    cursor: pointer;
+}
+
+.inventory-category-header {
+    display: grid;
+    grid-template-columns: 50% 40% 40%;
+}
+
+.inventory-category-header > p {
+    padding: 7px;
+}
+
+.inventory-category-header button {
+    width: fit-content;
+}
+
+.inventory-items {
+    display: none;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.inventory-items.selected {
+    display: block;
+}
+
+.inventory-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.inventory-items-item {
+    display: flex;
+    flex-direction: column;
+}
+.inventory-items-item .flex.add-gap {
+    padding: 0;
+    justify-content: space-between;
+}
+.inventory-items-item .flex.add-gap button {
+    width: 50%;
+}
+.inventory-items-item .flex.add-gap input {
+    width: 10%;
+    margin: auto 0;
+    text-align: center;
+}
+
+.inventory-item-header {
+    display: grid;
+    border: 1px solid var(--color-2);
+    padding: 10px;
+    margin-left: 30px;
+    grid-template-columns: 47% 49% 25%;
+}
+
+.inventory-item-display {
+    display: none;
+    flex-direction: column;
+    margin-top: 10px;
+    gap: 10px;
+}
+
+.inventory-item-display.selected {
+    display: flex;
+}
+
+.inventory-item-display-info {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid var(--color-2);
+    padding: 10px;
+    margin-left: 60px;
+}
+
+.checkout-form {
+    width: fit-content;
+    height: fit-content;
+}
+
+.checkout-form > div {
+    width: 300px;
+}
+
+.checkout-form h2 {
+    font-size: 20px;
+}
+
+.checkout-list-container {
+    height: 200px;
+    overflow: auto;
+}
+
+.checkout-form .checkout-list-category {
+    display: flex;
+    flex-direction: column;
+}
+
+.checkout-form .checkout-list-item {
+    display: grid;
+    grid-template-columns: 40% 20% 40%;
+}
+
+.checkout-form textarea {
+    height: 200px;
+    resize: none;
 }
