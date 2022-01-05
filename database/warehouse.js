@@ -1,5 +1,5 @@
-const { json } = require("stream/consumers");
 const Inventory = require("./models/inventory");
+const SendMail = require("../utilities/mailer").SendMail;
 
 async function GetAllLocations() {
     const locations = await Inventory.find();
@@ -139,7 +139,29 @@ async function CheckoutInventoryItems(location, data, reason, user) {
         }
     }
 
-    inv.save();
+    inv.save().then(result = true);
+
+    const itemsStr =     
+`User: ${user}
+    
+Location: ${location.toUpperCase()}
+
+Reason:
+${reason}
+
+Items:
+
+${data.map((cat) => {
+    let retString = `${cat.category.toUpperCase()}\n`
+    for (const item of cat.items) {
+        retString = retString.concat(`${item.name}    ${item.serial || item.amount}`)
+    }
+    return retString;
+})}`
+
+    // Add Email Notification on inventory checkout
+    SendMail(process.env.INVENTORY_EMAIL, `Inventory Items Checked Out`, itemsStr);
+
     return result;
 }
 

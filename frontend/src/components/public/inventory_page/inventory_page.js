@@ -54,6 +54,8 @@ export default function InventoryPage() {
         axios.get(`/api/inventory/location/${location}`)
             .then(res => {
                 setCategories(res.data.response.categories);
+                setCheckoutCount(0);
+                setCheckoutData([]);
             })
     }
 
