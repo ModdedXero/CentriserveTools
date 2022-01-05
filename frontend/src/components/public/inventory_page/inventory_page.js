@@ -13,7 +13,7 @@ export default function InventoryPage() {
     const [locations, setLocations] = useState([]);
     const [categories, setCategories] = useState([]);
 
-    const [currentLocation, setCurrentLocation] = useState("create");
+    const [currentLocation, setCurrentLocation] = useState("");
 
     const [locationModal, setLocationModal] = useState(false);
     const [categoryModal, setCategoryModal] = useState(false);
@@ -143,7 +143,7 @@ export default function InventoryPage() {
     }
     
     function ToggleCategoryModal() {
-        if (currentLocation) setCategoryModal(true);
+        if (currentLocation.value) setCategoryModal(true);
     }
 
 

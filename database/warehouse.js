@@ -19,6 +19,7 @@ async function GetInventoryByLocation(location) {
 async function CreateNewInventoryLocation(location) {
     let result = false;
 
+    console.log(location)
     const inv = new Inventory({ location: location });
     await inv.save()
             .then(result = true)

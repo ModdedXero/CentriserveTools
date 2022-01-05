@@ -19,10 +19,7 @@ const noteSchema = new Schema({
 })
 
 const categorySchema = new Schema({
-    name: {
-        type: String,
-        required: true,
-    },
+    name: String,
     items: [itemSchema],
     notes: [noteSchema]
 })
