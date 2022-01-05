@@ -80,39 +80,60 @@ export default function InventoryPage() {
     function AddToCheckout(category, item) {
         const retList = [...checkoutData];
 
+        item.amount = parseInt(item.amount);
         if (!checkoutData.length) {
             let newCategory = {
-                category: category,
+                category: category.name,
                 items: []
             }
             newCategory.items.push(item);
 
             retList.push(newCategory);
-            setCheckoutCount(checkoutCount + item.amount);
+            setCheckoutCount(checkoutCount + parseInt(item.amount));
+            setCheckoutData(retList);
+            return;
         }
 
         for (let j = 0; j < checkoutData.length; j++) {
             if (!item.serial) {
                 for (let k = 0; k < checkoutData[j].items.length; k++) {
                     if (retList[j].items[k].name === item.name) {
-                        retList[j].items[k].amount  += item.amount;
-                        setCheckoutCount(checkoutCount + item.amount);
+                        retList[j].items[k].amount  += parseInt(item.amount);
+                        setCheckoutCount(checkoutCount + parseInt(item.amount));
+                        return;
                     }
                 }
-            }
 
-            if (retList[j].category === category) {
-                retList[j].items.push(item);
-                setCheckoutCount(checkoutCount + item.amount)
-            } else {
-                let newCategory = {
-                    category: category,
-                    items: []
+                if (retList[j].category === category) {
+                    retList[j].items.push(item);
+                    setCheckoutCount(checkoutCount + parseInt(item.amount))
+                } else {
+                    let newCategory = {
+                        category: category.name,
+                        items: []
+                    }
+                    newCategory.items.push(item);
+    
+                    retList.push(newCategory);
+                    setCheckoutCount(checkoutCount + parseInt(item.amount));
                 }
-                newCategory.items.push(item);
 
-                retList.push(newCategory);
-                setCheckoutCount(checkoutCount + item.amount);
+            } else {
+                if (retList[j].category === category.name) {
+                    console.log(item)
+                    retList[j].items.push(item);
+                    setCheckoutCount(checkoutCount + parseInt(item.amount))
+                    return;
+                } else {
+                    let newCategory = {
+                        category: category.name,
+                        items: []
+                    }
+                    newCategory.items.push(item);
+    
+                    retList.push(newCategory);
+                    setCheckoutCount(checkoutCount + parseInt(item.amount));
+                }
             }
         }
 

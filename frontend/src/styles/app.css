@@ -263,9 +263,13 @@ p {
     color: transparent;
 }
 .cool-input:placeholder-shown ~ label {
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     cursor: text;
-    top: 20px;
+    top: 25px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    white-space: nowrap;
 }
 .cool-input + label {
     position: absolute;

@@ -67,7 +67,7 @@ router.route("/item/update").post(async (req, res) => {
 
 router.route("/checkout").post(async (req, res) => {
     const result = await warehouse.CheckoutInventoryItems(
-        req.body.location, req.body.checkoutData, req.body.reason
+        req.body.location, req.body.checkoutData, req.body.reason, req.body.user
     );
 
     if (result) {

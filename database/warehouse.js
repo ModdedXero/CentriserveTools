@@ -1,3 +1,4 @@
+const { json } = require("stream/consumers");
 const Inventory = require("./models/inventory");
 
 async function GetAllLocations() {
@@ -102,11 +103,43 @@ async function UpdateInventoryCategoryItem(location, category, item) {
     return result;
 }
 
-async function CheckoutInventoryItems(location, data, reason) {
+async function CheckoutInventoryItems(location, data, reason, user) {
     let result = false;
 
-    
+    const inv = await Inventory.findOne({ location: location });
 
+    for (let i = 0; i < inv.categories.length; i++) {
+        for (const catg of data) {
+            if (catg.category === inv.categories[i].name) {
+                inv.categories[i].notes.push({ 
+                    reason: reason, 
+                    username: user,
+                    itemData: data
+                })
+
+                for (const item of catg.items) {
+                    for (let j = 0; j < inv.categories[i].items.length; j++) {
+                        if (item.serial) {
+                            if (item.serial === inv.categories[i].items[j].serial) {
+                                inv.categories[i].items.splice(j, 1);
+                            }
+
+                            continue;
+                        }
+
+                        if (item.name === inv.categories[i].items[j].name) {
+                            inv.categories[i].items[j].amount -= item.amount;
+                            if (inv.categories[i].items[j].amount <= 0) {
+                                inv.categories[i].items.splice(j, 1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    inv.save();
     return result;
 }
 

@@ -5,7 +5,7 @@ import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 import Modal from "../../utility/modal";
 import Button from "../../utility/button";
 
-export default function InventoryListItemDisplay({ location, category, checkout, index, id, item }) {
+export default function InventoryListItemDisplay({ location, category, checkout, index, item }) {
     const [editModal, setEditModal] = useState(false);
 
     const itemNameRef = useRef("");
@@ -35,14 +35,14 @@ export default function InventoryListItemDisplay({ location, category, checkout,
     }
 
     return (
-        <div key={index} onClick={e => { e.stopPropagation(); }}>
-            <ContextMenuTrigger id={`item-menu ${id} ${index}`}>
+        <div onClick={e => { e.stopPropagation(); }}>
+            <ContextMenuTrigger id={`item-menu ${item.serial} ${index}`}>
                 <div className="inventory-item-display-info">
                     <p>{item.name}</p>
                     <p>{item.serial}</p>
                 </div>
             </ContextMenuTrigger>
-            <ContextMenu id={`item-menu ${id} ${index}`}>
+            <ContextMenu id={`item-menu ${item.serial} ${index}`}>
                 <MenuItem onClick={_ => setEditModal(true)}>
                     Edit Item
                 </MenuItem>

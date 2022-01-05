@@ -16,7 +16,7 @@ const update = require("./update");
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.use(express.json());
+app.use(express.json({ limit: "500mb" }));
 app.use(fileUpload({
     useTempFiles: true,
     tempFileDir: filePaths.Temp

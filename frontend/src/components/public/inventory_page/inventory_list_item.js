@@ -55,7 +55,7 @@ export default function InventoryListItem({ location, category, checkout, group,
 
     function AddSerialItemToCheckout(item) {
         group.amount -= 1;
-        group.items = group.items.filter(i => i.serial === item.serial);
+        group.items = group.items.filter(i => i.serial !== item.serial);
 
         checkout(category, {
             name: group.name,
@@ -167,7 +167,6 @@ export default function InventoryListItem({ location, category, checkout, group,
                             checkout={AddSerialItemToCheckout}
                             key={index} 
                             index={index} 
-                            id={id} 
                             item={item} 
                         />
                     )

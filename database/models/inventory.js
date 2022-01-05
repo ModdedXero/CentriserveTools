@@ -12,12 +12,19 @@ const itemSchema = new Schema({
     amount: Number
 })
 
+const noteSchema = new Schema({
+    reason: String,
+    itemData: Object,
+    username: String
+})
+
 const categorySchema = new Schema({
     name: {
         type: String,
         required: true,
     },
-    items: [itemSchema]
+    items: [itemSchema],
+    notes: [noteSchema]
 })
 
 const inventorySchema = new Schema({
