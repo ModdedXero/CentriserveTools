@@ -155,7 +155,7 @@ export default function InventoryListItem({ location, category, checkout, group,
                             required
                         />
                     </div>
-                    <Button type="submit">Add Item</Button>
+                    <Button type="submit">Update Item</Button>
                 </form>
             </Modal>
             <div className={`inventory-item-display ${showItems ? "selected" : ""}`}>

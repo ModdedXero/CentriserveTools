@@ -79,7 +79,7 @@ export default function InventoryListItemDisplay({ location, category, checkout,
                             required
                         />
                     </div>
-                    <Button type="submit">Add Item</Button>
+                    <Button type="submit">Edit Item</Button>
                 </form>
             </Modal>
         </div>
