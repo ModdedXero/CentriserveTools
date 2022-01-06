@@ -34,6 +34,11 @@ export default function Navbar({ children }) {
                             Inventory
                         </DynamicLink>
                     </li>}
+                    {currentUser.security >= 5 && <li>
+                        <DynamicLink className="navbar-link" to="/user-admin">
+                            User Admin
+                        </DynamicLink>
+                    </li>}
                 </ul>
             </nav>
             <div className="app-wrapper">

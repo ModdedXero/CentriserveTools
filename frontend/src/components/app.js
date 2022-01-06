@@ -28,7 +28,7 @@ function App() {
 
             <DynamicRoute path="/inventory" adminLevel={2} component={InventoryPage} />
 
-            <DynamicRoute path="/admin" adminLevel={5} component={AdminPage} />
+            <DynamicRoute path="/user-admin" adminLevel={5} component={AdminPage} />
         </Switch>
     )
 }
