@@ -1,8 +1,9 @@
 .inventory-page {
     display: flex;
     width: 95%;
-    height: 95%;
+    height: 90vh;
     margin: auto;
+    overflow: hidden;
 }
 
 .inventory-nav {
@@ -11,7 +12,6 @@
     gap: 10px;
     padding: 5px;
     width: 150px;
-    height: 100%;
     margin: 0;
     border: 3px solid var(--color-2);
     overflow: hidden;
@@ -19,11 +19,11 @@
 }
 
 .inventory-data {
+    position: relative;
     display: flex;
     flex-direction: column;
     width: 50%;
     gap: 20px;
-    padding-left: 20px;
 }
 
 .inventory-header {
@@ -39,6 +39,8 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    padding: 0 20px;
+    overflow: auto;
 }
 
 .inventory-category {
