@@ -143,7 +143,7 @@ export default function InventoryPage() {
     }
     
     function ToggleCategoryModal() {
-        if (currentLocation.value) setCategoryModal(true);
+        if (currentLocation.value && currentLocation.value !== "add") setCategoryModal(true);
     }
 
 

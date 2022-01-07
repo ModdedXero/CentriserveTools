@@ -417,7 +417,6 @@ p {
     padding-top: 10px;
     max-height: 300px;
     overflow-y: auto;
-    overflow-x: hidden;
     width: 100%;
 }
 
@@ -430,6 +429,12 @@ p {
 }
 .search-bar-item:hover {
     background-color: var(--color-3);
+}
+
+.search-bar-item p {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
 }
 
 .search-bar-icon {

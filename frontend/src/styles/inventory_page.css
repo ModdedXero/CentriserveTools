@@ -15,7 +15,6 @@
     margin: 0;
     border: 3px solid var(--color-2);
     overflow: hidden;
-    white-space: nowrap;
 }
 
 .inventory-data {

@@ -41,9 +41,9 @@ export default function SearchBar({ options = [], setValue, select, defaultValue
                                 <div className="search-bar-icon">
                                     {item.icon && item.icon}
                                 </div>
-                                <div>
+                                <p>
                                     {item.label.toUpperCase()}
-                                </div>
+                                </p>
                                 <div className="search-bar-desc">
                                     {item.description && item.description.toLowerCase()}
                                 </div>
