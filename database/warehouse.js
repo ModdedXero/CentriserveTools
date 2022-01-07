@@ -85,14 +85,15 @@ async function UpdateInventoryCategoryItem(location, category, item) {
                 }
             } else {
                 let itemsRet = [];
-                for (let j = 0; j < inv.categories[i].items.length; j++) {
-                    if (item.name !== inv.categories[i].items[j].name) {
-                        itemsRet.push(inv.categories[i].items[j]);
-                    }
-                }
 
-                for (let k = 0; k < item.amount; k++) {
-                    itemsRet.push(item);
+                for (let k = 0; k < inv.categories[i].items.length; k++) {
+                    if (inv.categories[i].items[k].name === item.name) {
+                        if (parseInt(item.amount) !== 0) {
+                            itemsRet.push(item);
+                        }
+                    } else {
+                        itemsRet.push(inv.categories[i].items[k])
+                    }
                 }
 
                 inv.categories[i].items = itemsRet;
