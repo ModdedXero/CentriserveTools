@@ -75,7 +75,7 @@ async function UpdateInventoryCategoryItem(location, category, item) {
 
     const inv = await Inventory.findOne({ location: location });
 
-    console.log(`Updating Item: ${item}`)
+    console.log(`Updating Item: ${item.name} | Amount: ${item.amount || item.serial}`)
 
     for (let i = 0; i < inv.categories.length; i++) {
         if (inv.categories[i].name === category) {
