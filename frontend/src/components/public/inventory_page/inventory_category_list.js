@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 
 import InventoryListItem from "./inventory_list_item";
 
 export default function InventoryCategoryList({ location, category, checkout, items }) {
-    const [filterItems, setFilteredItems] = useState(FilteredItems);
+    const filterItems = useRef(FilteredItems());
 
     function FilteredItems() {
         const retItems = [];
@@ -52,7 +52,7 @@ export default function InventoryCategoryList({ location, category, checkout, it
 
     return (
         <div className="inventory-items-list">
-            {filterItems.map((group, index) => {
+            {filterItems.current.map((group, index) => {
                 return (
                     <InventoryListItem
                         location={location}

@@ -42,6 +42,7 @@ export default function InventoryListItem({ location, category, checkout, group,
     }
 
     function AddToCheckout() {
+        if (checkoutCount === 0) return;
         group.amount -= checkoutCount;
         
         checkout(category, { 

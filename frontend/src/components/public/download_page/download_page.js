@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import fileDownload from "js-file-download";
-import "../../../styles/download_page.css";
 
 import SearchBar from "../../utility/search_bar";
 import Button from "../../utility/button";
 import Modal from "../../utility/modal";
 import ProgressBar from "../../utility/progress_bar";
+
+import "../../../styles/download_page.css";
 
 export default function DownloadPage() {
     const [fileTree, setFileTree] = useState([]);

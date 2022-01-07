@@ -9,7 +9,8 @@ export default function InventoryCheckoutForm({ location, checkoutData }) {
 
     const checkoutReasonRef = useRef();
 
-    function SubmitCheckout() {
+    function SubmitCheckout(e) {
+        e.preventDefault();
         if (!checkoutData.length) return;
 
         axios.post("/api/inventory/checkout", {
