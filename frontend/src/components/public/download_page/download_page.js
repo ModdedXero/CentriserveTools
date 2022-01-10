@@ -171,7 +171,7 @@ export default function DownloadPage() {
                     <button onClick={_ => BrowsePath(-1)}>Downloads/</button>
                     {treePath.map((branch, index) => {
                         return (
-                            <button onClick={_ => BrowsePath(index)}>{branch}/</button>
+                            <button key={index} onClick={_ => BrowsePath(index)}>{branch}/</button>
                         )
                     })}
                 </div>

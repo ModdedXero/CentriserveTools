@@ -3,6 +3,7 @@ import { useAuth } from "../../../contexts/auth_context";
 import "../../../styles/login_page.css";
 
 import Button from "../../utility/button";
+import Input from "../../utility/input";
 import DynamicLink from "../../utility/dynamic_link";
 
 export default function LoginPage() {
@@ -51,12 +52,10 @@ export default function LoginPage() {
                             {GenerateTitle()}
                         </h1>
                         <div className="form-group">
-                            <input required type="email" ref={usernameRef} placeholder="Enter Email"/>
-                            <label>Username</label>
+                            <Input required type="email" fancy refVal={usernameRef} placeholder="Enter Email" label="Username" />
                         </div>
                         <div className="form-group">
-                            <input required type="password" minLength="8" ref={passwordRef} placeholder="Enter Password"/>
-                            <label>Password</label>
+                            <Input required type="password" fancy minLength="8" refVal={passwordRef} placeholder="Enter Password" label="Password" />
                         </div>
                         <div className="form-buttons">
                             <DynamicLink className="sub-link" to="/signup">Register Login</DynamicLink>

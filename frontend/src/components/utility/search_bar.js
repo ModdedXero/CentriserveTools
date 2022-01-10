@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import Input from "./input";
 
 export default function SearchBar({ options = [], setValue, select, defaultValue, noSort, className }) {
     const [query, setQuery] = useState("");
@@ -24,8 +25,7 @@ export default function SearchBar({ options = [], setValue, select, defaultValue
 
     return (
         <div className={`search-bar ${className}`}>
-            <input ref={searchBarRef} className="cool-input" placeholder={currentValue.label} type="text" onChange={OnQueryChange} />
-            <label>{currentValue.label}</label>
+            <Input label={currentValue.label} fancy refVal={searchBarRef} placeholder={currentValue.label} type="text" onChange={OnQueryChange}/>
             <div className="search-bar-container">
                 {
                     (noSort ? options : options.sort((a, b) => a.label.localeCompare(b.label))).filter(item => {
