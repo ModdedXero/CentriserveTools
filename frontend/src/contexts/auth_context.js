@@ -65,7 +65,7 @@ export function AuthProvider({ children }) {
     }
     
     async function Logout() {
-        setToken({});
+        setToken(undefined);
     }
 
     function setToken(token) {

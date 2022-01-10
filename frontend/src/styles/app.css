@@ -472,11 +472,12 @@ p {
 
 .navbar-app {
     display: flex;
-    background-color: var(--color-1);
     position: fixed;
+    background-color: var(--color-1);
+    justify-content: space-evenly;
     z-index: 1000;
-    top: 0;
     width: 100%;
+    top: 0;
 }
 
 .navbar-app ul {
@@ -508,6 +509,10 @@ p {
     display: block;
     padding: 10px;
     text-decoration: none;
+}
+
+.navbar-app .btn {
+    margin: auto 0;
 }
 
 /* Forms */
