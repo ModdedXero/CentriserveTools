@@ -45,7 +45,7 @@ export default function DeviceInfo({ device, refreshSite, filter }) {
             currentDevice.domain = device.datto.domain;
             currentDevice.intIp = device.datto.intIpAddress;
             currentDevice.extIp = device.datto.extIpAddress;
-            currentDevice.antivirus = device.datto.antivirus.antivirusProduct;
+            currentDevice.antivirus = device.datto.antivirus ? device.datto.antivirus.antivirusProduct : "None";
             currentDevice.datto = "Installed"
             currentDevice.dattoLink = device.datto.portalUrl;
         } else if (device && device.sophos) {
