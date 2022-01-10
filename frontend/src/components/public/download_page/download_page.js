@@ -154,7 +154,6 @@ export default function DownloadPage() {
     function OnSearchChange(item) {
         const newTree = item.description.split("/").splice(1);
         setTreePath(newTree)
-        console.log(newTree)
         setVisibleTree(getDescendantProp(fileTree, newTree))
     }
 

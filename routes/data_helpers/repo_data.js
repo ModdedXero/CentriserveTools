@@ -1,4 +1,5 @@
 const fs = require("../../utilities/file_saver");
+const Logger = require("../../utilities/logger");
 const uuid = require("uuid").v4;
 
 async function GenerateFileTree(force) {
@@ -9,6 +10,7 @@ async function GenerateFileTree(force) {
         (await fs.IsFile("tree.index", fs.FileTypes.FileStore) ?
             await GetRepoFileTree() : undefined));
 
+    Logger.Info("Repo file tree index generated.", "REPO");
     await fs.WriteFile("tree.index", JSON.stringify(indexedTree), fs.FileTypes.FileStore);
 }
 
@@ -70,7 +72,8 @@ async function DownloadFile(res, uuid) {
     const fPath = findFile(tree, uuid);
 
     if (fPath) {
-        res.download(fs.FileTypes.FileStore + fPath, fPath.split("/")[-1])
+        res.download(fs.FileTypes.FileStore + fPath, fPath.split("/")[-1]);
+        Logger.Info(`Downloading file ${fPath.split("/")[-1]}`, "REPO");
     } else {
         res.json({ response: "Failed to find file" })
     }
@@ -104,14 +107,20 @@ async function SaveFile(file, path) {
         }
     });
 
+    Logger.Info(`File ${file.name} saved to ${dir}.`, "REPO");
     await GenerateFileTree(true);
+    
     return result;
 }
 
 async function CreateFolder(folderName, path) {
     const result = await fs.ValidateDir(`${fs.FileTypes.FileStore}/${path.join("/")}/${folderName}`);
-    await GenerateFileTree(true);
 
+    if (!result) {
+        Logger.Info(`Folder ${folderName} created at ${fs.FileTypes.FileStore}/${path.join("/")}`, "REPO");
+        await GenerateFileTree(true);
+    }
+    
     return result;
 }
 

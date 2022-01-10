@@ -3,6 +3,7 @@ const axios = require("axios");
 
 const fs = require("../../utilities/file_saver");
 const waitFor = require("../../utilities/wait_for");
+const Logger = require("../../utilities/logger");
 
 // Initialize needed sophos access tokens
 let SophosAccessToken;
@@ -25,17 +26,17 @@ async function InitSophosAPI() {
         await axios.post("https://id.sophos.com/api/v2/oauth2/token", 
             `grant_type=client_credentials&client_id=${process.env.SOPHOS_CLIENT_KEY}&client_secret=${process.env.SOPHOS_SECRET_KEY}&scope=token`)
             .then(doc => { SophosAccessToken = doc.data.access_token; APICount++; })
-            .catch(err => { console.log("Failed to retrieve Sophos Access Token!") })
+            .catch(err => { Logger.Error("Failed to retrieve Sophos Access Token.", "SOPHOS") })
 
         if (SophosAccessToken) {
             await axios.get(`${process.env.SOPHOS_API_URL}/whoami/v1`,
                 { headers: { Authorization: `Bearer ${SophosAccessToken}` }})
                 .then(doc => { SophosPartnerID = doc.data.id; APICount++; })
-                .catch(err => { console.log("Failed to retrieve Sophos Partner ID!") })
+                .catch(err => { Logger.Error("Failed to retrieve Sophos Access Token.", "SOPHOS") })
         }
 
         if (APICount >= 2) {
-            console.log("Sophos API Enabled!");
+            Logger.Info("Sophos API Enabled.", "SOPHOS")
             break;
         };
     }
@@ -55,7 +56,11 @@ async function GetDevices(id) {
         .then(doc => { tenant = doc.data })
         .catch(err => APICheck("Failed to retrieve Sophos Tenant!"))
 
-    if (!tenant) return [];
+    if (!tenant) {
+        Logger.Error("Failed to retrieve Sophos Tenant.", "SOPHOS");
+        return [];
+    }
+
     await axios.get(`${tenant.apiHost}/endpoint/v1/endpoints?view=full`, 
         { headers: { Authorization: `Bearer ${SophosAccessToken}`, "X-Tenant-ID": tenant.id }})
         .then(doc => { tenant.devices = doc.data.items })
@@ -82,6 +87,8 @@ async function EnableTamper(id, tenantId) {
         { headers: { Authorization: `Bearer ${SophosAccessToken}`, "X-Tenant-ID": tenant.id }})
         .then(result = true)
         .catch(APICheck("Failed to enable Tamper Protection!"))
+
+    if (result) Logger.Info(`Enabled Tamper Protection for endpoint ${id}`, "SOPHOS");
 
     return result;
 }
@@ -137,7 +144,7 @@ async function GetSites() {
 
 async function APICheck(error) {
     if (error && APIInit) {
-        console.log(error);
+        Logger.Error(error, "SOPHOS");
 
         await InitSophosAPI();
     }
