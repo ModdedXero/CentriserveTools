@@ -1,9 +1,12 @@
 const Inventory = require("./models/inventory");
+
 const SendMail = require("../utilities/mailer").SendMail;
+const Logger = require("../utilities/logger");
 
 async function GetAllLocations() {
     const locations = await Inventory.find();
     const array = [];
+    
     for (const item of locations) {
         array.push(item.location);
     }
@@ -19,7 +22,6 @@ async function GetInventoryByLocation(location) {
 async function CreateNewInventoryLocation(location) {
     let result = false;
 
-    console.log(location)
     const inv = new Inventory({ location: location });
     await inv.save()
             .then(result = true)
