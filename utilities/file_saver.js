@@ -14,6 +14,17 @@ async function WriteFile(fileName, data, type) {
     return result;
 }
 
+async function AppendFile(fileName, data, type) {
+    let result = false;
+
+    await ValidateDir(type);
+
+    await fs.appendFile(`${type}/${fileName}`, data, "utf-8")
+            .then(data => { result = true; })
+
+    return result;
+}
+
 async function ReadFile(fileName, type) {
     let rFile = "";
 
@@ -89,10 +100,12 @@ const FileTypes = {
     FileStore: path.join(repoPath, "file_repo", "file_store"),
     Update: path.join(repoPath, "file_repo", "updates"),
     Agents: path.join(repoPath, "file_repo", "agents"),
+    Logs: path.join(repoPath, "file_repo", "logs"),
     Temp: path.join(repoPath, "file_repo", "temp")
 }
 
 exports.WriteFile = WriteFile;
+exports.AppendFile = AppendFile;
 exports.ReadFile = ReadFile;
 exports.IsFile = IsFile;
 exports.ModifiedDate = ModifiedDate;

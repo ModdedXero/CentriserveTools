@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const Logger = require("../utilities/logger");
 
 const User = require("./models/user");
 
@@ -16,15 +17,21 @@ async function ValidateLogin(username, password) {
                     doc.lastLogin = Date.now();
                     security = doc.security;
                     await doc.save();
+                    Logger.Info(`User ${username} validated.`, "AUTH");
                     result = 1;
                 } else {
+                    Logger.Warn(`User ${username} incorrect password entered.`, "AUTH");
                     result = 3;
                 }
             } else {
+                Logger.Info(`User ${username} needs to register password.`, "AUTH");
                 result = 2;
             }
         })
-        .catch(() => { result = 0; })
+        .catch(() => { 
+            result = 0;
+            Logger.Error(`User ${username} does not exist.`, "AUTH");
+        })
 
     if (result !== 1) {
         return Promise.reject(result);
@@ -41,6 +48,7 @@ async function ValidateEncryptionKey(username, encrypt) {
                 const loginTime = ((new Date) - doc.lastLogin) < (12 * 60 * 60 * 1000);
                 if (doc.hash === encrypt && loginTime) {
                     result = true;
+                    Logger.Info(`User ${username} validated 2FA encryption.`, "AUTH");
                 }
             })
             .catch()
@@ -58,8 +66,9 @@ async function SavePassword(username, password) {
                 doc.password = hashedPass;
                 await doc.save();
                 result = true;
+                Logger.Info(`User ${username} password saved.`, "AUTH");
             })
-            .catch()
+            .catch(Logger.Error(`User ${username} does not exist.`, "AUTH"))
 
 
     return result;
@@ -72,8 +81,13 @@ async function CreateUser(username, security=0) {
         username: username,
         security: security
     })
-    .then(_ => { result = true })
-    .catch(() => {});
+    .then(_ => { 
+        result = true;
+        Logger.Info(`User ${username} has been created.`, "AUTH");
+    })
+    .catch(() => {
+        Logger.Warn(`User ${username} could not be created.`, "AUTH");
+    });
 
     return result;
 }
@@ -82,7 +96,10 @@ async function UpdateUser(data) {
     let result = false;
 
     await User.findOneAndUpdate({ username: data.username }, data, { new: true })
-        .then(result = true)
+        .then(_ => {
+            result = true;
+            Logger.Info(`User ${data.username} has been updated.`, "AUTH");
+        })
         .catch()
 
     return result;
@@ -94,8 +111,9 @@ async function DeleteUser(username) {
     await User.findOneAndDelete({ username: username })
             .then(_ => {
                 result = true;
+                Logger.Info(`User ${data.username} has been deleted.`, "AUTH");
             })
-            .catch()
+            .catch(Logger.Error(`User ${username} does not exist.`, "AUTH"))
 
     return result;
 }
@@ -109,8 +127,9 @@ async function ResetPassword(username) {
             doc.password = ""
             await doc.save();
             result = true;
+            Logger.Info(`User ${username} password reset.`, "AUTH")
         })
-        .catch()
+        .catch(Logger.Error(`User ${username} does not exist.`, "AUTH"))
 
     return result;
 }
@@ -138,8 +157,9 @@ async function SetSecurityLevel(username, level) {
                 doc.security = level;
                 await doc.save();
                 result = true;
+                Logger.Info(`User ${username} security level set to ${level}.`, "AUTH")
             })
-            .catch()
+            .catch(Logger.Error(`User ${username} does not exist.`, "AUTH"))
 
     return result;
 }

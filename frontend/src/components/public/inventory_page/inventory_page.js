@@ -185,10 +185,12 @@ export default function InventoryPage() {
                         />
                     </Modal>
                     <div className="inventory-header">
-                        <Button borderless onClick={_ => setCheckoutModal(true)}>
-                            Checkout
+                        <Button borderless>
+                            Add Item
                         </Button>
-                        <p>{checkoutCount}</p>
+                        <Button borderless onClick={_ => setCheckoutModal(true)}>
+                            Checkout {checkoutCount}
+                        </Button>
                     </div>
                     <div className="inventory-list">
                         {categories.map((category, index) => {
