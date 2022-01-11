@@ -27,18 +27,18 @@ const Updates = {
 }
 
 async function MongoInitUserUpdate() {
-    if (!await auth.CreateUser("blake@centriserveit.com")) return false;
-    if (!await auth.CreateUser("david@centriserveit.com")) return false;
-    if (!await auth.CreateUser("jj@centriserveit.com")) return false;
-    if (!await auth.CreateUser("tj@centriserveit.com")) return false;
-    if (!await auth.CreateUser("ben@centriserveit.com")) return false;
-    if (!await auth.CreateUser("oscar@centriserveit.com")) return false;
-    if (!await auth.CreateUser("jared@centriserveit.com")) return false;
+    await auth.CreateUser("blake@centriserveit.com")
+    await auth.CreateUser("david@centriserveit.com")
+    await auth.CreateUser("jj@centriserveit.com")
+    await auth.CreateUser("tj@centriserveit.com")
+    await auth.CreateUser("ben@centriserveit.com")
+    await auth.CreateUser("oscar@centriserveit.com")
+    await auth.CreateUser("jared@centriserveit.com")
     return true;
 }
 
 async function MongoAdminSecurityUpdate() {
-    if (!await auth.SetSecurityLevel("blake@centriserveit.com", 5)) return false;
+    await auth.SetSecurityLevel("blake@centriserveit.com", 5)
     return true;
 }
 
