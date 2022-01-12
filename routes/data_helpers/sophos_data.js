@@ -94,11 +94,12 @@ async function EnableTamper(id, tenantId) {
 }
 
 // Access Sophos API for array of sites and returns array
-async function GetSites() {
+async function GetSites(force = false) {
     await waitFor(() => APICheck());
 
-    if (await fs.IsFile("sites.txt", fs.FileTypes.Agents)) {
+    if (!force && await fs.IsFile("sites.txt", fs.FileTypes.Agents)) {
         if ((await fs.ModifiedDate("sites.txt", fs.FileTypes.Agents) - Date.now()) < 60 * 60 * 1000)
+        GetSites(true);
         return JSON.parse(await fs.ReadFile("sites.txt", fs.FileTypes.Agents)).sites;
     }
     

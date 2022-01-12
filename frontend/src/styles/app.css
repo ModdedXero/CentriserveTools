@@ -243,6 +243,10 @@ p {
 
 /* Cool Input */
 
+.input {
+    position: relative;
+}
+
 .cool-input {
     position: relative;
     width: 80%;
@@ -272,7 +276,7 @@ p {
 }
 .cool-input + label {
     position: absolute;
-    top: 0;
+    top: 0px;
     display: block;
     transition: 0.2s;
     font-size: 1rem;

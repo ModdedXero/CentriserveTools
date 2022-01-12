@@ -16,7 +16,14 @@ const update = require("./update");
 const app = express();
 const port = process.env.PORT || 5000;
 const server = require("http").createServer(app);
-const io = require("socket.io")(server);
+const io = require("socket.io")(server, {
+    transports: ["polling"],
+    cors: {
+        cors: {
+            origin: process.env.CORSORIGIN
+        }
+    }
+});
 
 app.use(express.json({ limit: "500mb" }));
 app.use(fileUpload({

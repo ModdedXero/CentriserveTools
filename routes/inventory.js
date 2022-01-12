@@ -1,80 +1,93 @@
 const router = require("express").Router();
+const server = require("../server");
 const warehouse = require("../database/warehouse");
 
-router.route("/locations").get(async (req, res) => {
-    const result = await warehouse.GetAllLocations();
+router.route("/locations").post(async (req, res) => {
+    const locations = await warehouse.GetAllLocations();
+    const sortedLocations = [];
 
-    if (result.length) {
-        res.status(200).json({ response: result });
-    } else {
-        res.status(400).json({ response: "Can't get locations!" });
+    for (const loc of locations) {
+        sortedLocations.push({
+            value: loc,
+            label: loc.toUpperCase()
+        });
     }
+
+    res.status(200).send(sortedLocations);
 });
 
-router.route("/location/:location").get(async (req, res) => {
-    const result = await warehouse.GetInventoryByLocation(req.params.location.toLowerCase());
+router.route("/create/locations").post(async (req, res) => {
+    await warehouse.CreateInventoryLocation(req.body.newVar);
+    const locations = await warehouse.GetAllLocations();
+    const sortedLocations = [];
 
-    if (result) {
-        res.status(200).json({ response: result });
-    } else {
-        res.status(400).json({ response: `Failed to find inventory for ${req.params.location}` });
+    for (const loc of locations) {
+        sortedLocations.push({
+            value: loc,
+            label: loc.toUpperCase()
+        });
     }
+
+    server.RealtimeSocket.emit(`inventory-locations`, sortedLocations);
 });
 
-router.route("/location/create").post(async (req, res) => {
-    const result = await warehouse.CreateNewInventoryLocation(req.body.location.toLowerCase());
+router.route("/update/locations").post(async (req, res) => {
+    await warehouse.UpdateInventoryLocation(req.body.upVar, req.body.oldVar);
+    const locations = await warehouse.GetAllLocations();
+    const sortedLocations = [];
 
-    if (result) {
-        res.status(200).json({ response: `Created location ${req.body.location}` });
-    } else {
-        res.status(200).json({ response: `Failed to create location ${req.body.location}` });
+    for (const loc of locations) {
+        sortedLocations.push({
+            value: loc,
+            label: loc.toUpperCase()
+        });
     }
+
+    server.RealtimeSocket.emit(`inventory-locations`, sortedLocations);
 });
 
-router.route("/category").post(async (req, res) => {
-    const result = await warehouse.CreateNewInventoryCategory(req.body.location, req.body.category);
+router.route("/delete/locations").post(async (req, res) => {
+    await warehouse.DeleteInventoryLocation(req.body.delVar);
+    
+    const locations = await warehouse.GetAllLocations();
+    const sortedLocations = [];
 
-    if (result) {
-        res.status(200).json({ response: `Created category ${req.body.category}`});
-    } else {
-        res.status(400).json({ response: `Failed to create category ${req.body.category}` });
+    for (const loc of locations) {
+        sortedLocations.push({
+            value: loc,
+            label: loc.toUpperCase()
+        });
     }
+
+    server.RealtimeSocket.emit(`inventory-locations`, sortedLocations);
+    res.status(200).send(`Location ${req.body.delVar} has been deleted`);
 });
 
-router.route("/item/add").post(async (req, res) => {
-    const result = await warehouse.AddInventoryCategoryItem(
-        req.body.location, req.body.category, req.body.item
-    );
+router.route("/categories/:location").post(async (req, res) => {
+    
+});
 
-    if (result) {
-        res.status(200).json({ response: `Created item ${req.body.item.name}`});
-    } else {
-        res.status(400).json({ response: `Failed to create item ${req.body.item.name}` });
-    }
-})
+// router.route("/locations").post((req, res) => {
+//     res.send([
+//         {
+//             value: "Test1",
+//             label: "TEST1"
+//         },
+//         {
+//             value: "Test2",
+//             label: "TEST2"
+//         }
+//     ]);
+//     console.log("Test");
+// });
 
-router.route("/item/update").post(async (req, res) => {
-    const result = await warehouse.UpdateInventoryCategoryItem(
-        req.body.location, req.body.category, req.body.item
-    );
-
-    if (result) {
-        res.status(200).json({ response: `Updated item ${req.body.item.name}`});
-    } else {
-        res.status(400).json({ response: `Failed to update item ${req.body.item.name}` });
-    }
-})
-
-router.route("/checkout").post(async (req, res) => {
-    const result = await warehouse.CheckoutInventoryItems(
-        req.body.location, req.body.checkoutData, req.body.reason, req.body.user
-    );
-
-    if (result) {
-        res.status(200).json({ response: `Checkedout items`});
-    } else {
-        res.status(400).json({ response: `Failed to checkout items` });
-    }
-})
+// router.route("/categories/:location").post((req, res) => {
+//     if (req.params.location === "Test1") {
+//         res.send(["Test1 Suc!"]);
+//         server.RealtimeSocket.emit(`inventory/categories-${req.params.location}`, ["Test1 Super Suc!"])
+//     }
+//     if (req.params.location === "Test2") res.send(["Test2 Suc!"]);
+//     if (req.params.location === "Test3") res.send(["Test3 Suc!"]);
+// });
 
 module.exports = router;

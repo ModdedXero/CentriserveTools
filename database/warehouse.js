@@ -3,6 +3,8 @@ const Inventory = require("./models/inventory");
 const SendMail = require("../utilities/mailer").SendMail;
 const Logger = require("../utilities/logger");
 
+// Location Functions
+
 async function GetAllLocations() {
     const locations = await Inventory.find();
     const array = [];
@@ -19,7 +21,7 @@ async function GetInventoryByLocation(location) {
     return inv;
 }
 
-async function CreateNewInventoryLocation(location) {
+async function CreateInventoryLocation(location) {
     let result = false;
 
     const inv = new Inventory({ location: location });
@@ -30,7 +32,24 @@ async function CreateNewInventoryLocation(location) {
     return result;
 }
 
-async function CreateNewInventoryCategory(location, category) {
+async function UpdateInventoryLocation(newValue, oldValue) {
+    const inv = await Inventory.findOne({ location: oldValue });
+    inv.location = newValue;
+    await inv.save()
+}
+
+async function DeleteInventoryLocation(location) {
+    await Inventory.deleteOne({ location: location });
+}
+
+// Category Functions
+
+async function GetCategoriesByLocation(location) {
+    const inv = await Inventory.findOne({ location: location });
+    return Inventory.categories;
+}
+
+async function CreateInventoryCategory(location, category) {
     let result = false;
 
     const inv = await Inventory.findOne({ location: location });
@@ -173,8 +192,10 @@ ${data.map((cat) => {
 
 exports.GetAllLocations = GetAllLocations;
 exports.GetInventoryByLocation = GetInventoryByLocation;
-exports.CreateNewInventoryLocation = CreateNewInventoryLocation;
-exports.CreateNewInventoryCategory = CreateNewInventoryCategory;
+exports.CreateInventoryLocation = CreateInventoryLocation;
+exports.UpdateInventoryLocation = UpdateInventoryLocation;
+exports.DeleteInventoryLocation = DeleteInventoryLocation;
+exports.CreateInventoryCategory = CreateInventoryCategory;
 exports.AddInventoryCategoryItem = AddInventoryCategoryItem;
 exports.UpdateInventoryCategoryItem = UpdateInventoryCategoryItem;
 exports.CheckoutInventoryItems = CheckoutInventoryItems;

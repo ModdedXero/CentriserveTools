@@ -11,6 +11,7 @@ import LoginPage from "./public/login/login_page";
 import SignupPage from "./public/login/signup_page";
 
 import InventoryPage from "./public/inventory_page/inventory_page";
+import InventoryAdmin from "./public/inventory_page/admin/inventory_admin";
 
 import AdminPage from "./admin/admin_page/admin_page";
 
@@ -27,6 +28,7 @@ function App() {
             <DynamicRoute path="/signup" nonav notsecure component={SignupPage} />
 
             <DynamicRoute path="/inventory" adminLevel={2} component={InventoryPage} />
+            <DynamicRoute path="/inventory-admin" adminLevel={4} component={InventoryAdmin} />
 
             <DynamicRoute path="/user-admin" adminLevel={5} component={AdminPage} />
         </Switch>

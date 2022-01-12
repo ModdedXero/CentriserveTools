@@ -1,42 +1,66 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { io } from "socket.io-client";
 
 // Class to manage retrieving data and using realtime variables
 export class Variable {
-    constructor (api, variable, sync = false) {
+    constructor (api, sync = false) {
         this.api = api;
-        this.variable = variable;
         this.sync = sync;
     }
 
     // Used as a custom hook to get data
-    useVar() {
+    useVar(variable, defaultVal) {
         const [data, setData] = useState(null);
 
+        this.variable = variable;
+
         useEffect(async () => {
-            await axios.post(`/api/${this.api}/${this.variable}`)
+            if (variable) {
+                await axios.post(`/api/${this.api}/${variable}`)
                     .then(res => setData(res.data));
-        }, []);
+            }
+        }, [variable]);
 
         if (this.sync) {
             useEffect(() => {
-                const socket = io(`http://${window.location.hostname}:5000`);
-                socket.on(`${this.api}-${this.variable}`, i => setData(i));
-            }, []);
+                if (variable) {
+                    const socket = io(`http://${window.location.hostname}:5000`);
+                    socket.on(`${this.api}-${variable}`, i => setData(i));
+                }
+            }, [variable]);
         }
     
-        return data;
+        return data ? data : defaultVal;
     }
 
     // Used to update the new data to upload
-    setVar(newVar) {
+    createVar(newVar) {
         this.newVar = newVar;
+    }
+
+    updateVar(newVar, oldVar) {
+        this.upVar = newVar;
+        this.oldVar = oldVar;
+    }
+
+    removeVar(delVar) {
+        this.delVar = delVar;
     }
 
     // Called to upload the data to the server
     syncVar() {
-        axios.post(`/api/${this.api}/update/${this.variable}`, { newVar: this.newVar });
+        if (this.newVar)
+            axios.post(`/api/${this.api}/create/${this.variable}`, { newVar: this.newVar });
+        if (this.upVar && this.oldVar)
+            axios.post(`/api/${this.api}/update/${this.variable}`, { upVar: this.upVar, oldVar: this.oldVar });
+        if (this.delVar)
+            axios.post(`/api/${this.api}/delete/${this.variable}`, { delVar: this.delVar });
+
+        this.newVar = null;
+        this.upVar = null;
+        this.oldVar = null;
+        this.delVar = null;
     }
 }
 
