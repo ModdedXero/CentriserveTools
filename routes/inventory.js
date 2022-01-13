@@ -64,8 +64,35 @@ router.route("/delete/locations").post(async (req, res) => {
 });
 
 router.route("/categories/:location").post(async (req, res) => {
-    
+    const categories = await warehouse.GetCategoriesByLocation(req.params.location);
+    res.status(200).send(categories);
 });
+
+router.route("/categories/create/:location").post(async (req, res) => {
+    await warehouse.CreateInventoryCategory(req.params.location, req.body.newVar);
+    const categories = await await warehouse.GetCategoriesByLocation(req.params.location);
+    server.RealtimeSocket.emit(`inventory/categories-${req.params.location}`, categories);
+});
+
+router.route("/categories/update/:location").post(async (req, res) => {
+    await warehouse.UpdateInventoryCategory(
+        req.params.location, 
+        req.body.upVar, 
+        req.body.oldVar
+    );
+
+    const categories = await await warehouse.GetCategoriesByLocation(req.params.location);
+    server.RealtimeSocket.emit(`inventory/categories-${req.params.location}`, categories);
+});
+
+router.route("/categories/delete/:location").post(async (req, res) => {
+    await warehouse.DeleteInventoryCategory(req.params.location, req.body.delVar);
+
+    const categories = await await warehouse.GetCategoriesByLocation(req.params.location);
+    server.RealtimeSocket.emit(`inventory/categories-${req.params.location}`, categories);
+});
+
+
 
 // router.route("/locations").post((req, res) => {
 //     res.send([

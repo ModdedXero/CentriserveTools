@@ -46,7 +46,7 @@ async function DeleteInventoryLocation(location) {
 
 async function GetCategoriesByLocation(location) {
     const inv = await Inventory.findOne({ location: location });
-    return Inventory.categories;
+    return inv.categories;
 }
 
 async function CreateInventoryCategory(location, category) {
@@ -62,71 +62,33 @@ async function CreateInventoryCategory(location, category) {
     return result;
 }
 
-async function AddInventoryCategoryItem(location, category, item) {
-    let result = false;
-
+async function UpdateInventoryCategory(location, newValue, oldValue) {
     const inv = await Inventory.findOne({ location: location });
 
     for (let i = 0; i < inv.categories.length; i++) {
-        if (inv.categories[i].name === category) {
-            if (inv.categories[i].items.length) {
-                for (let j = 0; j < inv.categories[i].items.length; j++) {
-                    if (!item.serial && 
-                        inv.categories[i].items[j].name === item.name) {
-                            console.log("test");
-                            inv.categories[i].items[j].amount += parseInt(item.amount);
-                    } else {
-                        inv.categories[i].items.push(item);
-                        break;
-                    }
-                }
-            } else {
-                inv.categories[i].items.push(item);
-            }
+        if (inv.categories[i].name === oldValue.name) {
+            inv.categories[i] = newValue;
+            break;
         }
     }
 
-    await inv.save().then(result = true);
-
-    return result;
+    await inv.save();
 }
 
-async function UpdateInventoryCategoryItem(location, category, item) {
-    let result = false;
-
+async function DeleteInventoryCategory(location, category) {
     const inv = await Inventory.findOne({ location: location });
 
-    console.log(`Updating Item: ${item.name} | Amount: ${item.amount || item.serial}`)
-
-    for (let i = 0; i < inv.categories.length; i++) {
-        if (inv.categories[i].name === category) {
-            if (item.serial) {
-                for (let j = 0; j < inv.categories[i].items.length; j++) {
-                    if (item._id === inv.categories[i].items[j]._id.toString()) {
-                        inv.categories[i].items[j] = item;
-                    }
-                }
-            } else {
-                let itemsRet = [];
-
-                for (let k = 0; k < inv.categories[i].items.length; k++) {
-                    if (inv.categories[i].items[k].name === item.name) {
-                        if (parseInt(item.amount) !== 0) {
-                            itemsRet.push(item);
-                        }
-                    } else {
-                        itemsRet.push(inv.categories[i].items[k])
-                    }
-                }
-
-                inv.categories[i].items = itemsRet;
-            }
+    const retCats = [];
+    for (const cat of inv.categories) {
+        if (cat.name !== category) {
+            retCats.push(cat);
         }
     }
 
-    await inv.save().then(result = true);
-    return result;
+    inv.categories = retCats;
+    await inv.save();
 }
+
 
 async function CheckoutInventoryItems(location, data, reason, user) {
     let result = false;
@@ -179,7 +141,7 @@ Items:
 ${data.map((cat) => {
     let retString = `${cat.category.toUpperCase()}\n`
     for (const item of cat.items) {
-        retString = retString.concat(`${item.name}    ${item.serial || item.amount}`)
+        retString = retString.concat(`${item.name}    ${item.serial || item.amount}\n`)
     }
     return retString;
 })}`
@@ -195,7 +157,8 @@ exports.GetInventoryByLocation = GetInventoryByLocation;
 exports.CreateInventoryLocation = CreateInventoryLocation;
 exports.UpdateInventoryLocation = UpdateInventoryLocation;
 exports.DeleteInventoryLocation = DeleteInventoryLocation;
+exports.GetCategoriesByLocation = GetCategoriesByLocation;
 exports.CreateInventoryCategory = CreateInventoryCategory;
-exports.AddInventoryCategoryItem = AddInventoryCategoryItem;
-exports.UpdateInventoryCategoryItem = UpdateInventoryCategoryItem;
+exports.UpdateInventoryCategory = UpdateInventoryCategory;
+exports.DeleteInventoryCategory = DeleteInventoryCategory;
 exports.CheckoutInventoryItems = CheckoutInventoryItems;

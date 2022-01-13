@@ -2,14 +2,28 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
+const fieldSchema = new Schema({
+    label: String,
+    type: String,
+    action: String,
+    position: String,
+    transit: Boolean,
+    header: Boolean,
+    addItem: Boolean,
+    showLabel: Boolean,
+    valueList: [String]
+});
+
+const fieldDataSchema = new Schema({
+    label: String,
+    position: String,
+    value: String,
+    type: String,
+    showLabel: Boolean
+});
+
 const itemSchema = new Schema({
-    name: {
-        type: String,
-        required: true
-    },
-    price: String,
-    serial: String,
-    amount: Number
+    fields: [fieldDataSchema]
 })
 
 const noteSchema = new Schema({
@@ -20,6 +34,7 @@ const noteSchema = new Schema({
 
 const categorySchema = new Schema({
     name: String,
+    fields: [fieldSchema],
     items: [itemSchema],
     notes: [noteSchema]
 })

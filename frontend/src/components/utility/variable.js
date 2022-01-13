@@ -15,13 +15,6 @@ export class Variable {
 
         this.variable = variable;
 
-        useEffect(async () => {
-            if (variable) {
-                await axios.post(`/api/${this.api}/${variable}`)
-                    .then(res => setData(res.data));
-            }
-        }, [variable]);
-
         if (this.sync) {
             useEffect(() => {
                 if (variable) {
@@ -30,6 +23,13 @@ export class Variable {
                 }
             }, [variable]);
         }
+
+        useEffect(async () => {
+            if (variable) {
+                await axios.post(`/api/${this.api}/${variable}`)
+                    .then(res => setData(res.data));
+            }
+        }, [variable]);
     
         return data ? data : defaultVal;
     }

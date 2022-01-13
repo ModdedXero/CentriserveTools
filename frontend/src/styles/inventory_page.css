@@ -39,8 +39,13 @@
     border: 1px solid var(--color-3);
 }
 
+.inv-admin-h .search-bar {
+    width: 15%;
+}
+
 .inv-admin-cat-h p {
     margin: auto;
+    font-size: 1.3rem;
 }
 
 .inv-admin-cat-b {
@@ -54,16 +59,24 @@
 .inv-admin-cat-b-list {
     display: flex;
     flex-direction: column;
-    gap: 5px;
 }
 
 .inv-admin-cat-b-list-item {
+    padding: 10px;
     border: 1px solid var(--color-3);
     border-width: 1px 0;
+    text-align: center;
+    cursor: pointer;
+}
+.inv-admin-cat-b-list-item:hover {
+    background-color: var(--color-3);
+}
+.inv-admin-cat-b-list-item.selected {
+    background-color: var(--color-2);
 }
 
 .inv-admin-cat-b-btn {
     display: grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 33.33% 33.33% 33.33%;
     width: 100%;
 }
