@@ -33,7 +33,7 @@ export default function InventoryAdmin() {
         setCreateLocModal(false);
     }
 
-    function onCreateLocChange(item) {
+    function onLocChange(item) {
         setCurrentLocation(item.value);
     }
 
@@ -66,11 +66,13 @@ export default function InventoryAdmin() {
                     <SearchBar
                         select
                         options={locations}
-                        setValue={onCreateLocChange}
+                        setValue={onLocChange}
                     />
-                    <Button onClick={_ => setCreateLocModal(true)}>
-                        Add Location
-                    </Button>
+                    <Input
+                        display="button"
+                        onClick={_ => setCreateLocModal(true)}
+                        label="Add Location"
+                    />
                     <Modal visible={createLocModal} onClose={setCreateLocModal}>
                         <form className="modal-form" onSubmit={CreateLocation}>
                             <Input 

@@ -11,7 +11,8 @@ const fieldSchema = new Schema({
     header: Boolean,
     addItem: Boolean,
     showLabel: Boolean,
-    valueList: [String]
+    valueList: [String],
+    actionValueRef: String
 });
 
 const fieldDataSchema = new Schema({

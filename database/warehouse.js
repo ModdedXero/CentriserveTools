@@ -16,7 +16,7 @@ async function GetAllLocations() {
     return array;
 }
 
-async function GetInventoryByLocation(location) {
+async function GetInventory(location) {
     const inv = await Inventory.findOne({ location: location });
     return inv;
 }
@@ -44,7 +44,7 @@ async function DeleteInventoryLocation(location) {
 
 // Category Functions
 
-async function GetCategoriesByLocation(location) {
+async function GetCategories(location) {
     const inv = await Inventory.findOne({ location: location });
     return inv.categories;
 }
@@ -66,8 +66,8 @@ async function UpdateInventoryCategory(location, newValue, oldValue) {
     const inv = await Inventory.findOne({ location: location });
 
     for (let i = 0; i < inv.categories.length; i++) {
-        if (inv.categories[i].name === oldValue.name) {
-            inv.categories[i] = newValue;
+        if (inv.categories[i].name === oldValue) {
+            inv.categories[i].name = newValue;
             break;
         }
     }
@@ -89,6 +89,62 @@ async function DeleteInventoryCategory(location, category) {
     await inv.save();
 }
 
+// Field Functions
+
+async function GetFields(location, category) {
+    const inv = await Inventory.findOne({ location: location });
+
+    return inv.categories[findCatIndexInList(inv.categories, category)].fields;
+}
+
+async function CreateField(location, category, field) {
+    const inv = await Inventory.findOne({ location: location });
+    const cat =  findCatIndexInList(inv.categories, category);
+
+    if (inv.categories[cat].fields.filter(e => e.label === field).length > 0) return false;
+
+    inv.categories[cat].fields.push({ label: field });
+    await inv.save();
+}
+
+async function UpdateField(location, category, newValue, oldValue) {
+    const inv = await Inventory.findOne({ location: location });
+    const cat =  findCatIndexInList(inv.categories, category);
+    const fields = inv.categories[cat].fields;
+
+    for (let i = 0; i < fields.length; i++) {
+        if (fields[i].label === oldValue.label) {
+            fields[i] = newValue;
+        }
+    }
+
+    inv.categories[cat].fields = fields;
+    await inv.save();
+}
+
+async function DeleteField(location, category, field) {
+    const inv = await Inventory.findOne({ location: location });
+    const cat =  findCatIndexInList(inv.categories, category);
+    const fields = inv.categories[cat].fields;
+    const retFields = [];
+
+    for (let i = 0; i < fields.length; i++) {
+        if (fields[i].label !== field) {
+            retFields.push(fields[i]);
+        }
+    }
+
+    inv.categories[cat].fields = retFields;
+    await inv.save();
+}
+
+function findCatIndexInList(categories, category) {
+    for (let i = 0; i < categories.length; i++) {
+        if (categories[i].name === category) {
+            return i;
+        }
+    }
+}
 
 async function CheckoutInventoryItems(location, data, reason, user) {
     let result = false;
@@ -153,12 +209,20 @@ ${data.map((cat) => {
 }
 
 exports.GetAllLocations = GetAllLocations;
-exports.GetInventoryByLocation = GetInventoryByLocation;
+
+exports.GetInventory = GetInventory;
 exports.CreateInventoryLocation = CreateInventoryLocation;
 exports.UpdateInventoryLocation = UpdateInventoryLocation;
 exports.DeleteInventoryLocation = DeleteInventoryLocation;
-exports.GetCategoriesByLocation = GetCategoriesByLocation;
+
+exports.GetCategories = GetCategories;
 exports.CreateInventoryCategory = CreateInventoryCategory;
 exports.UpdateInventoryCategory = UpdateInventoryCategory;
 exports.DeleteInventoryCategory = DeleteInventoryCategory;
+
+exports.GetFields = GetFields;
+exports.CreateField = CreateField;
+exports.UpdateField = UpdateField;
+exports.DeleteField = DeleteField;
+
 exports.CheckoutInventoryItems = CheckoutInventoryItems;

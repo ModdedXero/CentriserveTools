@@ -9,6 +9,10 @@ export class Variable {
         this.sync = sync;
     }
 
+    updateAPI(api) {
+        this.api = api;
+    }
+
     // Used as a custom hook to get data
     useVar(variable, defaultVal) {
         const [data, setData] = useState(null);
@@ -21,15 +25,17 @@ export class Variable {
                     const socket = io(`http://${window.location.hostname}:5000`);
                     socket.on(`${this.api}-${variable}`, i => setData(i));
                 }
-            }, [variable]);
+            }, [this.variable]);
         }
 
         useEffect(async () => {
             if (variable) {
-                await axios.post(`/api/${this.api}/${variable}`)
+                await axios.get(`/api/${this.api}/${variable}`)
                     .then(res => setData(res.data));
+            } else {
+                setData(null);
             }
-        }, [variable]);
+        }, [this.variable]);
     
         return data ? data : defaultVal;
     }

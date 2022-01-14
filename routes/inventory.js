@@ -2,7 +2,9 @@ const router = require("express").Router();
 const server = require("../server");
 const warehouse = require("../database/warehouse");
 
-router.route("/locations").post(async (req, res) => {
+// Location Routes
+
+router.route("/locations").get(async (req, res) => {
     const locations = await warehouse.GetAllLocations();
     const sortedLocations = [];
 
@@ -63,14 +65,16 @@ router.route("/delete/locations").post(async (req, res) => {
     res.status(200).send(`Location ${req.body.delVar} has been deleted`);
 });
 
-router.route("/categories/:location").post(async (req, res) => {
-    const categories = await warehouse.GetCategoriesByLocation(req.params.location);
+// Category Routes
+
+router.route("/categories/:location").get(async (req, res) => {
+    const categories = await warehouse.GetCategories(req.params.location);
     res.status(200).send(categories);
 });
 
 router.route("/categories/create/:location").post(async (req, res) => {
     await warehouse.CreateInventoryCategory(req.params.location, req.body.newVar);
-    const categories = await await warehouse.GetCategoriesByLocation(req.params.location);
+    const categories = await warehouse.GetCategories(req.params.location);
     server.RealtimeSocket.emit(`inventory/categories-${req.params.location}`, categories);
 });
 
@@ -81,18 +85,58 @@ router.route("/categories/update/:location").post(async (req, res) => {
         req.body.oldVar
     );
 
-    const categories = await await warehouse.GetCategoriesByLocation(req.params.location);
+    const categories = await warehouse.GetCategories(req.params.location);
     server.RealtimeSocket.emit(`inventory/categories-${req.params.location}`, categories);
 });
 
 router.route("/categories/delete/:location").post(async (req, res) => {
     await warehouse.DeleteInventoryCategory(req.params.location, req.body.delVar);
 
-    const categories = await await warehouse.GetCategoriesByLocation(req.params.location);
+    const categories = await warehouse.GetCategories(req.params.location);
     server.RealtimeSocket.emit(`inventory/categories-${req.params.location}`, categories);
 });
 
+// Field Routes
 
+router.route("/fields/:location/:category").get(async (req, res) => {
+    const fields = await warehouse.GetFields(
+        req.params.location, req.params.category
+    );
+    res.status(200).send(fields);
+});
+
+router.route("/fields/:location/create/:category").post(async (req, res) => {
+    await warehouse.CreateField(
+        req.params.location, req.params.category, req.body.newVar
+    );
+
+    const fields = await warehouse.GetFields(
+        req.params.location, req.params.category
+    );
+    server.RealtimeSocket.emit(`inventory/fields/${req.params.location}-${req.params.category}`, fields);
+});
+
+router.route("/fields/:location/update/:category").post(async (req, res) => {
+    await warehouse.UpdateField(
+        req.params.location, req.params.category, req.body.upVar, req.body.oldVar
+    );
+
+    const fields = await warehouse.GetFields(
+        req.params.location, req.params.category
+    );
+    server.RealtimeSocket.emit(`inventory/fields/${req.params.location}-${req.params.category}`, fields);
+});
+
+router.route("/fields/:location/delete/:category").post(async (req, res) => {
+    await warehouse.UpdateField(
+        req.params.location, req.params.category, req.body.delVar
+    );
+
+    const fields = await warehouse.GetFields(
+        req.params.location, req.params.category
+    );
+    server.RealtimeSocket.emit(`inventory/fields/${req.params.location}-${req.params.category}`, fields);
+});
 
 // router.route("/locations").post((req, res) => {
 //     res.send([
