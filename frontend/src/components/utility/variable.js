@@ -29,7 +29,6 @@ export class Variable {
                     const socket = io(`http://${window.location.hostname}:5000`);
                     socket.on(`${this.api}-${variable}`, i => {
                         setData(i);
-                        console.log(i)
                     });
                 }
             }, [this.variable]);

@@ -10,8 +10,8 @@ export default function InventoryAdminCatField({ field, fieldVar=new Variable() 
     const [actionRef, setActionRef] = useState("None");
     const positionRef = useRef();
     const transitRef = useRef();
-    const [headerRef, setHeaderRef] = useState(field.header);
-    const [itemRef, setItemRef] = useState(field.item);
+    const [headerRef, setHeaderRef] = useState(field.header || false);
+    const [itemRef, setItemRef] = useState(field.item || false);
     const showLabelRef = useRef();
     const valueListRef = useRef();
     const actionValueRef = useRef();
@@ -29,6 +29,8 @@ export default function InventoryAdminCatField({ field, fieldVar=new Variable() 
         setErrorData("");
         setErrorNotify(false);
         setUpdateNotify(false);
+        setItemRef(field.item || false);
+        setHeaderRef(field.header || false);
     }, [field])
 
     function UpdateField() {
@@ -107,7 +109,7 @@ export default function InventoryAdminCatField({ field, fieldVar=new Variable() 
                     />}
                     {field.label !== "Name" &&
                     <Input
-                        key={field.addItem + "Item" + field.label}
+                        key={field.item + "Item" + field.label}
                         label="Display in Item"
                         display="checkbox"
                         onChange={e => setItemRef(e.target.checked)}
@@ -129,49 +131,22 @@ export default function InventoryAdminCatField({ field, fieldVar=new Variable() 
                             values={field.label === "Name"
                             ? 
                             [
-                                {
-                                    value: "Text",
-                                    label: "Text"
-                                },
-                                {
-                                    value: "List",
-                                    label: "List"
-                                }
+                                "Text",
+                                "List"
                             ]
                             :
                             (headerRef ? 
                                 [
-                                    {
-                                        value: "Text",
-                                        label: "Text"
-                                    },
-                                    {
-                                        value: "List",
-                                        label: "List"
-                                    },
-                                    {
-                                        value: "Number",
-                                        label: "Number"
-                                    }
+                                    "Text",
+                                    "List",
+                                    "Number"
                                 ]
                                 :
                                 [
-                                {
-                                    value: "Text",
-                                    label: "Text"
-                                },
-                                {
-                                    value: "List",
-                                    label: "List"
-                                },
-                                {
-                                    value: "Number",
-                                    label: "Number"
-                                },
-                                {
-                                    value: "Checkbox",
-                                    label: "Checkbox"
-                                }
+                                    "Text",
+                                    "List",
+                                    "Number",
+                                    "Checkbox"
                             ])}
                             defaultValue={field.type ? {
                                 value: field.type || "",
@@ -187,13 +162,14 @@ export default function InventoryAdminCatField({ field, fieldVar=new Variable() 
                             refVal={valueListRef}
                         />}
                     </div>
-                    {(field.label !== "Name" && !itemRef) &&
+                    {!itemRef &&
                     <div className="inv-admin-data-row">
                         <Input
                             key={field.action + field.label}
                             label="Action"
                             display="dropdown"
-                            values={[
+                            values={typeRef === "Number" ?
+                            [
                                 {
                                     value: "None",
                                     label: "None"
@@ -201,19 +177,28 @@ export default function InventoryAdminCatField({ field, fieldVar=new Variable() 
                                 {
                                     value: "Notify",
                                     label: "Notify",
-                                    description: "Only for Type Number | Less than amount triggers Notify"
+                                    description: "Less than amount triggers Notify"
                                 },
                                 {
                                     value: "Total",
                                     label: "Total",
-                                    description: "Only for Type Number | Displays the total amount of items"
+                                    description: "Displays the total amount of items"
                                 },
                                 {
                                     value: "Sum",
                                     label: "Sum",
-                                    description: "Only for Type Number | Displays sum of linked Item Field"
+                                    description: "Displays sum of linked Item Field"
+                                },
+                                {
+                                    value: "Amount",
+                                    label: "Amount",
+                                    description: "Allows for saving multiple items. Use in item for user to set amount."
                                 }
-                            ]}
+                            ]:
+                            [
+                                "None"
+                            ]
+                            }
                             onChange={i => setActionRef(i)}
                             defaultValue={field.action ? {
                                 value: field.action,
@@ -235,25 +220,14 @@ export default function InventoryAdminCatField({ field, fieldVar=new Variable() 
                         display="dropdown"
                         values={field.label === "Name" ?
                         [
-                            {
-                                value: "Top Left",
-                                label: "Top Left"
-                            }
+                            "Top Left"
                         ]
                         :
                         [
-                            {
-                                value: "Top Right",
-                                label: "Top Right"
-                            },
-                            {
-                                value: "Bottom Left",
-                                label: "Bottom Left"
-                            },
-                            {
-                                value: "Bottom Right",
-                                label: "Bottom Right"
-                            }
+                            "Hidden",
+                            "Top Right",
+                            "Bottom Left",
+                            "Bottom Right"
                         ]}
                         refVal={positionRef}
                         defaultValue={field.position ? {

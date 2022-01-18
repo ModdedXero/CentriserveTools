@@ -61,7 +61,16 @@ export default function InventoryAddItem({ location }) {
         for (const field of catRef.fields) {
             if (field.item) {
                 const itemCopy = {...field};
-                itemCopy.value = newItemRef.current[i].value;
+                if (field.action === "Amount") {
+                    itemCopy.amount = newItemRef.current[i].value;
+                }
+                
+                if (field.type === "Checkbox") {
+                    itemCopy.value = newItemRef.current[i].checked;
+                } else {
+                    itemCopy.value = newItemRef.current[i].value || newItemRef.current[i].checked;
+                }
+
                 newItem.fields.push(itemCopy);
                 i++;
             }
@@ -104,8 +113,8 @@ export default function InventoryAddItem({ location }) {
                                     label={field.label}
                                     display={getType(field.type)}
                                     type={getType(field.type)}
-                                    refVal={el => newItemRef.current[index] = el}
-                                    required
+                                    refVal={el => newItemRef.current.push(el)}
+                                    required={field.type !== "Checkbox"}
                                 />
                             )
                         }

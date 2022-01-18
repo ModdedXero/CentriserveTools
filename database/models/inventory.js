@@ -39,7 +39,8 @@ const itemFieldSchema = new Schema({
     type: String,
     value: String,
     position: String,
-    transit: Boolean
+    transit: Boolean,
+    showLabel: Boolean
 });
 
 const subItemSchema = new Schema({
@@ -48,7 +49,8 @@ const subItemSchema = new Schema({
 
 const itemSchema = new Schema({
     name: String,
-    collection: [itemFieldSchema]
+    amount: Number,
+    collection: [subItemSchema]
 });
 
 const noteSchema = new Schema({
@@ -63,6 +65,10 @@ const categoryContainerSchema = new Schema({
         requried: true
     },
     collapsed: Boolean,
+    amount: {
+        type: Number,
+        default: 0
+    },
     items: [itemSchema],
     notes: [noteSchema]
 });

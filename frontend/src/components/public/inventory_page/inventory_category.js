@@ -6,7 +6,7 @@ export default function InventoryCategory({ category }) {
     return (
         <div className="inv-b-cats-cat">
             <div className="inv-b-cats-cat-h">
-                <h3>{category.name}</h3>
+                <h3>{category.name} ({category.amount})</h3>
                 <div className="inv-b-cats-cat-h-btn">
                     <Input
                         display="button"

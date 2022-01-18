@@ -132,7 +132,7 @@ router.route("/fields/update/:category").post(async (req, res) => {
 });
 
 router.route("/fields/delete/:category").post(async (req, res) => {
-    await warehouse.UpdateField(
+    await warehouse.DeleteField(
         req.params.category, req.body.delVar
     );
 

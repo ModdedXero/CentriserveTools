@@ -160,7 +160,19 @@ async function CreateInventoryItem(location, category, newItem) {
     if (catIndex === -1) catIndex = inv.categories.push({ name: category.name, collapsed: category.collapsed }) - 1;
     
     // Collection added find item to group under
-    inv.categories[catIndex].items.push(newItem);
+    let itemIndex = -1;
+    for (let i = 0; i < inv.categories[catIndex].items.length; i++) {
+        if (inv.categories[catIndex].items[i].name === newItem.name) itemIndex = i;
+    }
+    if (itemIndex === -1) itemIndex = inv.categories[catIndex].items.push({ name: newItem.name }) - 1;
+
+    if (category.collapsed && newItem.amount) {
+        inv.categories[catIndex].amount =+ newItem.amount;
+        inv.categories[catIndex].items[itemIndex].amount =+ newItem.amount;
+        if (!inv.categories[catIndex].items[itemIndex].collection.length) inv.categories[catIndex].items[itemIndex].collection.push(newItem);
+    } else {
+        inv.categories[catIndex].items[itemIndex].collection.push(newItem);
+    }
 
     await inv.save();
 }
