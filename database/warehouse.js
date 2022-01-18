@@ -1,4 +1,6 @@
-const Inventory = require("./models/inventory");
+const Inventory = require("./models/inventory").Inventory;
+const Category = require("./models/inventory").Category;
+const Field = require("./models/inventory").Field;
 
 const SendMail = require("../utilities/mailer").SendMail;
 const Logger = require("../utilities/logger");
@@ -44,73 +46,77 @@ async function DeleteInventoryLocation(location) {
 
 // Category Functions
 
-async function GetCategories(location) {
-    const inv = await Inventory.findOne({ location: location });
-    return inv.categories;
+async function GetCategories() {
+    const cats = await Category.find();
+    return cats;
 }
 
-async function CreateInventoryCategory(location, category) {
+async function GetCategory(category) {
+    const cat = await Category.findOne({ name: category });
+    return cat;
+}
+
+async function CreateCategory(category) {
     let result = false;
 
-    const inv = await Inventory.findOne({ location: location });
+    const catFind = await Category.findOne({ name: category });
 
-    if (inv.categories.filter(e => e.name === category).length > 0) return false;
+    if (catFind) return false;
 
-    inv.categories.push({ name: category });
-    await inv.save().then(result = true);
+    const cat = new Category({ 
+        name: category, 
+        nameField: new Field({
+            label: "Name",
+            position: "Top Left",
+            header: true,
+            item: true,
+            addItem: true,
+            showLabel: false,
+            action: "None"
+    })});
+
+    await cat.save().then(result = true);
 
     return result;
 }
 
-async function UpdateInventoryCategory(location, newValue, oldValue) {
-    const inv = await Inventory.findOne({ location: location });
-
-    for (let i = 0; i < inv.categories.length; i++) {
-        if (inv.categories[i].name === oldValue) {
-            inv.categories[i].name = newValue;
-            break;
-        }
-    }
-
-    await inv.save();
+async function UpdateCategory(newValue, oldValue) {
+    await Category.findOneAndUpdate(
+        { name: oldValue.name }, newValue, { new: true }
+    );
 }
 
-async function DeleteInventoryCategory(location, category) {
-    const inv = await Inventory.findOne({ location: location });
-
-    const retCats = [];
-    for (const cat of inv.categories) {
-        if (cat.name !== category) {
-            retCats.push(cat);
-        }
-    }
-
-    inv.categories = retCats;
-    await inv.save();
+async function DeleteCategory(category) {
+    await Category.findOneAndDelete({ name: category });
 }
 
 // Field Functions
 
-async function GetFields(location, category) {
-    const inv = await Inventory.findOne({ location: location });
+async function GetFields(category) {
+    const cat = await Category.findOne({ name: category });
 
-    return inv.categories[findCatIndexInList(inv.categories, category)].fields;
+    return [cat.nameField, ...cat.fields];
 }
 
-async function CreateField(location, category, field) {
-    const inv = await Inventory.findOne({ location: location });
-    const cat =  findCatIndexInList(inv.categories, category);
+async function CreateField(category, field) {
+    const cat = await Category.findOne({ name: category });
 
-    if (inv.categories[cat].fields.filter(e => e.label === field).length > 0) return false;
+    if (cat.fields.filter(e => e.label === field).length > 0) return false;
 
-    inv.categories[cat].fields.push({ label: field });
-    await inv.save();
+    cat.fields.push({ label: field });
+    await cat.save();
 }
 
-async function UpdateField(location, category, newValue, oldValue) {
-    const inv = await Inventory.findOne({ location: location });
-    const cat =  findCatIndexInList(inv.categories, category);
-    const fields = inv.categories[cat].fields;
+async function UpdateField(category, newValue, oldValue) {
+    const cat = await Category.findOne({ name: category });
+
+    if (oldValue.label === "Name") {
+        cat.nameField = newValue;
+        await cat.save();
+        return;
+    }
+
+    const fields = cat.fields;
 
     for (let i = 0; i < fields.length; i++) {
         if (fields[i].label === oldValue.label) {
@@ -118,14 +124,13 @@ async function UpdateField(location, category, newValue, oldValue) {
         }
     }
 
-    inv.categories[cat].fields = fields;
-    await inv.save();
+    cat.fields = fields;
+    await cat.save();
 }
 
-async function DeleteField(location, category, field) {
-    const inv = await Inventory.findOne({ location: location });
-    const cat =  findCatIndexInList(inv.categories, category);
-    const fields = inv.categories[cat].fields;
+async function DeleteField(category, field) {
+    const cat = await Category.findOne({ name: category });
+    const fields = cat.fields;
     const retFields = [];
 
     for (let i = 0; i < fields.length; i++) {
@@ -134,16 +139,30 @@ async function DeleteField(location, category, field) {
         }
     }
 
-    inv.categories[cat].fields = retFields;
-    await inv.save();
+    cat.fields = retFields;
+    await cat.save();
 }
 
-function findCatIndexInList(categories, category) {
-    for (let i = 0; i < categories.length; i++) {
-        if (categories[i].name === category) {
-            return i;
-        }
+// Frontend Functions
+
+async function GetInventoryCategories(location) {
+    const inv = await Inventory.findOne({ location: location });
+    return inv.categories;
+}
+
+async function CreateInventoryItem(location, category, newItem) {
+    const inv = await Inventory.findOne({ location: location });
+    let catIndex = -1;
+
+    for (let i = 0; i < inv.categories.length; i++) {
+        if (inv.categories[i].name === category.name) catIndex = i;
     }
+    if (catIndex === -1) catIndex = inv.categories.push({ name: category.name, collapsed: category.collapsed }) - 1;
+    
+    // Collection added find item to group under
+    inv.categories[catIndex].items.push(newItem);
+
+    await inv.save();
 }
 
 async function CheckoutInventoryItems(location, data, reason, user) {
@@ -216,13 +235,17 @@ exports.UpdateInventoryLocation = UpdateInventoryLocation;
 exports.DeleteInventoryLocation = DeleteInventoryLocation;
 
 exports.GetCategories = GetCategories;
-exports.CreateInventoryCategory = CreateInventoryCategory;
-exports.UpdateInventoryCategory = UpdateInventoryCategory;
-exports.DeleteInventoryCategory = DeleteInventoryCategory;
+exports.GetCategory = GetCategory;
+exports.CreateCategory = CreateCategory;
+exports.UpdateCategory = UpdateCategory;
+exports.DeleteCategory = DeleteCategory;
 
 exports.GetFields = GetFields;
 exports.CreateField = CreateField;
 exports.UpdateField = UpdateField;
 exports.DeleteField = DeleteField;
+
+exports.GetInventoryCategories = GetInventoryCategories;
+exports.CreateInventoryItem = CreateInventoryItem;
 
 exports.CheckoutInventoryItems = CheckoutInventoryItems;

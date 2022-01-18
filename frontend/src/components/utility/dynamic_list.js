@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import Input from "./input";
 
-export default function DynamicList({ options = [], ref, label, noSort, noDup=true }) {
+export default function DynamicList({ options = [], refVal, label, noSort, noDup=true }) {
     const [internalList, setInteralList] = useState(options || []);
     const [query, setQuery] = useState("");
     const listInputRef = useRef();
@@ -17,14 +17,14 @@ export default function DynamicList({ options = [], ref, label, noSort, noDup=tr
         internalList.push(listInputRef.current.value);
         setQuery("");
         listInputRef.current.value = "";
-        ref.current = internalList;
+        refVal.current = internalList;
     }
 
     function RemoveItem(index) {
         const listCopy = [...internalList];
         listCopy.splice(index, 1);
         setInteralList(listCopy);
-        ref.current = internalList;
+        refVal.current = internalList;
     }
 
     return (

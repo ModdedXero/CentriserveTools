@@ -15,6 +15,11 @@ export default function Navbar({ children }) {
         { value: "/reports", label: "Reports" }
     ]
 
+    const inventoryDropdown = [
+        { value: "/inventory", label: "Inventory" },
+        { value: "/admin/inventory", label: "Admin" }
+    ]
+
     function LogoutClick() {
         Logout();
         history.push("/login");
@@ -38,7 +43,7 @@ export default function Navbar({ children }) {
                         </DynamicLink>
                     </li>
                     {currentUser.security >= 3 && <li>
-                        <DynamicLink className="navbar-link" to="/inventory">
+                        <DynamicLink className="navbar-link" dropdown={inventoryDropdown} to="/inventory">
                             Inventory
                         </DynamicLink>
                     </li>}

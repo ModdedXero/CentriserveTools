@@ -28,9 +28,9 @@ function App() {
             <DynamicRoute path="/signup" nonav notsecure component={SignupPage} />
 
             <DynamicRoute path="/inventory" adminLevel={2} component={InventoryPage} />
-            <DynamicRoute path="/inventory-admin" adminLevel={4} component={InventoryAdmin} />
 
-            <DynamicRoute path="/user-admin" adminLevel={5} component={AdminPage} />
+            <DynamicRoute path="/admin/inventory" adminLevel={4} component={InventoryAdmin} />
+            <DynamicRoute path="/admin/user" adminLevel={5} component={AdminPage} />
         </Switch>
     )
 }

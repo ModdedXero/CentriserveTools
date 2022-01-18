@@ -16,7 +16,8 @@ export default function Input({
     onChange,
     onClick,
     required, 
-    minLength 
+    minLength,
+    readOnly
 }) {
     switch (display) {
         case "dropdown":
@@ -49,7 +50,7 @@ export default function Input({
                     <input 
                         ref={refVal} 
                         type="checkbox" 
-                        checked={defaultValue}
+                        defaultChecked={defaultValue}
                         required={required}
                         onChange={onChange}
                     />
@@ -62,7 +63,7 @@ export default function Input({
                     options={values}
                     label={label}
                     noSort
-                    ref={refVal}
+                    refVal={refVal}
                 />
             )
         default:
@@ -70,7 +71,7 @@ export default function Input({
                 case true:
                     return (
                         <div className="input">
-                            <input ref={refVal} defaultValue={defaultValue} required={required} className="cool-input" placeholder={placeholder || " "} type={type} onChange={onChange} minLength={minLength} />
+                            <input readOnly={readOnly} step="0.01" min="0" ref={refVal} defaultValue={defaultValue} required={required} className="cool-input" placeholder={placeholder || " "} type={type} onChange={onChange} minLength={minLength} />
                             <label onClick={_ => refVal.current.focus()}>{label}</label>
                         </div>
                     )
@@ -78,7 +79,7 @@ export default function Input({
                     return (
                         <div className="input">
                             <label onClick={_ => refVal.current.focus()}>{label}</label>
-                            <input ref={refVal} defaultValue={defaultValue} required={required} className="cool-input" placeholder={placeholder || " "} type={type} onChange={onChange} minLength={minLength} />
+                            <input readOnly={readOnly} step="0.01" min="0" ref={refVal} defaultValue={defaultValue} required={required} className="cool-input" placeholder={placeholder || " "} type={type} onChange={onChange} minLength={minLength} />
                         </div>
                     )
             }

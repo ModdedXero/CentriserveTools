@@ -77,7 +77,7 @@
 
 .inv-admin-cat-b-btn {
     display: grid;
-    grid-template-columns: 33.33% 33.33% 33.33%;
+    grid-template-columns: 50% 50%;
     width: 100%;
 }
 
@@ -102,4 +102,103 @@
 }
 .inv-admin-data-row > .input {
     width: 40%;
+}
+
+.inv {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 95%;
+    height: 95%;
+    margin: auto auto;
+}
+
+.inv-h {
+    display: flex;
+    gap: 20px;
+}
+
+.inv-add {
+    margin-top: auto;
+}
+
+.inv-b {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    height: 100%;
+    margin-top: 20px;
+}
+
+.inv-b-cats {
+    background-color: var(--color-2);
+}
+
+.inv-b-checkout {
+    border: 1px solid var(--color-2);
+}
+
+.inv-b-cats {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 10px;
+    overflow-y: auto;
+}
+
+.inv-b-cats-cat {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--color-3);
+    padding: 20px;
+    padding-top: 10px;
+}
+
+.inv-b-cats-cat-h {
+    display: flex;
+    justify-content: space-between;
+}
+
+.inv-b-cats-cat-h-btn {
+    display: flex;
+    gap: 10px;
+    margin: auto 0;
+}
+
+.inv-b-cats-cat-b {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-left: 30px;
+}
+
+.inv-b-cats-cat-item {
+    position: relative;
+    padding: 10px;
+    height: 65px;
+    border: 1px solid var(--color-3);
+    font-size: 1.4rem;
+}
+
+.inv-b-cats-cat-item-topleft {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
+
+.inv-b-cats-cat-item-topright {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.inv-b-cats-cat-item-botleft {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+}
+
+.inv-b-cats-cat-item-botright {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
 }

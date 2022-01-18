@@ -2,43 +2,70 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
+// Admin Inventory
+
 const fieldSchema = new Schema({
+    // All
     label: String,
     type: String,
-    action: String,
     position: String,
-    transit: Boolean,
     header: Boolean,
-    addItem: Boolean,
+    item: Boolean,
     showLabel: Boolean,
     valueList: [String],
-    actionValueRef: String
+
+    // Header
+    action: String,
+    actionValue: String,
+    
+    // Items
+    transit: Boolean,
 });
 
-const fieldDataSchema = new Schema({
+const categorySchema = new Schema({
+    name: {
+        type: String,
+        unique: true
+    },
+    collapsed: Boolean,
+    nameField: fieldSchema,
+    fields: [fieldSchema],
+});
+
+// Visible Inventory
+
+const itemFieldSchema = new Schema({
     label: String,
-    position: String,
-    value: String,
     type: String,
-    showLabel: Boolean
+    value: String,
+    position: String,
+    transit: Boolean
+});
+
+const subItemSchema = new Schema({
+    fields: [itemFieldSchema]
 });
 
 const itemSchema = new Schema({
-    fields: [fieldDataSchema]
-})
+    name: String,
+    collection: [itemFieldSchema]
+});
 
 const noteSchema = new Schema({
     reason: String,
     itemData: Object,
     username: String
-})
+});
 
-const categorySchema = new Schema({
-    name: String,
-    fields: [fieldSchema],
+const categoryContainerSchema = new Schema({
+    name: {
+        type: String,
+        requried: true
+    },
+    collapsed: Boolean,
     items: [itemSchema],
     notes: [noteSchema]
-})
+});
 
 const inventorySchema = new Schema({
     location: {
@@ -46,9 +73,13 @@ const inventorySchema = new Schema({
         required: true,
         unique: true
     },
-    categories: [categorySchema]
-})
+    categories: [categoryContainerSchema]
+});
 
 const Inventory = mongoose.model("Inventory", inventorySchema);
+const Category = mongoose.model("Category", categorySchema);
+const Field = mongoose.model("Field", fieldSchema);
 
-module.exports = Inventory;
+exports.Inventory = Inventory;
+exports.Category = Category;
+exports.Field = Field;

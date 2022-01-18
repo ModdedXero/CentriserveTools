@@ -13,6 +13,10 @@ export class Variable {
         this.api = api;
     }
 
+    setVariable(variable) {
+        this.variable = variable;
+    }
+
     // Used as a custom hook to get data
     useVar(variable, defaultVal) {
         const [data, setData] = useState(null);
@@ -23,7 +27,10 @@ export class Variable {
             useEffect(() => {
                 if (variable) {
                     const socket = io(`http://${window.location.hostname}:5000`);
-                    socket.on(`${this.api}-${variable}`, i => setData(i));
+                    socket.on(`${this.api}-${variable}`, i => {
+                        setData(i);
+                        console.log(i)
+                    });
                 }
             }, [this.variable]);
         }

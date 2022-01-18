@@ -4,30 +4,27 @@ import Button from "../../../utility/button";
 import Input from "../../../utility/input";
 import Modal from "../../../utility/modal";
 import { Variable, APIs } from "../../../utility/variable";
+import InventoryAdminCat from "./inventory_admin_cat";
 
 import InventoryAdminCatField from "./inventory_admin_cat_field";
 
-const catsVar = new Variable(APIs.Inventory + "/categories", true);
-const fieldsVar = new Variable(APIs.Inventory + `/fields/`, true);
+const catsVar = new Variable(APIs.Inventory, true);
+const fieldsVar = new Variable(APIs.Inventory + `/fields`, true);
 
 export default function InventoryAdminBody({ location }) {
     const [createCatModal, setCreateCatModal] = useState(false);
-    const [editCatModal, setEditCatModal] = useState(false);
 
     const [createFieldModal, setCreateFieldModal] = useState(false);
-    const [editFieldModal, setEditFieldModal] = useState(false);
 
     const [selectedCat, setSelectedCat] = useState("");
     const [selectedField, setSelectedField] = useState("");
 
-    const categories = catsVar.useVar(location, []);
-
-    fieldsVar.updateAPI(APIs.Inventory + `/fields/${location}`);
-    const fields = fieldsVar.useVar(selectedCat, []);
+    const categories = catsVar.useVar("categories", []);
+    const fields = fieldsVar.useVar(selectedCat.name, []);
 
     useEffect(() => {
-        setSelectedField("");
         setSelectedCat("");
+        setSelectedField("");
     }, [location]);
 
     function CreateCategory(e) {
@@ -38,17 +35,8 @@ export default function InventoryAdminBody({ location }) {
         setCreateCatModal(false);
     }
 
-    function EditCategory(e) {
-        e.preventDefault();
-
-        setSelectedCat(catsVar.upVar);
-        catsVar.syncVar();
-
-        setEditCatModal();
-    }
-
     function DeleteCategory() {
-        catsVar.removeVar(selectedCat);
+        catsVar.removeVar(selectedCat.name);
         catsVar.syncVar();
     }
 
@@ -60,21 +48,14 @@ export default function InventoryAdminBody({ location }) {
         setCreateFieldModal(false);
     }
 
-    function EditField(e) {
-        e.preventDefault();
-
-        const fieldCopy = {...selectedField};
-        fieldCopy.label = fieldsVar.upVar;
-        fieldsVar.updateVar(fieldCopy, selectedField);
-        setSelectedField(fieldsVar.upVar);
-        fieldsVar.syncVar();
-
-        setEditFieldModal(false);
-    }
-
     function DeleteField() {
         fieldsVar.removeVar(selectedField.label);
         fieldsVar.syncVar();
+    }
+
+    function ChangeCat(cat) {
+        setSelectedCat(cat);
+        setSelectedField("");
     }
 
     return (
@@ -89,10 +70,10 @@ export default function InventoryAdminBody({ location }) {
                             return (
                                 <div 
                                     className={`inv-admin-cat-b-list-item ${
-                                        cat.name === (selectedCat) ? "selected" : ""
+                                        cat.name === (selectedCat.name) ? "selected" : ""
                                     }`} 
                                     key={index}
-                                    onClick={_ => setSelectedCat(cat.name)}
+                                    onClick={_ => ChangeCat(cat)}
                                 >
                                     {cat.name}
                                 </div>
@@ -111,20 +92,6 @@ export default function InventoryAdminBody({ location }) {
                                     required
                                 />
                                 <Button type="submit">Create</Button>
-                            </form>
-                        </Modal>
-                        <Button onClick={_ => setEditCatModal(true)}>
-                            Edit
-                        </Button>
-                        <Modal visible={editCatModal} onClose={setEditCatModal}>
-                            <form className="modal-form" onSubmit={EditCategory}>
-                                <Input
-                                    label="Edit Category Name"
-                                    defaultValue={selectedCat}
-                                    onChange={e => catsVar.updateVar(e.target.value, selectedCat)}
-                                    required
-                                />
-                                <Button type="submit">Edit</Button>
                             </form>
                         </Modal>
                         <Button onClick={DeleteCategory}>
@@ -167,29 +134,24 @@ export default function InventoryAdminBody({ location }) {
                                 <Button type="submit">Create</Button>
                             </form>
                         </Modal>
-                        <Button onClick={_ => setEditFieldModal(true)}>
-                            Edit
-                        </Button>
-                        <Modal visible={editFieldModal} onClose={setEditCatModal}>
-                            <form className="modal-form" onSubmit={EditField}>
-                                <Input
-                                    label="Edit Field Name"
-                                    defaultValue={selectedField.label}
-                                    onChange={e => fieldsVar.updateVar(
-                                        e.target.value, selectedField
-                                    )}
-                                    required
-                                />
-                                <Button type="submit">Edit</Button>
-                            </form>
-                        </Modal>
                         <Button onClick={DeleteField}>
                             Delete
                         </Button>
                     </div>
                 </div>
             </div>
-            <InventoryAdminCatField field={selectedField} fieldVar={fieldsVar} />
+            {selectedField &&
+            <InventoryAdminCatField 
+                field={selectedField} 
+                fieldVar={fieldsVar} 
+            />}
+            {selectedCat && !selectedField &&
+            <InventoryAdminCat
+                category={selectedCat}
+                catVar={catsVar}
+                setCat={setSelectedCat}
+            />
+            }
         </div>
     )
 }
