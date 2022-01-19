@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import Input from "../../utility/input";
 import InventoryCategoryItem from "./inventory_category_item";
 
-export default function InventoryCategory({ category }) {
+export default function InventoryCategory({ category, location }) {
+    const [showItems, setShowItems] = useState(false)
+
     return (
         <div className="inv-b-cats-cat">
-            <div className="inv-b-cats-cat-h">
+            <div className="inv-b-cats-cat-h" onClick={_ => setShowItems(!showItems)}>
                 <h3>{category.name} ({category.amount})</h3>
                 <div className="inv-b-cats-cat-h-btn">
                     <Input
@@ -18,12 +20,13 @@ export default function InventoryCategory({ category }) {
                     />
                 </div>
             </div>
-            <div className="inv-b-cats-cat-b">
+            <div className={`inv-b-cats-cat-b ${showItems ? "" : "hidden"}`}>
                 {category.items.map((item, index) => {
                     return (
                         <InventoryCategoryItem 
                             item={item} 
                             category={category} 
+                            location={location}
                             key={index} 
                         />
                     )

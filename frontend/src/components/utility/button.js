@@ -14,7 +14,7 @@ export default function Button({ onClick, onSubmit, className, disabled, type, b
     return (
         <button 
             className={getClassName()}
-            onClick={!disabled ? onClick : undefined}
+            onClick={!disabled ? e => { e.stopPropagation(); if (onClick) onClick(e); } : undefined}
             type={type ? type : "button"}
         >
             {children}

@@ -159,7 +159,6 @@ async function CreateInventoryItem(location, category, newItem) {
     }
     if (catIndex === -1) catIndex = inv.categories.push({ name: category.name, collapsed: category.collapsed }) - 1;
     
-    // Collection added find item to group under
     let itemIndex = -1;
     for (let i = 0; i < inv.categories[catIndex].items.length; i++) {
         if (inv.categories[catIndex].items[i].name === newItem.name) itemIndex = i;
@@ -167,14 +166,28 @@ async function CreateInventoryItem(location, category, newItem) {
     if (itemIndex === -1) itemIndex = inv.categories[catIndex].items.push({ name: newItem.name }) - 1;
 
     if (category.collapsed && newItem.amount) {
-        inv.categories[catIndex].amount =+ newItem.amount;
-        inv.categories[catIndex].items[itemIndex].amount =+ newItem.amount;
-        if (!inv.categories[catIndex].items[itemIndex].collection.length) inv.categories[catIndex].items[itemIndex].collection.push(newItem);
+        inv.categories[catIndex].amount += newItem.amount;
+        inv.categories[catIndex].items[itemIndex].amount += newItem.amount;
+        if (!inv.categories[catIndex].items[itemIndex].shelf.length) inv.categories[catIndex].items[itemIndex].shelf.push(newItem);
+        else {
+            for (let i = 0; i < inv.categories[catIndex].items[itemIndex].shelf.length; i++) {
+                for (let j = 0; j < inv.categories[catIndex].items[itemIndex].shelf[i].fields.length; j++) {
+                    if (inv.categories[catIndex].items[itemIndex].shelf[i].fields[j].action === "Amount") {
+                        inv.categories[catIndex].items[itemIndex].shelf[i].fields[j].value = newItem.amount + parseInt(inv.categories[catIndex].items[itemIndex].shelf[i].fields[j].value);
+                    }
+                }
+            }
+        }
     } else {
-        inv.categories[catIndex].items[itemIndex].collection.push(newItem);
+        inv.categories[catIndex].amount += 1;
+        inv.categories[catIndex].items[itemIndex].shelf.push(newItem);
     }
 
     await inv.save();
+}
+
+async function UpdateInventoryItem(location, category, newItem, oldItem) {
+
 }
 
 async function CheckoutInventoryItems(location, data, reason, user) {
@@ -259,5 +272,6 @@ exports.DeleteField = DeleteField;
 
 exports.GetInventoryCategories = GetInventoryCategories;
 exports.CreateInventoryItem = CreateInventoryItem;
+exports.UpdateInventoryItem = UpdateInventoryItem;
 
 exports.CheckoutInventoryItems = CheckoutInventoryItems;

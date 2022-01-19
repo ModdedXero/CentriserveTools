@@ -142,6 +142,7 @@ export default function InventoryAdminBody({ location }) {
             </div>
             {selectedField &&
             <InventoryAdminCatField 
+                category={selectedCat}
                 field={selectedField} 
                 fieldVar={fieldsVar} 
             />}

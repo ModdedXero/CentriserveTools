@@ -1,15 +1,22 @@
 :root {
-    --color-shadow: #0a1a1c;
-    --color-0: #0d2326;
+    /* --color-0: #0d2326;
     --color-1: #17242a;
     --color-2: #2b7a77;
     --color-3: #3aafa9;
     --color-4: #def2f1;
-    --color-5: #ffffff;
+    --color-5: #ffffff; */
+
+    --color-0: #14262d;
+    --color-1: #1A1A1B;
+    --color-2: #333F44;
+    --color-3: #37AA9C;
+    --color-4: #94F3E4;
+    --color-5: #E4E4E4;
+
     --color-error: #ff5747;
     --color-grayed-out: #f0f0f096;
-    --color-text: white;
-    --shadow-simple: var(--color-shadow) 0px 0px 25px;
+    --color-text: #EEEEEE;
+    --shadow: 0 0 10px 3px var(--color-1);
 }
 
 body {
@@ -750,8 +757,9 @@ p {
 
 .react-contextmenu {
     z-index: 1000;
-    background-color: var(--color-2);
+    background-color: var(--color-1);
     text-align: center;
+    cursor: pointer;
 }
 
 .react-contextmenu-item {

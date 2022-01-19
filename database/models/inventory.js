@@ -13,13 +13,14 @@ const fieldSchema = new Schema({
     item: Boolean,
     showLabel: Boolean,
     valueList: [String],
+    action: String,
 
     // Header
-    action: String,
     actionValue: String,
     
     // Items
     transit: Boolean,
+    value: String
 });
 
 const categorySchema = new Schema({
@@ -34,23 +35,17 @@ const categorySchema = new Schema({
 
 // Visible Inventory
 
-const itemFieldSchema = new Schema({
-    label: String,
-    type: String,
-    value: String,
-    position: String,
-    transit: Boolean,
-    showLabel: Boolean
-});
-
 const subItemSchema = new Schema({
-    fields: [itemFieldSchema]
+    fields: [fieldSchema]
 });
 
 const itemSchema = new Schema({
     name: String,
-    amount: Number,
-    collection: [subItemSchema]
+    amount: {
+        type: Number,
+        default: 0
+    },
+    shelf: [subItemSchema]
 });
 
 const noteSchema = new Schema({

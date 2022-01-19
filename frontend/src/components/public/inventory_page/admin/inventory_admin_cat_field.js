@@ -4,7 +4,7 @@ import Input from "../../../utility/input";
 import Notify from "../../../utility/notify";
 import { Variable } from "../../../utility/variable";
 
-export default function InventoryAdminCatField({ field, fieldVar=new Variable() }) {
+export default function InventoryAdminCatField({ category, field, fieldVar=new Variable() }) {
     const labelRef = useRef(field.label);
     const [typeRef, setTypeRef] = useState(field.type);
     const [actionRef, setActionRef] = useState("None");
@@ -14,7 +14,7 @@ export default function InventoryAdminCatField({ field, fieldVar=new Variable() 
     const [itemRef, setItemRef] = useState(field.item || false);
     const showLabelRef = useRef();
     const valueListRef = useRef();
-    const actionValueRef = useRef();
+    const actionValueRef = useRef(field.actionValue);
 
     const [updateNotify, setUpdateNotify] = useState(false);
     const [updateData, setUpdateData] = useState("");
@@ -48,7 +48,7 @@ export default function InventoryAdminCatField({ field, fieldVar=new Variable() 
             fieldCopy.showLabel = showLabelRef.current.checked;
             fieldCopy.valueList = valueListRef.current || field.valueList;
             if (actionValueRef.current)
-                fieldCopy.actionValue = actionValueRef.current.value || field.actionValue;
+                fieldCopy.actionValue = actionValueRef.current.value || actionValueRef.current || field.actionValue;
             
             if (!fieldCopy.label)
                 err = err + "Missing Data: Name\n";
@@ -61,7 +61,6 @@ export default function InventoryAdminCatField({ field, fieldVar=new Variable() 
             if (fieldCopy.type === "List" && fieldCopy.valueList.length <= 0)
                 err = err + "Missing Data: List\n";
         } else {
-            console.log(typeRef)
             fieldCopy.type = typeRef || field.type;
             fieldCopy.valueList = valueListRef.current || field.valueList;
 
@@ -78,6 +77,18 @@ export default function InventoryAdminCatField({ field, fieldVar=new Variable() 
             setErrorData(err);
             setErrorNotify(true);
         }
+    }
+
+    function getSumFields() {
+        const fieldRet = [];
+
+        for (const field of category.fields) {
+            if (field.item && field.action !== "Amount" && field.type === "Number") {
+                fieldRet.push(field.label);
+            }
+        }
+
+        return fieldRet;
     }
 
     return (
@@ -162,13 +173,13 @@ export default function InventoryAdminCatField({ field, fieldVar=new Variable() 
                             refVal={valueListRef}
                         />}
                     </div>
-                    {!itemRef &&
                     <div className="inv-admin-data-row">
                         <Input
                             key={field.action + field.label}
                             label="Action"
                             display="dropdown"
-                            values={typeRef === "Number" ?
+                            values={!itemRef ?
+                            (typeRef === "Number" ?
                             [
                                 {
                                     value: "None",
@@ -188,17 +199,26 @@ export default function InventoryAdminCatField({ field, fieldVar=new Variable() 
                                     value: "Sum",
                                     label: "Sum",
                                     description: "Displays sum of linked Item Field"
-                                },
-                                {
-                                    value: "Amount",
-                                    label: "Amount",
-                                    description: "Allows for saving multiple items. Use in item for user to set amount."
                                 }
-                            ]:
+                            ] :
                             [
                                 "None"
-                            ]
-                            }
+                            ]):
+                            (
+                                typeRef === "Number" ?
+                                [
+                                    "None",
+                                    {
+                                        value: "Amount",
+                                        label: "Amount",
+                                        description: "Allows user to save item amount"
+                                    }
+                                ]
+                                :
+                                [
+                                    "None"
+                                ]
+                            )}
                             onChange={i => setActionRef(i)}
                             defaultValue={field.action ? {
                                 value: field.action,
@@ -213,7 +233,16 @@ export default function InventoryAdminCatField({ field, fieldVar=new Variable() 
                             refVal={actionValueRef}
                             defaultValue={field.actionValue}
                         />}
-                    </div>}
+                        {(field.action === "Sum" || actionRef === "Sum") && 
+                        <Input
+                            key={field.actionValue + "Sum" + field.label}
+                            label="Link"
+                            display="dropdown"
+                            refVal={actionValueRef}
+                            values={getSumFields()}
+                            defaultValue={{ value: field.actionValue, label: field.actionValue }}
+                        />}
+                    </div>
                     <Input
                         key={field.position + field.label}
                         label="Position"

@@ -150,8 +150,13 @@ router.route("/inventory/categories/:location").get(async (req, res) => {
 });
 
 router.route("/inventory/fields/update/:location/").post(async (req, res) => {
-    await warehouse.CreateInventoryItem(req.params.location, req.body.oldVar, req.body.upVar);
-    res.status(200).send("Item created");
+    if (!req.body.upVar[1]) {
+        await warehouse.CreateInventoryItem(req.params.location, req.body.oldVar, req.body.upVar[0]);
+        res.status(200).send("Item created");
+    } else {
+        await warehouse.UpdateInventoryItem(req.params.location, req.body.oldVar, req.body.upVar[0], req.body.upVar[1]);
+        res.status(200).send("Item updated");
+    }
 });
 
 // router.route("/locations").post((req, res) => {

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 import Input from "../../utility/input";
-import Modal from "../../utility/modal";
 import { Variable, APIs } from "../../utility/variable";
 import InventoryAddItem from "./inventory_add_item";
 import InventoryCategory from "./inventory_category";
@@ -35,7 +34,7 @@ export default function InventoryPage() {
                     <div className="inv-b-cats">
                         {categories.map((cat, index) => {
                             return (
-                                <InventoryCategory key={index} category={cat} />
+                                <InventoryCategory key={index} category={cat} location={currentLoc} />
                             )
                         })}
                     </div>

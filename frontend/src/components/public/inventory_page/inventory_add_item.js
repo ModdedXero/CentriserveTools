@@ -53,22 +53,27 @@ export default function InventoryAddItem({ location }) {
         e.preventDefault();
 
         const newItem = {};
+        const newItemRefParse = [];
         newItem.fields = [];
 
-        newItem.name = newItemNameRef.current;
+        newItem.name = newItemNameRef.current.value || newItemNameRef.current;
+
+        for (let i = 0; i < newItemRef.current.length; i++) {
+            if (newItemRef.current[i]) newItemRefParse.push(newItemRef.current[i]);
+        }
 
         let i = 0;
         for (const field of catRef.fields) {
             if (field.item) {
                 const itemCopy = {...field};
                 if (field.action === "Amount") {
-                    itemCopy.amount = newItemRef.current[i].value;
+                    newItem.amount = parseInt(newItemRefParse[i].value);
                 }
                 
                 if (field.type === "Checkbox") {
-                    itemCopy.value = newItemRef.current[i].checked;
+                    itemCopy.value = newItemRefParse[i].checked;
                 } else {
-                    itemCopy.value = newItemRef.current[i].value || newItemRef.current[i].checked;
+                    itemCopy.value = newItemRefParse[i].value;
                 }
 
                 newItem.fields.push(itemCopy);
@@ -77,7 +82,7 @@ export default function InventoryAddItem({ location }) {
         }
 
         invFieldsVar.setVariable(location);
-        invFieldsVar.updateVar(newItem, catRef);
+        invFieldsVar.updateVar([newItem, null], catRef);
         invFieldsVar.syncVar();
 
         setAddItemModal(false);
@@ -106,6 +111,10 @@ export default function InventoryAddItem({ location }) {
                         refVal={newItemNameRef}
                     />}
                     {catRef && catRef.fields.map((field, index) => {
+                        if (index === 0) {
+                            newItemRef.current.length = 0;
+                        }
+
                         if (field.item) {
                             return (
                                 <Input
@@ -113,7 +122,7 @@ export default function InventoryAddItem({ location }) {
                                     label={field.label}
                                     display={getType(field.type)}
                                     type={getType(field.type)}
-                                    refVal={el => newItemRef.current.push(el)}
+                                    refVal={el => newItemRef.current.push(el) }
                                     required={field.type !== "Checkbox"}
                                 />
                             )

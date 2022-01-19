@@ -5,6 +5,10 @@
     width: 95%;
     height: 95%;
     margin: auto auto;
+    padding: 20px 50px;
+    padding-right: 0;
+    padding-top: 0;
+    background-color: var(--color-2);
 }
 
 .inv-admin-h {
@@ -125,12 +129,15 @@
 .inv-b {
     display: grid;
     grid-template-columns: 50% 50%;
-    height: 100%;
+    height: 80vh;
     margin-top: 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
 }
 
 .inv-b-cats {
     background-color: var(--color-2);
+    overflow: hidden;
 }
 
 .inv-b-checkout {
@@ -149,13 +156,14 @@
     display: flex;
     flex-direction: column;
     border: 1px solid var(--color-3);
-    padding: 20px;
-    padding-top: 10px;
+    box-shadow: var(--shadow);
 }
 
 .inv-b-cats-cat-h {
     display: flex;
+    padding: 10px 25px;
     justify-content: space-between;
+    cursor: pointer;
 }
 
 .inv-b-cats-cat-h-btn {
@@ -167,48 +175,65 @@
 .inv-b-cats-cat-b {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin-left: 30px;
+    height: fit-content;
+    max-height: 1000px;
+    overflow: hidden;
+    transition: all .5s;
+}
+.inv-b-cats-cat-b.hidden {
+    max-height: 0;
+    margin: 0;
+    color: transparent;
 }
 
 .inv-b-cats-cat-item, .inv-b-cats-cat-item-list-item {
     position: relative;
     padding: 10px;
+    margin: 10px 30px;
     height: 65px;
     border: 1px solid var(--color-3);
+    box-shadow: var(--shadow);
     font-size: 1.4rem;
 }
 
 .inv-b-cats-cat-item-list {
+    display: flex;
+    flex-direction: column;
     margin-left: 45px;
+    max-height: 1000px;
+    overflow: hidden;
+    transition: all .5s;
+}
+.inv-b-cats-cat-item-list.hidden {
+    max-height: 0;
+    color: transparent;
 }
 
 .inv-b-cats-cat-item-list-item {
     position: relative;
     height: 65px;
-    border-top: 0;
 }
 
 .inv-b-cats-cat-item-topleft {
     position: absolute;
-    top: 5px;
-    left: 5px;
+    top: 8px;
+    left: 8px;
 }
 
 .inv-b-cats-cat-item-topright {
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: 8px;
+    right: 8px;
 }
 
 .inv-b-cats-cat-item-botleft {
     position: absolute;
-    bottom: 5px;
-    left: 5px;
+    bottom: 8px;
+    left: 8px;
 }
 
 .inv-b-cats-cat-item-botright {
     position: absolute;
-    bottom: 5px;
-    right: 5px;
+    bottom: 8px;
+    right: 8px;
 }
