@@ -31,6 +31,7 @@ export default function InventoryEditItem({ location, category, item, itemName, 
 
         newItem.fields = [];
         newItem.name = itemName;
+        item.name = itemName;
 
         for (let i = 0; i < newItemRef.current.length; i++) {
             if (newItemRef.current[i]) newItemRefParse.push(newItemRef.current[i]);

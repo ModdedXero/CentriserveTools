@@ -3,10 +3,11 @@ import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 
 import InventoryEditItem from "./inventory_edit_item";
 import { Variable, APIs } from "../../utility/variable";
+import InventoryCategorySubItem from "./inventory_category_sub_item";
 
 const categoryVar = new Variable(APIs.Inventory + "/categories", false);
 
-export default function InventoryCategoryItem({ item, category, location }) {
+export default function InventoryCategoryItem({ item, category, location, checkout }) {
     const [showList, setShowList] = useState(false);
     const [editItem, setEditItem] = useState(false);
 
@@ -89,18 +90,25 @@ export default function InventoryCategoryItem({ item, category, location }) {
                 <MenuItem onClick={_ => setShowList(!showList)}>
                     Show List
                 </MenuItem>}
+                {(cat && cat.collapsed) && 
+                <MenuItem 
+                    onClick={_ => checkout(category.name, item.shelf[0], item.name)}
+                >
+                    Checkout Item
+                </MenuItem>}
             </ContextMenu>
             <div className={`inv-b-cats-cat-item-list ${!showList ? "hidden" : ""}`}>
                     {(cat && !cat.collapsed) && item.shelf.map((subItem, index1) => {
                         return (
-                            <div className="inv-b-cats-cat-item-list-item" key={index1}>
-                                <div className="inv-b-cats-cat-item-topleft">
-                                    {item.name}
-                                </div>
-                                {subItem.fields.map((subField, index2) => {
-                                    return parseHeaderFields(subField, index2);
-                                })}
-                            </div>
+                            <InventoryCategorySubItem 
+                                key={index1} 
+                                location={location}
+                                category={category}
+                                item={subItem}
+                                itemName={item.name}
+                                parseField={parseHeaderFields}
+                                checkout={checkout}
+                            />
                         )
                     })}
                 </div>

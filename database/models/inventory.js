@@ -19,6 +19,7 @@ const fieldSchema = new Schema({
     actionValue: String,
     
     // Items
+    checkout: Boolean,
     transit: Boolean,
     value: String
 });

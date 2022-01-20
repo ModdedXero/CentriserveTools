@@ -16,7 +16,7 @@
     --color-error: #ff5747;
     --color-grayed-out: #f0f0f096;
     --color-text: #EEEEEE;
-    --shadow: 0 0 10px 3px var(--color-1);
+    --shadow: 0 0 10px 2px var(--color-1);
 }
 
 body {
@@ -499,6 +499,7 @@ p {
     flex-direction: column;
     position: absolute;
     background-color: var(--color-2);
+    border: 1px solid var(--color-3);
     padding-top: 10px;
     max-height: 300px;
     overflow-y: auto;
@@ -767,4 +768,14 @@ p {
 }
 .react-contextmenu-item:hover {
     background-color: var(--color-3);
+}
+
+/* Textarea */
+
+.textarea {
+    resize: none;
+    color: var(--color-4);
+    font-size: 1.3rem;
+    background-color: var(--color-2);
+    border: 1px solid var(--color-3);
 }

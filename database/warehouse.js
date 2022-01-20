@@ -48,7 +48,7 @@ async function DeleteInventoryLocation(location) {
 
 async function GetCategories() {
     const cats = await Category.find();
-    return cats;
+    return cats.sort((a, b) => a.name.localeCompare(b.name));
 }
 
 async function GetCategory(category) {
@@ -84,6 +84,18 @@ async function UpdateCategory(newValue, oldValue) {
     await Category.findOneAndUpdate(
         { name: oldValue.name }, newValue, { new: true }
     );
+
+    const inv = await Inventory.find();
+
+    for (let i = 0; i < inv.length; i++) {
+        for (let j = 0; j < inv[i].categories.length; j ++) {
+            if (inv[i].categories[j].name === newValue.name) {
+                inv[i].categories[j].collapsed = newValue.collapsed;
+            }
+        }
+
+        await inv[i].save();
+    }
 }
 
 async function DeleteCategory(category) {
@@ -147,7 +159,7 @@ async function DeleteField(category, field) {
 
 async function GetInventoryCategories(location) {
     const inv = await Inventory.findOne({ location: location });
-    return inv.categories;
+    return inv.categories.sort((a, b) => a.name.localeCompare(b.name));
 }
 
 async function CreateInventoryItem(location, category, newItem) {
@@ -187,7 +199,55 @@ async function CreateInventoryItem(location, category, newItem) {
 }
 
 async function UpdateInventoryItem(location, category, newItem, oldItem) {
+    const inv = await Inventory.findOne({ location: location });
+    
+    let catIndex = -1;
+    for (let i = 0; i < inv.categories.length; i++) {
+        if (inv.categories[i].name === category.name) catIndex = i;
+    }
+    if (catIndex === -1) return;
+    
+    let itemIndex = -1;
+    for (let i = 0; i < inv.categories[catIndex].items.length; i++) {
+        if (inv.categories[catIndex].items[i].name === oldItem.name) itemIndex = i;
+    }
+    if (itemIndex === -1) return;
 
+    let shelfIndex = -1;
+    for (let i = 0; i < inv.categories[catIndex].items[itemIndex].shelf.length; i++) {
+        if (inv.categories[catIndex].items[itemIndex].shelf[i]._id.toString() === oldItem._id) shelfIndex = i;
+    }
+    if (shelfIndex === -1) return;
+    else {
+        inv.categories[catIndex].items[itemIndex].shelf[shelfIndex] = newItem;
+        await inv.save();
+    }
+}
+
+async function DeleteInventoryItem() {
+    const inv = await Inventory.findOne({ location: location });
+    
+    let catIndex = -1;
+    for (let i = 0; i < inv.categories.length; i++) {
+        if (inv.categories[i].name === category.name) catIndex = i;
+    }
+    if (catIndex === -1) return;
+    
+    let itemIndex = -1;
+    for (let i = 0; i < inv.categories[catIndex].items.length; i++) {
+        if (inv.categories[catIndex].items[i].name === oldItem.name) itemIndex = i;
+    }
+    if (itemIndex === -1) return;
+
+    let shelfIndex = -1;
+    for (let i = 0; i < inv.categories[catIndex].items[itemIndex].shelf.length; i++) {
+        if (inv.categories[catIndex].items[itemIndex].shelf[i]._id.toString() === oldItem._id) shelfIndex = i;
+    }
+    if (shelfIndex === -1) return;
+    else {
+        inv.categories[catIndex].items[itemIndex].shelf.splice(shelfIndex, 1);
+        await inv.save();
+    }
 }
 
 async function CheckoutInventoryItems(location, data, reason, user) {
@@ -273,5 +333,6 @@ exports.DeleteField = DeleteField;
 exports.GetInventoryCategories = GetInventoryCategories;
 exports.CreateInventoryItem = CreateInventoryItem;
 exports.UpdateInventoryItem = UpdateInventoryItem;
+exports.DeleteInventoryItem = DeleteInventoryItem;
 
 exports.CheckoutInventoryItems = CheckoutInventoryItems;

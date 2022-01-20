@@ -12,7 +12,8 @@ export default function InventoryAdminCatField({ category, field, fieldVar=new V
     const transitRef = useRef();
     const [headerRef, setHeaderRef] = useState(field.header || false);
     const [itemRef, setItemRef] = useState(field.item || false);
-    const showLabelRef = useRef();
+    const showLabelRef = useRef(field.showLabel || false);
+    const checkoutRef = useRef(field.checkout || false);
     const valueListRef = useRef();
     const actionValueRef = useRef(field.actionValue);
 
@@ -46,6 +47,7 @@ export default function InventoryAdminCatField({ category, field, fieldVar=new V
             fieldCopy.header = headerRef;
             fieldCopy.item = itemRef;
             fieldCopy.showLabel = showLabelRef.current.checked;
+            fieldCopy.checkout = checkoutRef.current.checked;
             fieldCopy.valueList = valueListRef.current || field.valueList;
             if (actionValueRef.current)
                 fieldCopy.actionValue = actionValueRef.current.value || actionValueRef.current || field.actionValue;
@@ -279,6 +281,14 @@ export default function InventoryAdminCatField({ category, field, fieldVar=new V
                         display="checkbox"
                         refVal={showLabelRef}
                         defaultValue={field.showLabel}
+                    />}
+                    {(field.label !== "Name" && itemRef) && 
+                    <Input
+                        key={field.checkout + "Checkout" + field.label}
+                        label="Show on Checkout?"
+                        display="checkbox"
+                        refVal={checkoutRef}
+                        defaultValue={field.checkout}
                     />}
                 </div>}
             </div>

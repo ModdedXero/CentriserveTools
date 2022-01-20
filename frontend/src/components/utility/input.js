@@ -66,6 +66,10 @@ export default function Input({
                     refVal={refVal}
                 />
             )
+        case "textarea":
+            return (
+                <textarea className="textarea" ref={refVal} defaultValue={defaultValue} readOnly={readOnly} required={required} placeholder={placeholder} onChange={onChange} />
+            )
         default:
             switch (fancy) {
                 case true:

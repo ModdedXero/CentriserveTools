@@ -6,7 +6,7 @@ import { Variable } from "../../../utility/variable";
 
 export default function InventoryAdminCat({ category, catVar=new Variable(), setCat }) {
     const catNameRef = useRef(category.name);
-    const catCollapsedRef = useRef(category.grouped);
+    const catCollapsedRef = useRef(category.collapsed);
 
     const [updateNotify, setUpdateNotify] = useState(false);
     const [updateData, setUpdateData] = useState("");
