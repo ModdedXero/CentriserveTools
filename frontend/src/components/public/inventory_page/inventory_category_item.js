@@ -4,12 +4,15 @@ import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 import InventoryEditItem from "./inventory_edit_item";
 import { Variable, APIs } from "../../utility/variable";
 import InventoryCategorySubItem from "./inventory_category_sub_item";
+import Input from "../../utility/input";
 
 const categoryVar = new Variable(APIs.Inventory + "/categories", false);
 
 export default function InventoryCategoryItem({ item, category, location, checkout }) {
     const [showList, setShowList] = useState(false);
     const [editItem, setEditItem] = useState(false);
+
+    const [checkoutAmount, setCheckoutAmount] = useState(0);
 
     const cat = categoryVar.useVar(category.name, null);
 
@@ -22,7 +25,8 @@ export default function InventoryCategoryItem({ item, category, location, checko
             if (field.value === "true") field.value = "Yes"
             if (field.value === "false") field.value = "No"
         } else if (field.action === "Total") {
-            field.value = item.amount || item.shelf.length;
+            field.value = (item.hasOwnProperty("amount") && category.collapsed)
+                ? item.amount : item.shelf.length;
         } else if (field.action === "Sum") {
             field.value = 0;
             for (const subItem of item.shelf) {
@@ -61,6 +65,16 @@ export default function InventoryCategoryItem({ item, category, location, checko
         }
     }
 
+    function CheckCheckoutCount(e) {
+        if (e.target.value < 0) {
+            setCheckoutAmount(0);
+        } else if (e.target.value > item.amount) {
+            setCheckoutAmount(item.amount);
+        } else {
+            setCheckoutAmount(e.target.value);
+        }
+    }
+
     return (
         <div>
             <ContextMenuTrigger id={`item ${item.name} ${category.name}`}>
@@ -92,9 +106,26 @@ export default function InventoryCategoryItem({ item, category, location, checko
                 </MenuItem>}
                 {(cat && cat.collapsed) && 
                 <MenuItem 
-                    onClick={_ => checkout(category.name, item.shelf[0], item.name)}
+                    onClick={_ => {
+                        checkout(category, { 
+                            item: item.shelf[0], 
+                            name: item.name,
+                            amount: parseInt(checkoutAmount)
+                        });
+
+                        setCheckoutAmount(0);
+                    }}
                 >
                     Checkout Item
+                </MenuItem>}
+                {(cat && cat.collapsed) &&
+                <MenuItem className="inv-b-cats-cat-checkout">
+                    <input
+                        type="number" 
+                        onClick={e => e.stopPropagation()}
+                        value={checkoutAmount}
+                        onChange={CheckCheckoutCount}
+                    />
                 </MenuItem>}
             </ContextMenu>
             <div className={`inv-b-cats-cat-item-list ${!showList ? "hidden" : ""}`}>

@@ -17,19 +17,12 @@ export default function InventoryAdminCatField({ category, field, fieldVar=new V
     const valueListRef = useRef();
     const actionValueRef = useRef(field.actionValue);
 
-    const [updateNotify, setUpdateNotify] = useState(false);
-    const [updateData, setUpdateData] = useState("");
-
-    const [errorNotify, setErrorNotify] = useState(false);
-    const [errorData, setErrorData] = useState("");
+    const [notifyData, setNotifyData] = useState();
+    const [isNotifyError, setIsNotifyError] = useState(false);
 
     useEffect(() => {
         setTypeRef(field.type || "");
         setActionRef(field.action || "None");
-        setUpdateData("");
-        setErrorData("");
-        setErrorNotify(false);
-        setUpdateNotify(false);
         setItemRef(field.item || false);
         setHeaderRef(field.header || false);
     }, [field])
@@ -47,7 +40,7 @@ export default function InventoryAdminCatField({ category, field, fieldVar=new V
             fieldCopy.header = headerRef;
             fieldCopy.item = itemRef;
             fieldCopy.showLabel = showLabelRef.current.checked;
-            fieldCopy.checkout = checkoutRef.current.checked;
+            fieldCopy.checkout = checkoutRef.current ?  checkoutRef.current.checked : false;
             fieldCopy.valueList = valueListRef.current || field.valueList;
             if (actionValueRef.current)
                 fieldCopy.actionValue = actionValueRef.current.value || actionValueRef.current || field.actionValue;
@@ -73,11 +66,12 @@ export default function InventoryAdminCatField({ category, field, fieldVar=new V
         if (!err) {
             fieldVar.updateVar(fieldCopy, field);
             fieldVar.syncVar();
-            setUpdateData(fieldCopy);
-            setUpdateNotify(true);
+            setNotifyData("Updated!")
+            setIsNotifyError(false);
         } else {
-            setErrorData(err);
-            setErrorNotify(true);
+            console.log(err)
+            setNotifyData(err);
+            setIsNotifyError(true);
         }
     }
 
@@ -95,12 +89,7 @@ export default function InventoryAdminCatField({ category, field, fieldVar=new V
 
     return (
         <div className="inv-admin-data">
-            {errorNotify && <Notify error>
-                {errorData}
-            </Notify>}
-            {updateNotify && <Notify value={updateData}>
-                Updated!
-            </Notify>}
+            <Notify error={isNotifyError} data={notifyData} setData={setNotifyData} />
             <div className="inv-admin-data-h">
                 <p>Field Data</p>
                 <Input
@@ -132,7 +121,7 @@ export default function InventoryAdminCatField({ category, field, fieldVar=new V
                         key={field.label}
                         label="Name"
                         refVal={labelRef}
-                        readOnly={field.label === "name" ? true : false}
+                        readOnly={field.label === "Name" ? true : false}
                         defaultValue={field.label || ""}
                     />
                     <div className="inv-admin-data-row">

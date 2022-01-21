@@ -6,16 +6,7 @@ const warehouse = require("../database/warehouse");
 
 router.route("/locations").get(async (req, res) => {
     const locations = await warehouse.GetAllLocations();
-    const sortedLocations = [];
-
-    for (const loc of locations) {
-        sortedLocations.push({
-            value: loc,
-            label: loc.toUpperCase()
-        });
-    }
-
-    res.status(200).send(sortedLocations);
+    res.status(200).send(locations);
 });
 
 router.route("/create/locations").post(async (req, res) => {
@@ -159,27 +150,11 @@ router.route("/inventory/fields/update/:location/").post(async (req, res) => {
     }
 });
 
-// router.route("/locations").post((req, res) => {
-//     res.send([
-//         {
-//             value: "Test1",
-//             label: "TEST1"
-//         },
-//         {
-//             value: "Test2",
-//             label: "TEST2"
-//         }
-//     ]);
-//     console.log("Test");
-// });
+// Checkout Routes
 
-// router.route("/categories/:location").post((req, res) => {
-//     if (req.params.location === "Test1") {
-//         res.send(["Test1 Suc!"]);
-//         server.RealtimeSocket.emit(`inventory/categories-${req.params.location}`, ["Test1 Super Suc!"])
-//     }
-//     if (req.params.location === "Test2") res.send(["Test2 Suc!"]);
-//     if (req.params.location === "Test3") res.send(["Test3 Suc!"]);
-// });
+router.route("/checkout/:location").post(async (req, res) => {
+    const result = await warehouse.SubmitCheckout(req.params.location, req.body.data);
+    res.send(result);
+});
 
 module.exports = router;

@@ -197,7 +197,6 @@ async function CreateInventoryItem(location, category, newItem) {
 
     await inv.save();
 }
-
 async function UpdateInventoryItem(location, category, newItem, oldItem) {
     const inv = await Inventory.findOne({ location: location });
     
@@ -249,6 +248,11 @@ async function DeleteInventoryItem() {
         await inv.save();
     }
 }
+
+async function SubmitCheckout() {
+
+}
+
 
 async function CheckoutInventoryItems(location, data, reason, user) {
     let result = false;
@@ -335,4 +339,4 @@ exports.CreateInventoryItem = CreateInventoryItem;
 exports.UpdateInventoryItem = UpdateInventoryItem;
 exports.DeleteInventoryItem = DeleteInventoryItem;
 
-exports.CheckoutInventoryItems = CheckoutInventoryItems;
+exports.SubmitCheckout = SubmitCheckout;

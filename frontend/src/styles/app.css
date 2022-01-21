@@ -118,7 +118,7 @@ p {
 
 @keyframes borderBlink-red {
     from, to {
-        border-color: transparent;
+        border-color: var(--color-3);
     }
     50% {
         border-color: var(--color-error);
@@ -442,13 +442,13 @@ p {
     top: 20px;
     transform: translateX(-50%);
     width: 300px;
-    padding: 20px;
+    padding: 10px;
     text-align: center;
 
 
     z-index: 1000;
     background-color: var(--color-2);
-    border: 2px solid var(--color-3);
+    border: 1px solid var(--color-3);
     color: var(--color-5);
     overflow: auto;
     overflow-x: hidden;
@@ -464,7 +464,7 @@ p {
 }
 
 .notify-background > textarea {
-    height: max-content;
+    height: 100px;
     width: fit-content;
     resize: none;
     background-color: var(--color-2);

@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 import Input from "../../utility/input";
+import Notify from "../../utility/notify";
 
 export default function InventoryCheckout({ location, categories, checkoutList, setList }) {
+    const [notifyData, setNotifyData] = useState();
+
     function ReturnItem(item, category, listIndex, index) {
         for(let i = 0; i < categories.length; i++) {
             if (categories[i].name === category) {
                 for (let j = 0; j < categories[i].items.length; j++) {
                     if (categories[i].items[j].name === item.name) {
                         if (categories[i].collapsed) {
-                            categories[i].items[j].amount += item.amount || 1;
+                            categories[i].items[j].amount += parseInt(item.amount) || 1;
                         } else {
                             categories[i].items[j].amount += 1;
                             categories[i].items[j].shelf.push(item);
@@ -25,8 +29,28 @@ export default function InventoryCheckout({ location, categories, checkoutList, 
         }
     }
 
+    async function SubmitCheckout(e) {
+        e.preventDefault();
+
+        if (!checkoutList.length) {
+            setNotifyData("Add items to checkout!");
+            return;
+        }
+
+        await axios.post(`/api/inventory/checkout/${location}`, { data: checkoutList })
+            .then(async res => {
+                if (res === "Verified") {
+                    setNotifyData("Items Checked Out!");
+                } else {
+                    setNotifyData("Items are not available for checkout!");
+                }
+            })
+            .catch(err => setNotifyData("Items are not available for checkout!"))
+    }
+
     return (
-        <form className="inv-b-checkout">
+        <form className="inv-b-checkout" onSubmit={SubmitCheckout}>
+            <Notify data={notifyData} setData={setNotifyData} />
             <Input 
                 defaultValue={"Checkout"}
                 readOnly

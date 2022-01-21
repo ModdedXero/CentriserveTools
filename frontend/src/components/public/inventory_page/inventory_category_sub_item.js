@@ -30,7 +30,11 @@ export default function InventoryCategorySubItem({ location, category, item, ite
                         setModal={setEditSubItem} 
                     />
                 </MenuItem>
-                <MenuItem onClick={_ => checkout(category.name, item, itemName)}>
+                <MenuItem onClick={_ => checkout(category, {
+                        item: item, 
+                        name: itemName,
+                        amount: 1
+                    })}>
                     Checkout Item
                 </MenuItem>
             </ContextMenu>
