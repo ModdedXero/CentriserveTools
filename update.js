@@ -51,7 +51,7 @@ async function AddRepoTempDir() {
 async function SaveUsers() {
     const users = await auth.GetAllUsers();
     for await (const user of users) {
-        fs.AppendFile("UserData.txt", JSON.stringify(user), fs.FileTypes.Temp);
+        fs.AppendFile("UserData.txt", JSON.stringify(user) + "\n", fs.FileTypes.Temp);
     }
     return true;
 }
