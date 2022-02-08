@@ -24,6 +24,7 @@ const Updates = {
     "Mongo User Init": { callback: async () => { return MongoInitUserUpdate() } },
     "MongoAdminSecurityUpdate": { callback: async () => { return MongoAdminSecurityUpdate() }},
     "Add Repo Temp Dir": { callback: async () => { return AddRepoTempDir()}},
+    "Save Users": { callback: async () => { return SaveUsers() }}
 }
 
 async function MongoInitUserUpdate() {
@@ -44,6 +45,14 @@ async function MongoAdminSecurityUpdate() {
 
 async function AddRepoTempDir() {
     await fs.ValidateDir(fs.FileTypes.Temp);
+    return true;
+}
+
+async function SaveUsers() {
+    const users = await auth.GetAllUsers();
+    for await (const user of users) {
+        fs.AppendFile("UserData.txt", user, fs.FileTypes.Temp);
+    }
     return true;
 }
 

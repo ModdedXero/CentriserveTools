@@ -135,16 +135,7 @@ async function ResetPassword(username) {
 }
 
 async function GetAllUsers() {
-    const users = [];
-
-    await User.find()
-        .then(doc => {
-            doc.forEach(usr => {
-                users.push(usr);
-            })
-        })
-
-    return users;
+    return await User.find();
 }
 
 async function SetSecurityLevel(username, level) {
